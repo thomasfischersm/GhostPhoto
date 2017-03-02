@@ -3,11 +3,14 @@ package com.playposse.ghostphoto;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,8 @@ import java.util.TimerTask;
  * {@link BasicPhotoFragment} deals with the mechanics of dealing with the Android photo API.
  */
 public class PhotoFragment extends BasicPhotoFragment {
+
+    private static final String LOG_CAT = PhotoFragment.class.getSimpleName();
 
     private static enum TimeInterval {
         halfSecond(500),
@@ -95,6 +100,34 @@ public class PhotoFragment extends BasicPhotoFragment {
                     actionState = ActionState.running;
                 }
                 refreshActionButton();
+            }
+        });
+
+        thumbNailImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getLastFile() != null) {
+                    try {
+                        Uri uri = FileProvider.getUriForFile(
+                                getActivity(),
+                                "com.playposse.ghostphoto",
+                                getLastFile());
+                        Log.i(LOG_CAT, "Starting intent to view " + uri);
+
+                        Intent intent = new Intent()
+                                .setAction(Intent.ACTION_VIEW)
+                                .setDataAndType(uri, "image/jpeg")
+                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        PackageManager packageManager = getActivity().getPackageManager();
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(intent);
+                        }
+                    } catch (Throwable ex) {
+                        Log.e(LOG_CAT, "Failed to view photo in photoviewer");
+                        throw ex;
+                    }
+                }
             }
         });
     }

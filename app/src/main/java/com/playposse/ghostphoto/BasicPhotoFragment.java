@@ -908,6 +908,10 @@ public abstract class BasicPhotoFragment
         }
     }
 
+    public File getLastFile() {
+        return lastFile;
+    }
+
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
