@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -140,6 +141,8 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
 
         super.onPause();
+
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void initTextView(TextView textView, TimeInterval timeInterval) {
@@ -162,6 +165,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         currentTimerTask = new PhotoTimerTask();
         timer.scheduleAtFixedRate(currentTimerTask, 0, currentTimeInterval.getTimeInMs());
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private synchronized void stopTakingPhotos() {
@@ -169,6 +173,8 @@ public class PhotoFragment extends BasicPhotoFragment {
             currentTimerTask.cancel();
             currentTimerTask = null;
         }
+
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
