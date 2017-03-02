@@ -13,7 +13,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, BasicPhotoFragment.newInstance())
+                    .replace(R.id.container, PhotoFragment.newInstance())
                     .commit();
         }
     }

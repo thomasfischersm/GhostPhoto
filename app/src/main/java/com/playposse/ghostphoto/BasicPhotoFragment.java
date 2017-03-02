@@ -28,6 +28,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -47,15 +48,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class BasicPhotoFragment extends Fragment
+public abstract class BasicPhotoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
     /**
@@ -166,6 +169,11 @@ public class BasicPhotoFragment extends Fragment
     private Size mPreviewSize;
 
     /**
+     * This is the output file for our picture.
+     */
+    private File mFile; // TODO: Remove
+
+    /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -213,10 +221,7 @@ public class BasicPhotoFragment extends Fragment
      */
     private ImageReader mImageReader;
 
-    /**
-     * This is the output file for our picture.
-     */
-    private File mFile;
+    private File lastFile;
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
@@ -227,7 +232,9 @@ public class BasicPhotoFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+//            lastFile = generateNextFileName();
+//            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile)); // TODO: Remove
         }
 
     };
@@ -349,6 +356,12 @@ public class BasicPhotoFragment extends Fragment
         }
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) { // TODO: REMOVE
+        super.onActivityCreated(savedInstanceState);
+        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+    }
+
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
      * is at least as large as the respective texture view size, and that is at most as large as the
@@ -398,10 +411,6 @@ public class BasicPhotoFragment extends Fragment
         }
     }
 
-    public static BasicPhotoFragment newInstance() {
-        return new BasicPhotoFragment();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -415,10 +424,12 @@ public class BasicPhotoFragment extends Fragment
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+    private File generateNextFileName() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        return new File(
+                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                imageFileName);
     }
 
     @Override
@@ -749,7 +760,7 @@ public class BasicPhotoFragment extends Fragment
     /**
      * Initiate a still image capture.
      */
-    private void takePicture() {
+    protected void takePicture() {
         lockFocus();
     }
 
@@ -819,8 +830,13 @@ public class BasicPhotoFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onAfterPhotoTaken(lastFile);
+                        }
+                    });
+                    Log.d(TAG, lastFile.toString());
                     unlockFocus();
                 }
             };
@@ -831,6 +847,8 @@ public class BasicPhotoFragment extends Fragment
             e.printStackTrace();
         }
     }
+
+    protected abstract void onAfterPhotoTaken(File photoFile);
 
     /**
      * Retrieves the JPEG orientation from the specified screen rotation.

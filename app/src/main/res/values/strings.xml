@@ -16,4 +16,10 @@
 
         ]]>
     </string>
+
+    <!-- Photo activity -->
+    <string name="half_second_interval">.5s</string>
+    <string name="second_interval">1s</string>
+    <string name="three_second_interval">3s</string>
+    <string name="ten_second_interval">10s</string>
 </resources>
