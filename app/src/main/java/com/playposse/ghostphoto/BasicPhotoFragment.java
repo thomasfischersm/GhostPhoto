@@ -169,11 +169,6 @@ public abstract class BasicPhotoFragment extends Fragment
     private Size mPreviewSize;
 
     /**
-     * This is the output file for our picture.
-     */
-    private File mFile; // TODO: Remove
-
-    /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -232,9 +227,8 @@ public abstract class BasicPhotoFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-//            lastFile = generateNextFileName();
-//            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile)); // TODO: Remove
+            lastFile = generateNextFileName();
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
         }
 
     };
@@ -354,12 +348,6 @@ public abstract class BasicPhotoFragment extends Fragment
                 }
             });
         }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) { // TODO: REMOVE
-        super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     /**
@@ -836,7 +824,9 @@ public abstract class BasicPhotoFragment extends Fragment
                             onAfterPhotoTaken(lastFile);
                         }
                     });
-                    Log.d(TAG, lastFile.toString());
+                    if (lastFile != null) {
+                        Log.d(TAG, lastFile.toString());
+                    }
                     unlockFocus();
                 }
             };
