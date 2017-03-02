@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -54,6 +56,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private TextView tenSecondTextView;
     private ImageView infoButton;
     private FloatingActionButton actionButton;
+    private ImageView thumbNailImageView;
 
     private TimeInterval currentTimeInterval = TimeInterval.oneSecond;
     private ActionState actionState = ActionState.stopped;
@@ -73,6 +76,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         tenSecondTextView = (TextView) rootView.findViewById(R.id.tenSecondTextView);
         infoButton = (ImageView) rootView.findViewById(R.id.infoButton);
         actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
+        thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
 
         initTextView(halfSecondTextView, TimeInterval.halfSecond);
         initTextView(secondTextView, TimeInterval.oneSecond);
@@ -137,8 +141,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     @Override
     protected void onAfterPhotoTaken(File photoFile) {
         addPhotoToGallery(photoFile);
-
-        // TODO: Show thumbnail of photo.
+        showThumbNail(photoFile);
     }
 
     private void addPhotoToGallery(File photoFile) {
@@ -147,6 +150,23 @@ public class PhotoFragment extends BasicPhotoFragment {
             Uri contentUri = Uri.fromFile(photoFile);
             mediaScanIntent.setData(contentUri);
             getActivity().sendBroadcast(mediaScanIntent);
+        }
+    }
+
+    private void showThumbNail(File photoFile) {
+        if (photoFile != null) {
+            Uri contentUri = Uri.fromFile(photoFile);
+            thumbNailImageView.setImageURI(contentUri);
+
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    actionButton.getWidth(),
+                    actionButton.getHeight());
+//            layoutParams.addRule(RelativeLayout.ALIGN_TOP, R.id.actionButton);
+//            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.actionButton);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            thumbNailImageView.setLayoutParams(layoutParams);
+            thumbNailImageView.requestLayout();
+            thumbNailImageView.invalidate();
         }
     }
 
@@ -162,7 +182,9 @@ public class PhotoFragment extends BasicPhotoFragment {
             this.timeInterval = timeInterval;
             this.textView = textView;
 
-            refreshView();
+            if (currentTimeInterval == timeInterval) {
+                refreshView();
+            }
         }
 
         @Override
@@ -184,9 +206,15 @@ public class PhotoFragment extends BasicPhotoFragment {
             if (textView == otherTextView) {
                 otherTextView.setTypeface(null, Typeface.BOLD);
                 otherTextView.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
+                otherTextView.setTextSize(
+                        TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.selectedText));
             } else {
                 otherTextView.setTypeface(null, Typeface.NORMAL);
                 otherTextView.setTextColor(ContextCompat.getColor(context, R.color.unselectedText));
+                otherTextView.setTextSize(
+                        TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.unselectedText));
             }
         }
     }
