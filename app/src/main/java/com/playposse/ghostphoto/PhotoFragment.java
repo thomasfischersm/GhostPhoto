@@ -95,6 +95,16 @@ public class PhotoFragment extends BasicPhotoFragment {
         });
     }
 
+    @Override
+    public void onPause() {
+        if (currentTimerTask != null) {
+            currentTimerTask.cancel();
+            currentTimerTask = null;
+        }
+
+        super.onPause();
+    }
+
     private void initTextView(TextView textView, TimeInterval timeInterval) {
         textView.setOnClickListener(new TimeIntervalOnClickListener(textView, timeInterval));
     }

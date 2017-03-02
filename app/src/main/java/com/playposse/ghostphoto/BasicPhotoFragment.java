@@ -61,6 +61,10 @@ import java.util.concurrent.TimeUnit;
 public abstract class BasicPhotoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
+    private static final String LOG_CAT = BasicPhotoFragment.class.getSimpleName();
+
+    private static final String DIR_NAME = "GhostPhoto";
+
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
@@ -414,9 +418,18 @@ public abstract class BasicPhotoFragment extends Fragment
 
     private File generateNextFileName() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + ".jpg";
+        File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File photoDir = new File(rootDir, DIR_NAME);
+
+        if (!photoDir.exists()) {
+            if (!photoDir.mkdir()) {
+                throw new RuntimeException("Failed to create photo directory: " + photoDir);
+            }
+        }
+
         return new File(
-                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                photoDir,
                 imageFileName);
     }
 
@@ -444,10 +457,17 @@ public abstract class BasicPhotoFragment extends Fragment
     }
 
     private void requestCameraPermission() {
-        if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)
+                || FragmentCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+            FragmentCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_CAMERA_PERMISSION);
         }
     }
@@ -456,7 +476,9 @@ public abstract class BasicPhotoFragment extends Fragment
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length != 2
+                    || grantResults[0] != PackageManager.PERMISSION_GRANTED
+                    || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
                 ErrorDialog.newInstance(getString(R.string.request_permission))
                         .show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }
@@ -583,8 +605,13 @@ public abstract class BasicPhotoFragment extends Fragment
      * Opens the camera specified by {@link BasicPhotoFragment#mCameraId}.
      */
     private void openCamera(int width, int height) {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        boolean hasCameraPermission =
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean hasWriteExternalStoragePermission =
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED;
+        if (!hasCameraPermission || !hasWriteExternalStoragePermission) {
             requestCameraPermission();
             return;
         }
@@ -1005,7 +1032,9 @@ public abstract class BasicPhotoFragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FragmentCompat.requestPermissions(parent,
-                                    new String[]{Manifest.permission.CAMERA},
+                                    new String[]{
+                                            Manifest.permission.CAMERA,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                     REQUEST_CAMERA_PERMISSION);
                         }
                     })
