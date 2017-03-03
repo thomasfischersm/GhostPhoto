@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -209,7 +210,12 @@ public class PhotoFragment extends BasicPhotoFragment {
                     actionButton.getHeight());
 //            layoutParams.addRule(RelativeLayout.ALIGN_TOP, R.id.actionButton);
 //            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.actionButton);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            int orientation = getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            } else {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            }
             thumbNailImageView.setLayoutParams(layoutParams);
             thumbNailImageView.requestLayout();
             thumbNailImageView.invalidate();

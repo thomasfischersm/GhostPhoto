@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.playposse.ghostphoto.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/panelBackground"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/halfSecondTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/half_second_interval"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/secondTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/second_interval"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/threeSecondTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/three_second_interval"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tenSecondTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/ten_second_interval"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/infoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/description_info"
+                android:src="@drawable/ic_info_outline_black_24dp"
+                android:gravity="center_vertical"
+                android:tint="@android:color/white" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/secondPanelLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/actionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_play_arrow_black_24dp" />
+
+            <ImageView
+                android:id="@+id/thumbNailImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/actionButton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignEnd="@+id/actionButton"
+                android:layout_gravity="end" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
