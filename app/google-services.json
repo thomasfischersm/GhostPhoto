@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "178514594583",
+    "project_id": "ghost-photo"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178514594583:android:ad6566041472d127",
+        "android_client_info": {
+          "package_name": "com.playposse.ghostphoto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf9CtZtm3IQdQ-vEUHh5mfjObtLve9Ygc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-92561975-3"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

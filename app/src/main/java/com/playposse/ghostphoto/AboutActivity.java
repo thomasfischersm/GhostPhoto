@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 /**
  * A {@link android.app.Activity} that provides background information about the app.
  */
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends ParentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

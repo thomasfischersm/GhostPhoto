@@ -34,7 +34,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
     private static final String LOG_CAT = PhotoFragment.class.getSimpleName();
 
-    private static enum TimeInterval {
+    private enum TimeInterval {
         halfSecond(500),
         oneSecond(1_000),
         threeSeconds(3_000),
@@ -175,6 +175,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         currentTimerTask = new PhotoTimerTask();
         timer.scheduleAtFixedRate(currentTimerTask, 0, currentTimeInterval.getTimeInMs());
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        AnalyticsUtil.sendEvent(this, AnalyticsUtil.START_TAKING_PHOTOS_ACTION);
     }
 
     private synchronized void stopTakingPhotos() {
@@ -184,6 +185,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
 
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        AnalyticsUtil.sendEvent(this, AnalyticsUtil.STOP_TAKING_PHOTOS_ACTION);
     }
 
     @Override
@@ -262,6 +264,9 @@ public class PhotoFragment extends BasicPhotoFragment {
             currentTimeInterval = timeInterval;
 
             refreshView();
+            AnalyticsUtil.sendEvent(
+                    getActivity().getApplication(),
+                    AnalyticsUtil.SET_INTERVAL_ACTION + timeInterval.timeInMs);
         }
 
         private void refreshView() {
@@ -301,6 +306,9 @@ public class PhotoFragment extends BasicPhotoFragment {
                 public void run() {
                     takePicture();
                     playSound();
+                    AnalyticsUtil.sendEvent(
+                            getActivity().getApplication(),
+                            AnalyticsUtil.TAKE_PHOTO_ACTION);
                 }
             });
         }

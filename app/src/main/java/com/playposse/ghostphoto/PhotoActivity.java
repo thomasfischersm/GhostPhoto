@@ -3,7 +3,7 @@ package com.playposse.ghostphoto;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends ParentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
