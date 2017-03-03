@@ -22,4 +22,14 @@
     <string name="second_interval">1s</string>
     <string name="three_second_interval">3s</string>
     <string name="ten_second_interval">10s</string>
+
+    <!-- About activity -->
+    <string name="about_app_heading">About</string>
+    <string name="about_app_body_text">Ghost Photo is an app that takes photos on its own in a regular interval. It\'s like a ghost that photographs you.\n\nIf you want to take a selfie, the back facing camera makes higher quality photos. Putting the camera down instead of holding it steps up the photo quality another notch. But how do you trigger the photos then? A timer takes one photo. With Ghost Photo, you can make the phone take a series of photos while you post. At the end, simply look through the photos and pick the best one.\n\nWhen taking a group photo, there is often a runner. The runner presses the timer button and runs to the group. Some smart people simply turn on a video and screen grab the perfect shot out of it. The problem is that the camera can make higher quality photos for still shots than ongoing video. So, Photo Ghost coems to the rescue. It\'ll steadily snap photos at the highest still photo quality. You pick the best one and delete the rest.</string>
+    <string name="about_feedback_heading">Send Us Feedback!</string>
+    <string name="about_feedback_body_text">I love to hear from you. Send your feedback to <a href="mailto:thomas@playposse.com?subject=Feedback About Ghost Photo Android App">thomas@playposse.com</a>.</string>
+    <string name="about_credits_heading">Copyright And Credits</string>
+    <string name="about_credits_body_text">© 2017 Thomas Fischer</string>
+    <string name="feedback_email_subject">Feedback About Ghost Photo Android App</string>
+
 </resources>
