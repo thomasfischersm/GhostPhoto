@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -222,6 +223,23 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
     }
 
+    private void playSound() {
+        final MediaPlayer mediaPlayer;
+        if (currentTimeInterval == TimeInterval.halfSecond) {
+            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.water_drop_sound);
+        } else {
+            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.water_drop_sound2);
+        }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        Log.i(LOG_CAT, "Length of sound file: " + mediaPlayer.getDuration());
+        mediaPlayer.start();
+    }
+
     /**
      * An {@link android.view.View.OnClickListener} that selects a different time interval.
      */
@@ -282,6 +300,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                 @Override
                 public void run() {
                     takePicture();
+                    playSound();
                 }
             });
         }
