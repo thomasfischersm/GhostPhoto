@@ -29,6 +29,6 @@
     <string name="about_feedback_heading">Send Us Feedback!</string>
     <string name="about_feedback_body_text">I love to hear from you. Send your feedback to <a href="mailto:thomas@playposse.com?subject=Feedback About Ghost Photo Android App">thomas@playposse.com</a>.</string>
     <string name="about_credits_heading">Copyright And Credits</string>
-    <string name="about_credits_body_text">Water drop sound effect recorded by Mike Koenig\n\n© 2017 Thomas Fischer</string>
+    <string name="about_credits_body_text">Water drop sound effect recorded by Mike Koenig\nCamera by Iconsparty from the Noun Project\nGhost by Visual Glow from the Noun Project\nStar by Ralf Schmitzer from the Noun Project\n\n© 2017 Thomas Fischer</string>
     <string name="feedback_email_subject">Feedback About Ghost Photo Android App</string>
 </resources>
