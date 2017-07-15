@@ -182,6 +182,11 @@ public abstract class BasicPhotoFragment
     private boolean isCameraOpen = false;
 
     /**
+     * Stores the current flash mode.
+     */
+    protected PhotoFragment.FlashMode currentFlashMode = PhotoFragment.FlashMode.auto;
+
+    /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -598,7 +603,7 @@ public abstract class BasicPhotoFragment
 
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-                mFlashSupported = available == null ? false : available;
+                mFlashSupported = (available == null) ? false : available;
 
                 mCameraId = cameraId;
                 return;
@@ -732,7 +737,7 @@ public abstract class BasicPhotoFragment
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
+                                setFlash(mPreviewRequestBuilder);
 
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
@@ -852,7 +857,7 @@ public abstract class BasicPhotoFragment
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            setAutoFlash(captureBuilder);
+            setFlash(captureBuilder);
 
             // Orientation
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -910,7 +915,7 @@ public abstract class BasicPhotoFragment
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            setAutoFlash(mPreviewRequestBuilder);
+            setFlash(mPreviewRequestBuilder);
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
@@ -922,10 +927,22 @@ public abstract class BasicPhotoFragment
         }
     }
 
-    private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
-        if (mFlashSupported) {
+    private void setFlash(CaptureRequest.Builder requestBuilder) {
+        if (!mFlashSupported || (currentFlashMode == PhotoFragment.FlashMode.off)) {
+            Log.i(LOG_TAG, "setFlash: flash set to off");
+            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                    CaptureRequest.CONTROL_AE_MODE_ON);
+        } else if (currentFlashMode == PhotoFragment.FlashMode.auto) {
+            Log.i(LOG_TAG, "setFlash: flash set to auto");
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+        } else if (currentFlashMode == PhotoFragment.FlashMode.on) {
+            Log.i(LOG_TAG, "setFlash: flash set to always");
+            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                    CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+        } else {
+            Log.e(LOG_TAG, "setFlash: Unexepected configuration! mFlashSupported: "
+                    + mFlashSupported + ", currentFlashMode: " + currentFlashMode);
         }
     }
 

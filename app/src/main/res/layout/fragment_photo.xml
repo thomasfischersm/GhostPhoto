@@ -9,6 +9,108 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
+    <ImageView
+        android:id="@+id/flashImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/flash_content_description"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_flash_auto_black_24dp"
+        android:tint="@color/selectedText" />
+
+    <FrameLayout
+        android:id="@+id/flashSelectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/panelBackground"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <LinearLayout
+                android:id="@+id/flashOffLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/flash_off_content_description"
+                    android:src="@drawable/ic_flash_off_black_24dp"
+                    android:tint="@color/selectedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/flash_off"
+                    android:textColor="@color/selectedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/flashAutoLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/flash_auto_content_description"
+                    android:src="@drawable/ic_flash_auto_black_24dp"
+                    android:tint="@color/selectedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/flash_auto"
+                    android:textColor="@color/selectedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/flashOnLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/flash_on_content_description"
+                    android:src="@drawable/ic_flash_on_black_24dp"
+                    android:tint="@color/selectedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/flash_on"
+                    android:textColor="@color/selectedText" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

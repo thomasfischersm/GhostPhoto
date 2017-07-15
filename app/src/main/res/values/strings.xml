@@ -18,10 +18,17 @@
     </string>
 
     <!-- Photo activity -->
+    <string name="flash_content_description">An icon that indicates the flash mode.</string>
+    <string name="flash_off_content_description">An icon to set the flash to off.</string>
+    <string name="flash_auto_content_description">An icon to set the flash to auto.</string>
+    <string name="flash_on_content_description">An icon to set the flash to on.</string>
     <string name="half_second_interval">.5s</string>
     <string name="second_interval">1s</string>
     <string name="three_second_interval">3s</string>
     <string name="ten_second_interval">10s</string>
+    <string name="flash_off">Flash off</string>
+    <string name="flash_auto">Flash auto</string>
+    <string name="flash_on">Flash on</string>
 
     <!-- About activity -->
     <string name="about_app_heading">About</string>

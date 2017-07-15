@@ -1,5 +1,6 @@
 package com.playposse.ghostphoto;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,8 +16,12 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,10 +39,11 @@ import java.util.TimerTask;
  */
 public class PhotoFragment extends BasicPhotoFragment {
 
-    private static final String LOG_CAT = PhotoFragment.class.getSimpleName();
+    private static final String LOG_TAG = PhotoFragment.class.getSimpleName();
 
     private static final String ACTION_STATE_KEY = "actionState";
     private static final String TIME_INTERVAL_KEY = "timeInterval";
+    private static final String FLASH_MODE_KEY = "flashMode";
 
     private enum TimeInterval {
         halfSecond(500),
@@ -61,8 +67,15 @@ public class PhotoFragment extends BasicPhotoFragment {
         stopped,
     }
 
+    public enum FlashMode {
+        auto,
+        on,
+        off
+    }
+
     private final Timer timer = new Timer();
 
+    private ImageView flashImageView;
     private TextView halfSecondTextView;
     private TextView secondTextView;
     private TextView threeSecondTextView;
@@ -70,6 +83,10 @@ public class PhotoFragment extends BasicPhotoFragment {
     private ImageView infoButton;
     private FloatingActionButton actionButton;
     private ImageView thumbNailImageView;
+    private FrameLayout flashSelectionLayout;
+    private LinearLayout flashOffLayout;
+    private LinearLayout flashAutoLayout;
+    private LinearLayout flashOnLayout;
 
     private TimeInterval currentTimeInterval = TimeInterval.oneSecond;
     private ActionState actionState = ActionState.stopped;
@@ -84,6 +101,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
+        flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
         halfSecondTextView = (TextView) rootView.findViewById(R.id.halfSecondTextView);
         secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
         threeSecondTextView = (TextView) rootView.findViewById(R.id.threeSecondTextView);
@@ -91,14 +109,29 @@ public class PhotoFragment extends BasicPhotoFragment {
         infoButton = (ImageView) rootView.findViewById(R.id.infoButton);
         actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
         thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
+        flashSelectionLayout = (FrameLayout) rootView.findViewById(R.id.flashSelectionLayout);
+        flashOffLayout = (LinearLayout) rootView.findViewById(R.id.flashOffLayout);
+        flashAutoLayout = (LinearLayout) rootView.findViewById(R.id.flashAutoLayout);
+        flashOnLayout = (LinearLayout) rootView.findViewById(R.id.flashOnLayout);
 
         initTextView(halfSecondTextView, TimeInterval.halfSecond);
         initTextView(secondTextView, TimeInterval.oneSecond);
         initTextView(threeSecondTextView, TimeInterval.threeSeconds);
         initTextView(tenSecondTextView, TimeInterval.tenSeconds);
 
+        flashOffLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.off));
+        flashAutoLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.auto));
+        flashOnLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.on));
+        flashSelectionLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss flash selection when the user clicks away.
+                startFlashLayoutHideAnimation();
+            }
+        });
+
         refreshActionButton();
-        actionButton.setOnClickListener(new View.OnClickListener() {
+        actionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (actionState == ActionState.running) {
@@ -109,7 +142,7 @@ public class PhotoFragment extends BasicPhotoFragment {
             }
         });
 
-        thumbNailImageView.setOnClickListener(new View.OnClickListener() {
+        thumbNailImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getLastFile() != null) {
@@ -118,7 +151,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                                 getActivity(),
                                 "com.playposse.ghostphoto",
                                 getLastFile());
-                        Log.i(LOG_CAT, "Starting intent to view " + uri);
+                        Log.i(LOG_TAG, "Starting intent to view " + uri);
 
                         Intent intent = new Intent()
                                 .setAction(Intent.ACTION_VIEW)
@@ -130,21 +163,29 @@ public class PhotoFragment extends BasicPhotoFragment {
                             startActivity(intent);
                         }
                     } catch (Throwable ex) {
-                        Log.e(LOG_CAT, "Failed to view photo in photoviewer");
+                        Log.e(LOG_TAG, "Failed to view photo in photoviewer");
                         throw ex;
                     }
                 }
             }
         });
 
-        infoButton.setOnClickListener(new View.OnClickListener() {
+        infoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
             }
         });
 
+        flashImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFlashLayoutRevealAnimation();
+            }
+        });
+
         continueTakingPhotosAfterScreenRotation(savedInstanceState);
+        refreshFlashState();
         refreshTimeIntervalViews();
     }
 
@@ -266,7 +307,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                 mp.release();
             }
         });
-        Log.i(LOG_CAT, "Length of sound file: " + mediaPlayer.getDuration());
+        Log.i(LOG_TAG, "Length of sound file: " + mediaPlayer.getDuration());
         mediaPlayer.start();
     }
 
@@ -293,6 +334,23 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
     }
 
+    private void refreshFlashState() {
+        if (getActivity() != null) {
+            currentFlashMode = GhostPhotoPreferences.getFlashMode(getActivity());
+        }
+        switch (currentFlashMode) {
+            case auto:
+                flashImageView.setImageResource(R.drawable.ic_flash_auto_black_24dp);
+                break;
+            case on:
+                flashImageView.setImageResource(R.drawable.ic_flash_on_black_24dp);
+                break;
+            case off:
+                flashImageView.setImageResource(R.drawable.ic_flash_off_black_24dp);
+                break;
+        }
+    }
+
     private void continueTakingPhotosAfterScreenRotation(Bundle savedInstanceState) {
         // Re-start the photo timer if the user simply changed the screen orientation.
         if (savedInstanceState != null) {
@@ -309,13 +367,75 @@ public class PhotoFragment extends BasicPhotoFragment {
                     startTakingPhotos();
                 }
             }
+
+            String savedFlashModeStr = savedInstanceState.getString(FLASH_MODE_KEY);
+            if (savedFlashModeStr != null) {
+                currentFlashMode = FlashMode.valueOf(savedFlashModeStr);
+            }
         }
     }
 
+    private void startFlashLayoutRevealAnimation() {
+        int centerX = (flashImageView.getLeft() + flashImageView.getRight()) / 2;
+        int centerY = (flashImageView.getTop() + flashImageView.getBottom()) / 2;
+        int startRadius = 0;
+        int endRadius = flashSelectionLayout.getWidth();
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                flashSelectionLayout,
+                centerX,
+                centerY,
+                startRadius,
+                endRadius);
+
+        flashSelectionLayout.setVisibility(View.VISIBLE);
+        flashImageView.setVisibility(View.GONE);
+        animator.start();
+    }
+
+    private void startFlashLayoutHideAnimation() {
+        int centerX = (flashImageView.getLeft() + flashImageView.getRight()) / 2;
+        int centerY = (flashImageView.getTop() + flashImageView.getBottom()) / 2;
+        int startRadius = flashSelectionLayout.getWidth();
+        int endRadius = 0;
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                flashSelectionLayout,
+                centerX,
+                centerY,
+                startRadius,
+                endRadius);
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                flashSelectionLayout.setVisibility(View.GONE);
+                flashImageView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                // Nothing to do.
+            }
+        });
+
+        animator.start();
+    }
+
     /**
-     * An {@link android.view.View.OnClickListener} that selects a different time interval.
+     * An {@link OnClickListener} that selects a different time interval.
      */
-    private class TimeIntervalOnClickListener implements View.OnClickListener {
+    private class TimeIntervalOnClickListener implements OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -325,6 +445,26 @@ public class PhotoFragment extends BasicPhotoFragment {
             AnalyticsUtil.sendEvent(
                     getActivity().getApplication(),
                     AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.timeInMs);
+        }
+    }
+
+    /**
+     * An {@link OnClickListener} that selects a new flash mode.
+     */
+    private class FlashModeOnClickListener implements OnClickListener {
+
+        private final FlashMode flashMode;
+
+        private FlashModeOnClickListener(FlashMode flashMode) {
+            this.flashMode = flashMode;
+        }
+
+        @Override
+        public void onClick(View v) {
+            startFlashLayoutHideAnimation();
+            GhostPhotoPreferences.setFlashMode(getActivity(), flashMode);
+            refreshFlashState();
+            Log.i(LOG_TAG, "onClick: Selected new flash mode: " + currentFlashMode.name());
         }
     }
 
