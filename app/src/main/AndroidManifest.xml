@@ -44,5 +44,4 @@
             android:name=".AboutActivity"
             android:parentActivityName=".PhotoActivity" />
     </application>
-
 </manifest>
