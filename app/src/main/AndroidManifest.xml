@@ -33,6 +33,11 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <provider
+            android:name=".data.GhostPhotoContentProvider"
+            android:authorities="com.playposse.ghostphoto.provider"
+            android:exported="false" />
+
         <activity android:name=".activities.camera.PhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
