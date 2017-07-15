@@ -1,7 +1,9 @@
-package com.playposse.ghostphoto;
+package com.playposse.ghostphoto.camera;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.playposse.ghostphoto.ParentActivity;
+import com.playposse.ghostphoto.R;
 
 public class PhotoActivity extends ParentActivity {
 

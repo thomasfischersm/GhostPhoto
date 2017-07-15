@@ -1,4 +1,4 @@
-package com.playposse.ghostphoto;
+package com.playposse.ghostphoto.camera;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -27,6 +27,10 @@ import android.widget.TextView;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.playposse.ghostphoto.AboutActivity;
+import com.playposse.ghostphoto.AnalyticsUtil;
+import com.playposse.ghostphoto.GhostPhotoPreferences;
+import com.playposse.ghostphoto.R;
 
 import java.io.File;
 import java.util.Map;

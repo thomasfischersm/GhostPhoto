@@ -1,4 +1,4 @@
-package com.playposse.ghostphoto;
+package com.playposse.ghostphoto.camera;
 
 import android.content.Context;
 import android.util.AttributeSet;
