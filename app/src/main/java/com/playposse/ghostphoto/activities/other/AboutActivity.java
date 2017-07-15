@@ -1,8 +1,10 @@
-package com.playposse.ghostphoto;
+package com.playposse.ghostphoto.activities.other;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import com.playposse.ghostphoto.activities.ParentActivity;
+import com.playposse.ghostphoto.R;
 
 /**
  * A {@link android.app.Activity} that provides background information about the app.

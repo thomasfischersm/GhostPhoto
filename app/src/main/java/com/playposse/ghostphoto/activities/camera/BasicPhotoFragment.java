@@ -1,4 +1,4 @@
-package com.playposse.ghostphoto.camera;
+package com.playposse.ghostphoto.activities.camera;
 
 import android.Manifest;
 import android.app.Activity;

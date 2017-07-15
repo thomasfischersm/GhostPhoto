@@ -1,10 +1,11 @@
-package com.playposse.ghostphoto;
+package com.playposse.ghostphoto.util;
 
 import android.app.Application;
 import android.app.Fragment;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.playposse.ghostphoto.GhostPhotoApplication;
 
 /**
  * A helper class to deal with Google Analytics.

@@ -33,7 +33,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".camera.PhotoActivity">
+        <activity android:name=".activities.camera.PhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
-            android:parentActivityName=".camera.PhotoActivity" />
+            android:name=".activities.other.AboutActivity"
+            android:parentActivityName=".activities.camera.PhotoActivity" />
     </application>
 </manifest>

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.playposse.ghostphoto.camera.PhotoFragment;
+import com.playposse.ghostphoto.activities.camera.PhotoFragment;
 
 import java.util.HashSet;
 import java.util.Set;
