@@ -1,6 +1,5 @@
 package com.playposse.ghostphoto;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,21 +7,24 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import java.io.File;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +35,9 @@ import java.util.TimerTask;
 public class PhotoFragment extends BasicPhotoFragment {
 
     private static final String LOG_CAT = PhotoFragment.class.getSimpleName();
+
+    private static final String ACTION_STATE_KEY = "actionState";
+    private static final String TIME_INTERVAL_KEY = "timeInterval";
 
     private enum TimeInterval {
         halfSecond(500),
@@ -51,7 +56,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
     }
 
-    private static enum ActionState {
+    private enum ActionState {
         running,
         stopped,
     }
@@ -69,6 +74,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private TimeInterval currentTimeInterval = TimeInterval.oneSecond;
     private ActionState actionState = ActionState.stopped;
     private PhotoTimerTask currentTimerTask = null;
+    private BiMap<TimeInterval, TextView> timeIntervalToViewMap = HashBiMap.create();
 
     public static PhotoFragment newInstance() {
         return new PhotoFragment();
@@ -97,12 +103,9 @@ public class PhotoFragment extends BasicPhotoFragment {
             public void onClick(View v) {
                 if (actionState == ActionState.running) {
                     stopTakingPhotos();
-                    actionState = ActionState.stopped;
                 } else {
                     startTakingPhotos();
-                    actionState = ActionState.running;
                 }
-                refreshActionButton();
             }
         });
 
@@ -140,6 +143,9 @@ public class PhotoFragment extends BasicPhotoFragment {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
             }
         });
+
+        continueTakingPhotosAfterScreenRotation(savedInstanceState);
+        refreshTimeIntervalViews();
     }
 
     @Override
@@ -154,8 +160,17 @@ public class PhotoFragment extends BasicPhotoFragment {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(ACTION_STATE_KEY, actionState.name());
+        outState.putString(TIME_INTERVAL_KEY, currentTimeInterval.name());
+    }
+
     private void initTextView(TextView textView, TimeInterval timeInterval) {
-        textView.setOnClickListener(new TimeIntervalOnClickListener(textView, timeInterval));
+        timeIntervalToViewMap.put(timeInterval, textView);
+        textView.setOnClickListener(new TimeIntervalOnClickListener());
     }
 
     private void refreshActionButton() {
@@ -176,6 +191,9 @@ public class PhotoFragment extends BasicPhotoFragment {
         timer.scheduleAtFixedRate(currentTimerTask, 0, currentTimeInterval.getTimeInMs());
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         AnalyticsUtil.sendEvent(this, AnalyticsUtil.START_TAKING_PHOTOS_ACTION);
+
+        actionState = ActionState.running;
+        refreshActionButton();
     }
 
     private synchronized void stopTakingPhotos() {
@@ -186,6 +204,9 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         AnalyticsUtil.sendEvent(this, AnalyticsUtil.STOP_TAKING_PHOTOS_ACTION);
+
+        actionState = ActionState.stopped;
+        refreshActionButton();
     }
 
     @Override
@@ -199,7 +220,14 @@ public class PhotoFragment extends BasicPhotoFragment {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri contentUri = Uri.fromFile(photoFile);
             mediaScanIntent.setData(contentUri);
-            getActivity().sendBroadcast(mediaScanIntent);
+
+            if (getActivity() != null) {
+                getActivity().sendBroadcast(mediaScanIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // getActivity() may return null during screen rotation changes. If the user has
+                // a late enough SDK, try using getContext().
+                getContext().sendBroadcast(mediaScanIntent);
+            }
         }
     }
 
@@ -242,55 +270,61 @@ public class PhotoFragment extends BasicPhotoFragment {
         mediaPlayer.start();
     }
 
+    private void refreshTimeIntervalViews() {
+        for (Map.Entry<TimeInterval, TextView> entry : timeIntervalToViewMap.entrySet()) {
+            makeBoldOrNormal(entry.getValue(), entry.getKey() == currentTimeInterval);
+        }
+    }
+
+    private void makeBoldOrNormal(TextView textView, boolean isBold) {
+        Context context = getActivity();
+        if (isBold) {
+            textView.setTypeface(null, Typeface.BOLD);
+            textView.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
+            textView.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    getResources().getDimension(R.dimen.selectedText));
+        } else {
+            textView.setTypeface(null, Typeface.NORMAL);
+            textView.setTextColor(ContextCompat.getColor(context, R.color.unselectedText));
+            textView.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    getResources().getDimension(R.dimen.unselectedText));
+        }
+    }
+
+    private void continueTakingPhotosAfterScreenRotation(Bundle savedInstanceState) {
+        // Re-start the photo timer if the user simply changed the screen orientation.
+        if (savedInstanceState != null) {
+            String savedTimeIntervalStr = savedInstanceState.getString(TIME_INTERVAL_KEY);
+            if (savedTimeIntervalStr != null) {
+                currentTimeInterval = TimeInterval.valueOf(savedTimeIntervalStr);
+                refreshTimeIntervalViews();
+            }
+
+            String savedActionStateStr = savedInstanceState.getString(ACTION_STATE_KEY);
+            if (savedActionStateStr != null) {
+                ActionState savedActionState = ActionState.valueOf(savedActionStateStr);
+                if (savedActionState == ActionState.running) {
+                    startTakingPhotos();
+                }
+            }
+        }
+    }
+
     /**
      * An {@link android.view.View.OnClickListener} that selects a different time interval.
      */
     private class TimeIntervalOnClickListener implements View.OnClickListener {
 
-        private final TimeInterval timeInterval;
-        private final TextView textView;
-
-        private TimeIntervalOnClickListener(TextView textView, TimeInterval timeInterval) {
-            this.timeInterval = timeInterval;
-            this.textView = textView;
-
-            if (currentTimeInterval == timeInterval) {
-                refreshView();
-            }
-        }
-
         @Override
-        public void onClick(View v) {
-            currentTimeInterval = timeInterval;
+        public void onClick(View view) {
+            currentTimeInterval = timeIntervalToViewMap.inverse().get((TextView) view);
 
-            refreshView();
+            refreshTimeIntervalViews();
             AnalyticsUtil.sendEvent(
                     getActivity().getApplication(),
-                    AnalyticsUtil.SET_INTERVAL_ACTION + timeInterval.timeInMs);
-        }
-
-        private void refreshView() {
-            makeBoldOrNormal(halfSecondTextView);
-            makeBoldOrNormal(secondTextView);
-            makeBoldOrNormal(threeSecondTextView);
-            makeBoldOrNormal(tenSecondTextView);
-        }
-
-        private void makeBoldOrNormal(TextView otherTextView) {
-            Context context = getActivity();
-            if (textView == otherTextView) {
-                otherTextView.setTypeface(null, Typeface.BOLD);
-                otherTextView.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
-                otherTextView.setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        getResources().getDimension(R.dimen.selectedText));
-            } else {
-                otherTextView.setTypeface(null, Typeface.NORMAL);
-                otherTextView.setTextColor(ContextCompat.getColor(context, R.color.unselectedText));
-                otherTextView.setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        getResources().getDimension(R.dimen.unselectedText));
-            }
+                    AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.timeInMs);
         }
     }
 

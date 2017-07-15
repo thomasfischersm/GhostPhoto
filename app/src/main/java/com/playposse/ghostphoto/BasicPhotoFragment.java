@@ -58,11 +58,14 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A {@link Fragment} that simply shows the camera surface and deals with the camera2 API.
+ */
 public abstract class BasicPhotoFragment
         extends Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static final String LOG_CAT = BasicPhotoFragment.class.getSimpleName();
+    private static final String LOG_TAG = BasicPhotoFragment.class.getSimpleName();
 
     private static final String DIR_NAME = "GhostPhoto";
 
@@ -172,6 +175,11 @@ public abstract class BasicPhotoFragment
      * The {@link android.util.Size} of camera preview.
      */
     private Size mPreviewSize;
+
+    /**
+     * Indicates if the camera is open. It may take a few seconds until the camera is opened.
+     */
+    private boolean isCameraOpen = false;
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
@@ -371,8 +379,13 @@ public abstract class BasicPhotoFragment
      * @param aspectRatio       The aspect ratio
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
-    private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
-                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+    private static Size chooseOptimalSize(
+            Size[] choices,
+            int textureViewWidth,
+            int textureViewHeight,
+            int maxWidth,
+            int maxHeight,
+            Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
@@ -606,7 +619,7 @@ public abstract class BasicPhotoFragment
     private void openCamera(int width, int height) {
         boolean hasCameraPermission =
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED;
+                        == PackageManager.PERMISSION_GRANTED;
         boolean hasWriteExternalStoragePermission =
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED;
@@ -628,12 +641,16 @@ public abstract class BasicPhotoFragment
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
         }
+
+        isCameraOpen = true;
     }
 
     /**
      * Closes the current {@link CameraDevice}.
      */
     private void closeCamera() {
+        isCameraOpen = false;
+
         try {
             mCameraOpenCloseLock.acquire();
             if (null != mCaptureSession) {
@@ -775,7 +792,11 @@ public abstract class BasicPhotoFragment
      * Initiate a still image capture.
      */
     protected void takePicture() {
-        lockFocus();
+        if (isCameraOpen) {
+            lockFocus();
+        } else {
+            Log.i(LOG_TAG, "takePicture: Skipping taking a photo because the camera is closed.");
+        }
     }
 
     /**
