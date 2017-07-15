@@ -28,6 +28,9 @@ import android.widget.TextView;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.playposse.ghostphoto.activities.other.AboutActivity;
+import com.playposse.ghostphoto.constants.ActionState;
+import com.playposse.ghostphoto.constants.FlashMode;
+import com.playposse.ghostphoto.constants.TimeInterval;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
@@ -48,34 +51,6 @@ public class PhotoFragment extends BasicPhotoFragment {
     private static final String ACTION_STATE_KEY = "actionState";
     private static final String TIME_INTERVAL_KEY = "timeInterval";
     private static final String FLASH_MODE_KEY = "flashMode";
-
-    private enum TimeInterval {
-        halfSecond(500),
-        oneSecond(1_000),
-        threeSeconds(3_000),
-        tenSeconds(10_000),;
-
-        private final long timeInMs;
-
-        TimeInterval(long timeInMs) {
-            this.timeInMs = timeInMs;
-        }
-
-        private long getTimeInMs() {
-            return timeInMs;
-        }
-    }
-
-    private enum ActionState {
-        running,
-        stopped,
-    }
-
-    public enum FlashMode {
-        auto,
-        on,
-        off
-    }
 
     private final Timer timer = new Timer();
 
@@ -448,7 +423,7 @@ public class PhotoFragment extends BasicPhotoFragment {
             refreshTimeIntervalViews();
             AnalyticsUtil.sendEvent(
                     getActivity().getApplication(),
-                    AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.timeInMs);
+                    AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.getTimeInMs());
         }
     }
 

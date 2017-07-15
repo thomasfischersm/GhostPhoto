@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.playposse.ghostphoto.activities.camera.PhotoFragment;
+import com.playposse.ghostphoto.constants.FlashMode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,21 +20,21 @@ public final class GhostPhotoPreferences {
 
     private static final String FLASH_MODE_KEY = "flashMode";
 
-    private static final PhotoFragment.FlashMode FLASH_MODE_DEFAULT = PhotoFragment.FlashMode.auto;
+    private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
 
     private static final String NULL_STRING = "-1";
     private static final int NULL_VALUE = -1;
 
-    public static PhotoFragment.FlashMode getFlashMode(Context context) {
+    public static FlashMode getFlashMode(Context context) {
         String flashModeStr = getString(context, FLASH_MODE_KEY);
         if (flashModeStr != null) {
-            return PhotoFragment.FlashMode.valueOf(flashModeStr);
+            return FlashMode.valueOf(flashModeStr);
         } else {
             return FLASH_MODE_DEFAULT;
         }
     }
 
-    public static void setFlashMode(Context context, PhotoFragment.FlashMode flashMode) {
+    public static void setFlashMode(Context context, FlashMode flashMode) {
         setString(context, FLASH_MODE_KEY, flashMode.name());
     }
 

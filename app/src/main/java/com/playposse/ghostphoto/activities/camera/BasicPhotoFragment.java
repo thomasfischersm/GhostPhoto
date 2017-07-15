@@ -45,6 +45,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.playposse.ghostphoto.R;
+import com.playposse.ghostphoto.constants.FlashMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -186,7 +187,7 @@ public abstract class BasicPhotoFragment
     /**
      * Stores the current flash mode.
      */
-    protected PhotoFragment.FlashMode currentFlashMode = PhotoFragment.FlashMode.auto;
+    protected FlashMode currentFlashMode = FlashMode.auto;
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
@@ -930,15 +931,15 @@ public abstract class BasicPhotoFragment
     }
 
     private void setFlash(CaptureRequest.Builder requestBuilder) {
-        if (!mFlashSupported || (currentFlashMode == PhotoFragment.FlashMode.off)) {
+        if (!mFlashSupported || (currentFlashMode == FlashMode.off)) {
             Log.i(LOG_TAG, "setFlash: flash set to off");
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON);
-        } else if (currentFlashMode == PhotoFragment.FlashMode.auto) {
+        } else if (currentFlashMode == FlashMode.auto) {
             Log.i(LOG_TAG, "setFlash: flash set to auto");
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-        } else if (currentFlashMode == PhotoFragment.FlashMode.on) {
+        } else if (currentFlashMode == FlashMode.on) {
             Log.i(LOG_TAG, "setFlash: flash set to always");
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
