@@ -1,6 +1,7 @@
 package com.playposse.ghostphoto.activities.camera;
 
 import android.animation.Animator;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,13 +28,17 @@ import android.widget.TextView;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.playposse.ghostphoto.GhostPhotoPreferences;
+import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.other.AboutActivity;
 import com.playposse.ghostphoto.constants.ActionState;
 import com.playposse.ghostphoto.constants.FlashMode;
 import com.playposse.ghostphoto.constants.TimeInterval;
+import com.playposse.ghostphoto.data.GhostPhotoContract;
+import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.StartShootAction;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
-import com.playposse.ghostphoto.GhostPhotoPreferences;
-import com.playposse.ghostphoto.R;
 
 import java.io.File;
 import java.util.Map;
@@ -214,6 +219,11 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         actionState = ActionState.running;
         refreshActionButton();
+
+        // Record action to the db.
+        getActivity()
+                .getContentResolver()
+                .insert(StartShootAction.CONTENT_URI, null);
     }
 
     private synchronized void stopTakingPhotos() {
@@ -227,12 +237,27 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         actionState = ActionState.stopped;
         refreshActionButton();
+
+        // Record action to the db.
+        getActivity()
+                .getContentResolver()
+                .update(EndShootAction.CONTENT_URI, null, null, null);
     }
 
     @Override
     protected void onAfterPhotoTaken(File photoFile) {
         addPhotoToGallery(photoFile);
         showThumbNail(photoFile);
+
+        // Record action to the db.
+        if (photoFile != null) {
+            Uri fileUri = Uri.fromFile(photoFile);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(GhostPhotoContract.PhotoTable.FILE_URI_COLUMN, fileUri.toString());
+            getActivity()
+                    .getContentResolver()
+                    .insert(AddPhotoAction.CONTENT_URI, contentValues);
+        }
     }
 
     private void addPhotoToGallery(File photoFile) {

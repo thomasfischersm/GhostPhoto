@@ -12,8 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteSelectedAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
+import com.playposse.ghostphoto.data.GhostPhotoContract.StartShootAction;
+import com.playposse.ghostphoto.util.DatabaseDumper;
 
 /**
  * A {@link ContentProvider} to store informations about the photos that were taken.
@@ -36,12 +43,12 @@ public class GhostPhotoContentProvider extends ContentProvider {
     static {
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoShootTable.PATH, PHOTO_SHOOT_TABLE_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, PHOTO_TABLE_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, START_SHOOT_ACTION_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, END_SHOOT_ACTION_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, ADD_PHOTO_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, GET_LATEST_PHOTO_ACTION_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, DELETE_ALL_ACTION_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, PhotoTable.PATH, DELETE_SELECTED_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, StartShootAction.PATH, START_SHOOT_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, EndShootAction.PATH, END_SHOOT_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, AddPhotoAction.PATH, ADD_PHOTO_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, GetLatestPhotoAction.PATH, GET_LATEST_PHOTO_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteAllAction.PATH, DELETE_ALL_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteSelectedAction.PATH, DELETE_SELECTED_ACTION_KEY);
     }
 
     private GhostPhotoDatabaseHelper databaseHelper;
@@ -121,8 +128,6 @@ public class GhostPhotoContentProvider extends ContentProvider {
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
         ContentResolver contentResolver = getContext().getContentResolver();
 
-        String tableName;
-        Uri contentUri;
         switch (uriMatcher.match(uri)) {
             case START_SHOOT_ACTION_KEY:
                 return startShoot(database, contentResolver);
@@ -135,9 +140,12 @@ public class GhostPhotoContentProvider extends ContentProvider {
 
     private Uri startShoot(SQLiteDatabase database, ContentResolver contentResolver) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(PhotoShootTable.ID_COLUMN, (String) null);
         long id = database.insert(PhotoShootTable.TABLE_NAME, null, contentValues);
         contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
-        return ContentUris.withAppendedId(PhotoShootTable.CONTENT_URI, id);
+        Uri resultUri = ContentUris.withAppendedId(PhotoShootTable.CONTENT_URI, id);
+        DatabaseDumper.dumpTables(databaseHelper);
+        return resultUri;
     }
 
     /**
@@ -159,22 +167,28 @@ public class GhostPhotoContentProvider extends ContentProvider {
     private long getActivePhotoShootId(SQLiteDatabase database, ContentResolver contentResolver) {
         Cursor cursor = database.query(
                 PhotoShootTable.TABLE_NAME,
-                new String[]{PhotoShootTable._ID}, "state=?",
-                new String[]{Integer.toString(PhotoShootTable.ACTIVE_STATE)},
+                new String[]{PhotoShootTable._ID, PhotoShootTable.STATE_COLUMN},
+                "state = " + PhotoShootTable.ACTIVE_STATE,
+                null,
                 null,
                 null,
                 PhotoShootTable.ID_COLUMN);
 
-        if (cursor.moveToNext()) {
-            int idColumnIndex = cursor.getColumnIndex(PhotoShootTable.ID_COLUMN);
-            long id = cursor.getLong(idColumnIndex);
-            return id;
-        } else {
-            Log.e(LOG_TAG, "getActivePhotoShootId: Failed to find active photo shoot!");
-            // Try to recover by creating a new photo shoot.
-            Uri uri = startShoot(database, contentResolver);
-            long id = ContentUris.parseId(uri);
-            return id;
+        try {
+            if (cursor.moveToNext()) {
+                int idColumnIndex = cursor.getColumnIndex(PhotoShootTable.ID_COLUMN);
+                long id = cursor.getLong(idColumnIndex);
+                Log.d(LOG_TAG, "getActivePhotoShootId: Found active shoot: " + id);
+                return id;
+            } else {
+                Log.e(LOG_TAG, "getActivePhotoShootId: Failed to find active photo shoot!");
+                // Try to recover by creating a new photo shoot.
+                Uri uri = startShoot(database, contentResolver);
+                long id = ContentUris.parseId(uri);
+                return id;
+            }
+        } finally {
+            cursor.close();
         }
     }
 
@@ -224,8 +238,8 @@ public class GhostPhotoContentProvider extends ContentProvider {
         Cursor cursor = database.query(
                 PhotoTable.TABLE_NAME,
                 new String[]{PhotoTable.ID_COLUMN},
-                "shoot_id=?",
-                new String[]{Long.toString(shootId)},
+                "shoot_id = " + shootId,
+                null,
                 null,
                 null,
                 null);
@@ -243,14 +257,14 @@ public class GhostPhotoContentProvider extends ContentProvider {
         // Delete all the photos.
         int photoDeleteCount = database.delete(
                 PhotoTable.TABLE_NAME,
-                "shoot_id=?",
-                new String[]{Long.toString(shootId)});
+                "shoot_id=" + shootId,
+                null);
 
         // Delete the photo shoot.
         int shootDeleteCount = database.delete(
                 PhotoShootTable.TABLE_NAME,
-                "_id=?",
-                new String[]{Long.toString(shootId)});
+                "_id=" + shootId,
+                null);
         if (shootDeleteCount != 1) {
             Log.e(LOG_TAG, "deleteAll: Something went wrong deleting a photo shoot: "
                     + shootDeleteCount);
@@ -279,8 +293,8 @@ public class GhostPhotoContentProvider extends ContentProvider {
         Cursor cursor = database.query(
                 PhotoTable.TABLE_NAME,
                 new String[]{PhotoTable.ID_COLUMN},
-                "(shoot_id=?) and (is_selected=1)",
-                new String[]{Long.toString(shootId)},
+                "(shoot_id=" + shootId + ") and (is_selected=1)",
+                null,
                 null,
                 null,
                 null);
@@ -298,8 +312,8 @@ public class GhostPhotoContentProvider extends ContentProvider {
         // Delete selected photos.
         int photoDeleteCount = database.delete(
                 PhotoTable.TABLE_NAME,
-                "(shoot_id=?) and (is_selected=1)",
-                new String[]{Long.toString(shootId)});
+                "(shoot_id=" + shootId + ") and (is_selected=1)",
+                null);
 
         // Notify of changes.
         contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
@@ -317,7 +331,6 @@ public class GhostPhotoContentProvider extends ContentProvider {
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
-        final int rowCount;
         switch (uriMatcher.match(uri)) {
             case END_SHOOT_ACTION_KEY:
                 return endShoot(database);
@@ -331,10 +344,12 @@ public class GhostPhotoContentProvider extends ContentProvider {
         contentValues.put(
                 PhotoShootTable.STATE_COLUMN,
                 Integer.toString(PhotoShootTable.COMPLETED_STATE));
-        return database.update(
+        int rowCount = database.update(
                 PhotoShootTable.TABLE_NAME,
-                contentValues, "state=?",
-                new String[]{Integer.toString(PhotoShootTable.ACTIVE_STATE)});
+                contentValues, "state=" + PhotoShootTable.ACTIVE_STATE,
+                null);
+        DatabaseDumper.dumpTables(databaseHelper);
+        return rowCount;
     }
 }
 

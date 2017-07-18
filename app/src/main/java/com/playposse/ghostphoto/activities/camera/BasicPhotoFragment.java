@@ -220,6 +220,10 @@ public abstract class BasicPhotoFragment
             }
         }
 
+        @Override
+        public void onClosed(@NonNull CameraDevice camera) {
+            // TODO: Try to re-open the camera.
+        }
     };
 
     /**
@@ -248,6 +252,7 @@ public abstract class BasicPhotoFragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
+            Log.d(LOG_TAG, "onImageAvailable: Image is available");
             lastFile = generateNextFileName();
             mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
         }
@@ -292,7 +297,7 @@ public abstract class BasicPhotoFragment
     private CameraCaptureSession.CaptureCallback mCaptureCallback
             = new CameraCaptureSession.CaptureCallback() {
 
-        private void process(CaptureResult result) {
+        private void process(CaptureResult result, boolean isCompleted) {
             switch (mState) {
                 case STATE_PREVIEW: {
                     // We have nothing to do when the camera preview is working normally.
@@ -301,7 +306,7 @@ public abstract class BasicPhotoFragment
                 case STATE_WAITING_LOCK: {
                     Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
                     if (afState == null) {
-                        captureStillPicture();
+                        captureStillPicture(1, isCompleted);
                     } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
                             CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
                         // CONTROL_AE_STATE can be null on some devices
@@ -309,7 +314,7 @@ public abstract class BasicPhotoFragment
                         if (aeState == null ||
                                 aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
                             mState = STATE_PICTURE_TAKEN;
-                            captureStillPicture();
+                            captureStillPicture(2, isCompleted);
                         } else {
                             runPrecaptureSequence();
                         }
@@ -331,7 +336,7 @@ public abstract class BasicPhotoFragment
                     Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
                     if (aeState == null || aeState != CaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
                         mState = STATE_PICTURE_TAKEN;
-                        captureStillPicture();
+                        captureStillPicture(3, isCompleted);
                     }
                     break;
                 }
@@ -342,14 +347,16 @@ public abstract class BasicPhotoFragment
         public void onCaptureProgressed(@NonNull CameraCaptureSession session,
                                         @NonNull CaptureRequest request,
                                         @NonNull CaptureResult partialResult) {
-            process(partialResult);
+
+            process(partialResult, false);
         }
 
         @Override
         public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                        @NonNull CaptureRequest request,
                                        @NonNull TotalCaptureResult result) {
-            process(result);
+
+            process(result, true);
         }
 
     };
@@ -723,7 +730,8 @@ public abstract class BasicPhotoFragment
             mPreviewRequestBuilder.addTarget(surface);
 
             // Here, we create a CameraCaptureSession for camera preview.
-            mCameraDevice.createCaptureSession(Arrays.asList(surface, mImageReader.getSurface()),
+            mCameraDevice.createCaptureSession(
+                    Arrays.asList(surface, mImageReader.getSurface()),
                     new CameraCaptureSession.StateCallback() {
 
                         @Override
@@ -756,8 +764,8 @@ public abstract class BasicPhotoFragment
                                 @NonNull CameraCaptureSession cameraCaptureSession) {
                             showToast("Failed");
                         }
-                    }, null
-            );
+                    },
+                    null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -800,6 +808,7 @@ public abstract class BasicPhotoFragment
      * Initiate a still image capture.
      */
     protected void takePicture() {
+        Log.d(LOG_TAG, "takePicture: Take picture is triggered");
         if (isCameraOpen) {
             lockFocus();
         } else {
@@ -846,7 +855,15 @@ public abstract class BasicPhotoFragment
      * Capture a still picture. This method should be called when we get a response in
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
-    private void captureStillPicture() {
+    private void captureStillPicture(int triggerCause, boolean isCompleted) {
+        triggerCause += (isCompleted ? 20 : 10);
+        Log.d(LOG_TAG, "captureStillPicture: triggered by " + triggerCause);
+
+        if (!isCompleted) {
+            Log.d(LOG_TAG, "captureStillPicture: Skip incomplete process requests.");
+            return;
+        }
+
         try {
             final Activity activity = getActivity();
             if (null == activity || null == mCameraDevice) {
@@ -866,7 +883,7 @@ public abstract class BasicPhotoFragment
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
-            CameraCaptureSession.CaptureCallback CaptureCallback
+            CameraCaptureSession.CaptureCallback captureCallback
                     = new CameraCaptureSession.CaptureCallback() {
 
                 @Override
@@ -876,18 +893,21 @@ public abstract class BasicPhotoFragment
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            onAfterPhotoTaken(lastFile);
+                            Log.d(LOG_TAG, "run: Before onAfterPhotoTaken");
+//                            onAfterPhotoTaken(lastFile);
+                            Log.d(LOG_TAG, "run: Capture is complete");
+                            Log.d(LOG_TAG, "run: After onAfterPhotoTaken");
                         }
                     });
                     if (lastFile != null) {
-                        Log.d(TAG, lastFile.toString());
+                        Log.d(TAG, "onCaptureCompleted: " + lastFile.toString());
                     }
                     unlockFocus();
                 }
             };
 
             mCaptureSession.stopRepeating();
-            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
+            mCaptureSession.capture(captureBuilder.build(), captureCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -956,7 +976,7 @@ public abstract class BasicPhotoFragment
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
-    private static class ImageSaver implements Runnable {
+    private class ImageSaver implements Runnable {
 
         /**
          * The JPEG image
@@ -974,6 +994,7 @@ public abstract class BasicPhotoFragment
 
         @Override
         public void run() {
+            Log.d(LOG_TAG, "run: ImageSaver start");
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
@@ -993,6 +1014,14 @@ public abstract class BasicPhotoFragment
                     }
                 }
             }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onAfterPhotoTaken(mFile);
+                }
+            });
+            Log.d(LOG_TAG, "run: ImageSaver end");
         }
 
     }

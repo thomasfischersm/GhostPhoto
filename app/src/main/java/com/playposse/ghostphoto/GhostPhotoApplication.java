@@ -12,6 +12,13 @@ public class GhostPhotoApplication extends Application {
 
     private Tracker tracker;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        getApplicationContext().deleteDatabase("ghostPhotoDb");
+    }
+
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
      * @return tracker

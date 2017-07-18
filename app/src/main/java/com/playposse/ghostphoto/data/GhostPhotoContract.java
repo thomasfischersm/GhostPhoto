@@ -101,4 +101,38 @@ public class GhostPhotoContract {
         static final String SQL_SELECT_LAST_PHOTO =
                 "SELECT * FROM photo photo order by _id desc limit 1;";
     }
+
+    public static final class StartShootAction {
+
+        public static final String PATH = "startShoot";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    public static final class EndShootAction {
+
+        public static final String PATH = "endShoot";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    public static final class AddPhotoAction {
+
+        public static final String PATH = "addPhoto";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    public static final class GetLatestPhotoAction {
+
+        public static final String PATH = "getLatestPhoto";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    public static final class DeleteAllAction {
+        public static final String PATH = "deleteAll";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    public static final class DeleteSelectedAction {
+        public static final String PATH = "deleteSelected";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
 }
