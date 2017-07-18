@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -37,7 +38,6 @@ import com.playposse.ghostphoto.constants.TimeInterval;
 import com.playposse.ghostphoto.data.GhostPhotoContract;
 import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
-import com.playposse.ghostphoto.data.GhostPhotoContract.StartShootAction;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
 
 import java.io.File;
@@ -221,9 +221,15 @@ public class PhotoFragment extends BasicPhotoFragment {
         refreshActionButton();
 
         // Record action to the db.
-        getActivity()
-                .getContentResolver()
-                .insert(StartShootAction.CONTENT_URI, null);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                getActivity()
+                        .getContentResolver()
+                        .insert(GhostPhotoContract.StartShootAction.CONTENT_URI, null);
+                return null;
+            }
+        }.execute();
     }
 
     private synchronized void stopTakingPhotos() {
@@ -239,24 +245,45 @@ public class PhotoFragment extends BasicPhotoFragment {
         refreshActionButton();
 
         // Record action to the db.
-        getActivity()
-                .getContentResolver()
-                .update(EndShootAction.CONTENT_URI, null, null, null);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // Wait for the last photo to be taken (in case it is late).
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) {
+                    Log.e(LOG_TAG, "doInBackground: Failed to sleep", ex);
+                }
+
+                getActivity()
+                        .getContentResolver()
+                        .update(EndShootAction.CONTENT_URI, null, null, null);
+                return null;
+            }
+        }.execute();
     }
 
     @Override
-    protected void onAfterPhotoTaken(File photoFile) {
+    protected void onAfterPhotoTaken(final File photoFile) {
         addPhotoToGallery(photoFile);
         showThumbNail(photoFile);
 
         // Record action to the db.
         if (photoFile != null) {
-            Uri fileUri = Uri.fromFile(photoFile);
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(GhostPhotoContract.PhotoTable.FILE_URI_COLUMN, fileUri.toString());
-            getActivity()
-                    .getContentResolver()
-                    .insert(AddPhotoAction.CONTENT_URI, contentValues);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Uri fileUri = Uri.fromFile(photoFile);
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(
+                            GhostPhotoContract.PhotoTable.FILE_URI_COLUMN,
+                            fileUri.toString());
+                    getActivity()
+                            .getContentResolver()
+                            .insert(AddPhotoAction.CONTENT_URI, contentValues);
+                    return null;
+                }
+            }.execute();
         }
     }
 
