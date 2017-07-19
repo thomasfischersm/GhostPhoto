@@ -4,9 +4,11 @@
     <!-- Strings from the original Android documentation example. -->
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>
-    <string name="request_permission">This app takes photos and stores them to external storage. To do that, it needs permission.</string>
+    <string name="request_permission">
+        This app takes photos and stores them to external storage. To do that, it needs permission.
+    </string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-        <string name="intro_message">
+    <string name="intro_message">
         <![CDATA[
 
 
@@ -32,10 +34,40 @@
 
     <!-- About activity -->
     <string name="about_app_heading">About</string>
-    <string name="about_app_body_text">Ghost Photo is an app that takes photos on its own in a regular interval. It\'s like a ghost that photographs you.\n\nIf you want to take a selfie, the back facing camera makes higher quality photos. Putting the camera down instead of holding it steps up the photo quality another notch. But how do you trigger the photos then? A timer takes one photo. With Ghost Photo, you can make the phone take a series of photos while you post. At the end, simply look through the photos and pick the best one.\n\nWhen taking a group photo, there is often a runner. The runner presses the timer button and runs to the group. Some smart people simply turn on a video and screen grab the perfect shot out of it. The problem is that the camera can make higher quality photos for still shots than ongoing video. So, Photo Ghost comes to the rescue. It\'ll steadily snap photos at the highest still photo quality. You pick the best one and delete the rest.</string>
+    <string name="about_app_body_text">
+        Ghost Photo is an app that takes photos on its own in a regular interval. It\'s like a ghost
+        that photographs you.\n
+        \n
+        If you want to take a selfie, the back facing camera makes higher quality photos. Putting
+        the camera down instead of holding it steps up the photo quality another notch. But how do
+        you trigger the photos then? A timer takes one photo. With Ghost Photo, you can make the
+        phone take a series of photos while you post. At the end, simply look through the photos
+        and pick the best one.\n\nWhen taking a group photo, there is often a runner. The runner
+        presses the timer button and runs to the group. Some smart people simply turn on a video
+        and screen grab the perfect shot out of it. The problem is that the camera can make higher
+        quality photos for still shots than ongoing video. So, Photo Ghost comes to the rescue.
+        It\'ll steadily snap photos at the highest still photo quality. You pick the best one and
+        delete the rest.
+    </string>
     <string name="about_feedback_heading">Send Us Feedback!</string>
-    <string name="about_feedback_body_text">I love to hear from you. Send your feedback to <a href="mailto:thomas@playposse.com?subject=Feedback About Ghost Photo Android App">thomas@playposse.com</a>.</string>
+    <string name="about_feedback_body_text">
+        I love to hear from you. Send your feedback to
+        <a href="mailto:thomas@playposse.com?subject=Feedback About Ghost Photo Android App">thomas@playposse.com</a>.
+    </string>
     <string name="about_credits_heading">Copyright And Credits</string>
-    <string name="about_credits_body_text">Water drop sound effect recorded by Mike Koenig\nCamera by Iconsparty from the Noun Project\nGhost by Visual Glow from the Noun Project\nStar by Ralf Schmitzer from the Noun Project\n\n© 2017 Thomas Fischer</string>
+    <string name="about_credits_body_text">
+        Water drop sound effect recorded by Mike Koenig\n
+        Camera by Iconsparty from the Noun Project\n
+        Ghost by Visual Glow from the Noun Project\n
+        Star by Ralf Schmitzer from the Noun Project\n
+        \n
+        © 2017 Thomas Fischer
+    </string>
     <string name="feedback_email_subject">Feedback About Ghost Photo Android App</string>
+
+    <!-- List shoots activity -->
+    <string name="cover_photo_content_description">Show the first photo of a photo session.</string>
+    <string name="photo_count_label">%1$d photos</string>
+    <string name="photo_shoot_loading_message">Loading…</string>
+    <string name="photo_shoot_empty_message">There are no photos.</string>
 </resources>

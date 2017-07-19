@@ -5,4 +5,7 @@
 
     <dimen name="selectedText">16sp</dimen>
     <dimen name="unselectedText">14sp</dimen>
+
+    <!-- Set minimum width for photos in the photo shoot activity. -->
+    <dimen name="cover_photo_min_column_width">120dp</dimen>
 </resources>

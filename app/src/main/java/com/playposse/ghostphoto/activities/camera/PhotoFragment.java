@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -14,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -32,6 +30,7 @@ import com.google.common.collect.HashBiMap;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.other.AboutActivity;
+import com.playposse.ghostphoto.activities.review.ListShootsActivity;
 import com.playposse.ghostphoto.constants.ActionState;
 import com.playposse.ghostphoto.constants.FlashMode;
 import com.playposse.ghostphoto.constants.TimeInterval;
@@ -129,28 +128,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         thumbNailImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getLastFile() != null) {
-                    try {
-                        Uri uri = FileProvider.getUriForFile(
-                                getActivity(),
-                                "com.playposse.ghostphoto",
-                                getLastFile());
-                        Log.i(LOG_TAG, "Starting intent to view " + uri);
-
-                        Intent intent = new Intent()
-                                .setAction(Intent.ACTION_VIEW)
-                                .setDataAndType(uri, "image/jpeg")
-                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                        PackageManager packageManager = getActivity().getPackageManager();
-                        if (intent.resolveActivity(packageManager) != null) {
-                            startActivity(intent);
-                        }
-                    } catch (Throwable ex) {
-                        Log.e(LOG_TAG, "Failed to view photo in photoviewer");
-                        throw ex;
-                    }
-                }
+                startActivity(new Intent(getActivity(), ListShootsActivity.class));
             }
         });
 
@@ -311,8 +289,6 @@ public class PhotoFragment extends BasicPhotoFragment {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     actionButton.getWidth(),
                     actionButton.getHeight());
-//            layoutParams.addRule(RelativeLayout.ALIGN_TOP, R.id.actionButton);
-//            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.actionButton);
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);

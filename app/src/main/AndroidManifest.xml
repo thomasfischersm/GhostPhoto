@@ -18,7 +18,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <meta-data
             android:name="com.google.android.gms.analytics.globalConfigResource"
             android:resource="@xml/analytics_global_config" />
@@ -32,7 +31,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
         <provider
             android:name=".data.GhostPhotoContentProvider"
             android:authorities="com.playposse.ghostphoto.provider"
@@ -48,5 +46,9 @@
         <activity
             android:name=".activities.other.AboutActivity"
             android:parentActivityName=".activities.camera.PhotoActivity" />
+        <activity
+            android:name=".activities.review.ListShootsActivity"
+            android:parentActivityName=".activities.camera.PhotoActivity" />
     </application>
+
 </manifest>
