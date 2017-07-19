@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,13 @@ import com.bumptech.glide.Glide;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
+import com.playposse.ghostphoto.util.DateUtil;
 import com.playposse.ghostphoto.util.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.ResponsiveGridLayoutManager;
 import com.playposse.ghostphoto.util.SmartCursor;
+
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * An {@link Activity} that lists all of the photo shoots.
@@ -112,31 +117,49 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
         @Override
         protected void onBindViewHolder(PhotoShootViewHolder holder, int position, Cursor cursor) {
-            // Retrieve data.
-            SmartCursor smartCursor = new SmartCursor(cursor, PhotoShootTable.SELECT_COLUMN_NAMES);
-            final long photoShootId = smartCursor.getLong(PhotoShootTable.ID_COLUMN);
-            String firstPhotoUriStr = smartCursor.getString(PhotoShootTable.FIRST_PHOTO_URI_COLUMN);
-            int photoCount = smartCursor.getInt(PhotoShootTable.PHOTO_COUNT_COLUMN);
+            try {
+                // Retrieve data.
+                SmartCursor smartCursor = new SmartCursor(cursor, PhotoShootTable.SELECT_COLUMN_NAMES);
+                final long photoShootId = smartCursor.getLong(PhotoShootTable.ID_COLUMN);
+                String firstPhotoUriStr = smartCursor.getString(PhotoShootTable.FIRST_PHOTO_URI_COLUMN);
+                int photoCount = smartCursor.getInt(PhotoShootTable.PHOTO_COUNT_COLUMN);
+                Date date = smartCursor.getDate(PhotoShootTable.START_TIME_COLUMN);
 
-            // Prepare data.
-            Uri firstPhotoUri = Uri.parse(firstPhotoUriStr);
-            String photoCountStr = getString(R.string.photo_count_label, photoCount);
+                // Prepare data.
+                Uri firstPhotoUri = Uri.parse(firstPhotoUriStr);
+                String photoCountStr = getString(R.string.photo_count_label, photoCount);
+                String dateStr = formatTime(date);
 
-            // Update the UI.
-            holder.getPhotoCountTextView().setText(photoCountStr);
-            // TODO: Add time to UI
-            Glide.with(getApplicationContext())
-                    .load(firstPhotoUri)
-                    .into(holder.getPhotoImageView());
+                // Update the UI.
+                holder.getPhotoCountTextView().setText(photoCountStr);
+                holder.getDateTextView().setText(dateStr);
+                Glide.with(getApplicationContext())
+                        .load(firstPhotoUri)
+                        .into(holder.getPhotoImageView());
 
-            // Set event listeners
-            holder.getPhotoImageView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: Open comparison activity.
-                    Log.d(LOG_TAG, "onClick: Open comparison for shoot" + photoShootId);
-                }
-            });
+                // Set event listeners
+                holder.getPhotoImageView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: Open comparison activity.
+                        Log.d(LOG_TAG, "onClick: Open comparison for shoot" + photoShootId);
+                    }
+                });
+            } catch (ParseException ex) {
+                Log.e(LOG_TAG, "onBindViewHolder: Failed to parse the photoshoot date.", ex);
+            }
+        }
+    }
+
+    private String formatTime(Date date) {
+        if (DateUtil.isLessThan60MinutesAgo(date)) {
+            return getString(R.string.minutes_date, DateUtil.getMinutesDiff(date, new Date()));
+        } else if (DateUtil.isToday(date)) {
+            java.text.DateFormat timeFormat = DateFormat.getTimeFormat(this);
+            return getString(R.string.same_day_date, timeFormat.format(date));
+        } else {
+            java.text.DateFormat dateFormat = DateFormat.getDateFormat(this);
+            return getString(R.string.short_date, dateFormat.format(date));
         }
     }
 
@@ -148,20 +171,26 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
         private final ImageView photoImageView;
         private final TextView photoCountTextView;
+        private final TextView dateTextView;
 
         private PhotoShootViewHolder(View view) {
             super(view);
 
             photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
             photoCountTextView = (TextView) view.findViewById(R.id.photoCountTextView);
+            dateTextView = (TextView) view.findViewById(R.id.dateTextView);
         }
 
-        public ImageView getPhotoImageView() {
+        private ImageView getPhotoImageView() {
             return photoImageView;
         }
 
-        public TextView getPhotoCountTextView() {
+        private TextView getPhotoCountTextView() {
             return photoCountTextView;
+        }
+
+        private TextView getDateTextView() {
+            return dateTextView;
         }
     }
 }

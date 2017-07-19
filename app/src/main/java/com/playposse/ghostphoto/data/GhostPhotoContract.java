@@ -59,13 +59,15 @@ public class GhostPhotoContract {
 
         public static final String SQL_SELECT =
                 "select "
-                        + "a.*, "
+                        + "a._id, "
+                        + "datetime(a.start_time, 'localtime') start_time, "
+                        + "a.state, "
                         + "b.file_uri first_photo_uri, "
                         + "(select count(*) from photo where shoot_id=a._id) photo_count "
                         + "from photo_shoot a "
                         + "inner join photo b on (a._id = b.shoot_id) "
                         + "where b._id = (select max(_id) from photo where shoot_id=a._id) "
-                        + "order by _id desc";
+                        + "order by a._id desc";
     }
 
     /**

@@ -2,6 +2,9 @@ package com.playposse.ghostphoto.util;
 
 import android.database.Cursor;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +12,9 @@ import java.util.Map;
  * An improvement over {@link Cursor} that returns values by column name.
  */
 public class SmartCursor {
+
+    private static final SimpleDateFormat iso8601Format =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final Cursor cursor;
     private final Map<String, Integer> columnNameToIndexMap;
@@ -45,5 +51,9 @@ public class SmartCursor {
 
     public boolean getBoolean(String columnName) {
         return getInt(columnName) > 0;
+    }
+
+    public Date getDate(String columnName) throws ParseException {
+        return iso8601Format.parse(getString(columnName));
     }
 }

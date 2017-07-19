@@ -16,7 +16,7 @@ public class GhostPhotoApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        getApplicationContext().deleteDatabase("ghostPhotoDb");
+//        getApplicationContext().deleteDatabase("ghostPhotoDb");
     }
 
     /**
