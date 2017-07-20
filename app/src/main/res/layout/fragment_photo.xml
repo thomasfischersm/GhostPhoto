@@ -200,7 +200,9 @@
                 android:layout_alignBottom="@+id/actionButton"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/actionButton"
-                android:layout_gravity="end" />
+                android:layout_gravity="end"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/thumbnail_content_description" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

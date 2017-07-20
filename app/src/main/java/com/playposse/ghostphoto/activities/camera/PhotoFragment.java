@@ -1,10 +1,14 @@
 package com.playposse.ghostphoto.activities.camera;
 
 import android.animation.Animator;
+import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -37,7 +41,10 @@ import com.playposse.ghostphoto.constants.TimeInterval;
 import com.playposse.ghostphoto.data.GhostPhotoContract;
 import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
+import com.playposse.ghostphoto.util.SmartCursor;
 
 import java.io.File;
 import java.util.Map;
@@ -55,6 +62,8 @@ public class PhotoFragment extends BasicPhotoFragment {
     private static final String ACTION_STATE_KEY = "actionState";
     private static final String TIME_INTERVAL_KEY = "timeInterval";
     private static final String FLASH_MODE_KEY = "flashMode";
+
+    private static final int LOADER_ID = 2;
 
     private final Timer timer = new Timer();
 
@@ -152,6 +161,55 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        getLoaderManager().initLoader(
+                LOADER_ID,
+                null,
+                new LoaderManager.LoaderCallbacks<Cursor>() {
+                    @Override
+                    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                        return new CursorLoader(
+                                getActivity(),
+                                GetLatestPhotoAction.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                null);
+                    }
+
+                    @Override
+                    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                        if (cursor.moveToFirst()) {
+                            SmartCursor smartCursor =
+                                    new SmartCursor(cursor, PhotoTable.COLUMN_NAMES);
+                            final String photoUri =
+                                    smartCursor.getString(PhotoTable.FILE_URI_COLUMN);
+                            thumbNailImageView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showThumbNail(photoUri);
+                                    Log.i(LOG_TAG, "onLoadFinished: Showing new thumbnail: "
+                                            + photoUri);
+                                }
+                            });
+                            showThumbNail(photoUri);
+                            Log.i(LOG_TAG, "onLoadFinished: Showing new thumbnail: " + photoUri);
+                        } else {
+                            Log.i(LOG_TAG, "onLoadFinished: Didn't get a last photo thumbnail.");
+                            showThumbNail(null);
+                        }
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<Cursor> loader) {
+                        showThumbNail(null);
+                    }
+                });
+    }
+
+    @Override
     public void onPause() {
         if (currentTimerTask != null) {
             currentTimerTask.cancel();
@@ -244,7 +302,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     @Override
     protected void onAfterPhotoTaken(final File photoFile) {
         addPhotoToGallery(photoFile);
-        showThumbNail(photoFile);
+//        showThumbNail(photoFile);
 
         // Record action to the db.
         if (photoFile != null) {
@@ -254,7 +312,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                     Uri fileUri = Uri.fromFile(photoFile);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(
-                            GhostPhotoContract.PhotoTable.FILE_URI_COLUMN,
+                            PhotoTable.FILE_URI_COLUMN,
                             fileUri.toString());
                     getActivity()
                             .getContentResolver()
@@ -281,9 +339,9 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
     }
 
-    private void showThumbNail(File photoFile) {
-        if (photoFile != null) {
-            Uri contentUri = Uri.fromFile(photoFile);
+    private void showThumbNail(String photoContentUri) {
+        if (photoContentUri != null) {
+            Uri contentUri = Uri.parse(photoContentUri);
             thumbNailImageView.setImageURI(contentUri);
 
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -298,6 +356,8 @@ public class PhotoFragment extends BasicPhotoFragment {
             thumbNailImageView.setLayoutParams(layoutParams);
             thumbNailImageView.requestLayout();
             thumbNailImageView.invalidate();
+        } else {
+            thumbNailImageView.setImageBitmap(null);
         }
     }
 
