@@ -9,7 +9,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -59,7 +59,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     private RecyclerView allPhotosRecyclerView;
     private RecyclerView selectedPhotosRecyclerView;
     private TextView selectedPhotosHintTextView;
-    private GestureOverlayView comparePhotoGestureOverlayView;
+    private LinearLayout rootView;
 
     private PhotoAdapter allPhotosAdapter;
     private PhotoAdapter selectedPhotosAdapter;
@@ -78,7 +78,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         allPhotosRecyclerView = (RecyclerView) findViewById(R.id.allPhotosRecyclerView);
         selectedPhotosRecyclerView = (RecyclerView) findViewById(R.id.selectedPhotosRecyclerView);
         selectedPhotosHintTextView = (TextView) findViewById(R.id.selectedPhotosHintTextView);
-        comparePhotoGestureOverlayView = (GestureOverlayView) findViewById(R.id.comparePhotoGestureOverlayView);
+        rootView = (LinearLayout) findViewById(R.id.rootView);
 
         initActionBar();
 
@@ -107,10 +107,18 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         selectedPhotosRecyclerView.setOnDragListener(photoDragListener);
 
         selectedPhotosHintTextView.setOnDragListener(photoDragListener);
-        comparePhotoGestureOverlayView.setOnTouchListener(new ComparePhotosTouchListener());
 
         getLoaderManager().initLoader(ALL_PHOTO_LOADER, null, new AllPhotoLoader());
         getLoaderManager().initLoader(SELECTED_PHOTO_LOADER, null, new SelectedPhotoLoader());
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        // This is a little bit hacky. The touch events have to go through to the individual
+        // ImageViews, but we have to also check if two fingers touch two ImageViews.
+        new ComparePhotosTouchListener().onTouch(rootView, ev);
+
+        return super.dispatchTouchEvent(ev);
     }
 
     /**
@@ -120,11 +128,13 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
+                    + " and " + PhotoTable.IS_SELECTED_COLUMN + " = 0";
             return new CursorLoader(
                     getApplicationContext(),
                     PhotoTable.CONTENT_URI,
                     PhotoTable.COLUMN_NAMES,
-                    PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex,
+                    whereClause,
                     null,
                     PhotoTable.ID_COLUMN + " asc");
         }
