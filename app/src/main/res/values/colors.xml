@@ -10,4 +10,8 @@
     <color name="unselectedText">#F5F5F5</color>
 
     <color name="primaryText">#FFFFFF</color>
+
+    <!-- Drag and drop colors -->
+    <color name="availableDragTargetTint">#80558B2F</color>
+    <color name="activeDragTargetTint">#80AED581</color>
 </resources>

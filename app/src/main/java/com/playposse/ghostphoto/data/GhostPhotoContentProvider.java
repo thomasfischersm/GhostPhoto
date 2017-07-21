@@ -333,9 +333,18 @@ public class GhostPhotoContentProvider extends ContentProvider {
             @Nullable String[] selectionArgs) {
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        if (getContext() == null) {
+            Log.e(LOG_TAG, "update: Context was unexpectedly null");
+            return -1;
+        }
         ContentResolver contentResolver = getContext().getContentResolver();
 
         switch (uriMatcher.match(uri)) {
+            case PHOTO_TABLE_KEY:
+                int photoCount =
+                        database.update(PhotoTable.TABLE_NAME, values, selection, selectionArgs);
+                contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
+                return photoCount;
             case END_SHOOT_ACTION_KEY:
                 return endShoot(database);
             case SCAN_PHOTO_FILE_ACTION_KEY:
