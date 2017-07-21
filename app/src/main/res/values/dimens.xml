@@ -10,5 +10,5 @@
     <dimen name="cover_photo_min_column_width">100dp</dimen>
 
     <!-- Sets the spacing between items in the photo shoot activity. -->
-    <dimen name="photo_shoot_spacing">4dp</dimen>
+    <dimen name="photo_shoot_spacing">6dp</dimen>
 </resources>
