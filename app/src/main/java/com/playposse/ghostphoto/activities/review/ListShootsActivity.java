@@ -27,6 +27,7 @@ import com.playposse.ghostphoto.util.DateUtil;
 import com.playposse.ghostphoto.util.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.ResponsiveGridLayoutManager;
 import com.playposse.ghostphoto.util.SmartCursor;
+import com.playposse.ghostphoto.util.SpaceItemDecoration;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -58,10 +59,14 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
         loadingMessageTextView = (TextView) findViewById(R.id.loadingMessageTextView);
         emptyMessageTextView = (TextView) findViewById(R.id.emptyMessageTextView);
 
-        shootRecyclerView.setLayoutManager(
-                new ResponsiveGridLayoutManager(this, R.dimen.cover_photo_min_column_width));
+        // Initializes shootRecyclerView.
+        ResponsiveGridLayoutManager layoutManager =
+                new ResponsiveGridLayoutManager(this, R.dimen.cover_photo_min_column_width);
+        shootRecyclerView.setLayoutManager(layoutManager);
         photoShootAdapter = new PhotoShootAdapter();
         shootRecyclerView.setAdapter(photoShootAdapter);
+        shootRecyclerView.addItemDecoration(
+                new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
 
         getLoaderManager().initLoader(LOADER_MANAGER, null, this);
     }

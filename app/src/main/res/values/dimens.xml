@@ -7,5 +7,8 @@
     <dimen name="unselectedText">14sp</dimen>
 
     <!-- Set minimum width for photos in the photo shoot activity. -->
-    <dimen name="cover_photo_min_column_width">120dp</dimen>
+    <dimen name="cover_photo_min_column_width">100dp</dimen>
+
+    <!-- Sets the spacing between items in the photo shoot activity. -->
+    <dimen name="photo_shoot_spacing">4dp</dimen>
 </resources>
