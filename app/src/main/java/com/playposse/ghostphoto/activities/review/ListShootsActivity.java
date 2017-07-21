@@ -23,10 +23,11 @@ import com.bumptech.glide.Glide;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
+import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
 import com.playposse.ghostphoto.util.DateUtil;
+import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.ResponsiveGridLayoutManager;
-import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
 
 import java.text.ParseException;
@@ -69,6 +70,18 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
 
         getLoaderManager().initLoader(LOADER_MANAGER, null, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getContentResolver().update(ScanPhotoFilesAction.CONTENT_URI, null, null, null);
+            }
+        }).start();
     }
 
     @Override

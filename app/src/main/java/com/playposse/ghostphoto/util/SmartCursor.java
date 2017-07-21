@@ -1,6 +1,7 @@
 package com.playposse.ghostphoto.util;
 
 import android.database.Cursor;
+import android.net.Uri;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,5 +56,9 @@ public class SmartCursor {
 
     public Date getDate(String columnName) throws ParseException {
         return iso8601Format.parse(getString(columnName));
+    }
+
+    public Uri getUri(String columnName) {
+        return Uri.parse(getString(columnName));
     }
 }

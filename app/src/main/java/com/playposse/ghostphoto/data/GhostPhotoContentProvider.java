@@ -19,6 +19,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
+import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.StartShootAction;
 import com.playposse.ghostphoto.util.DatabaseDumper;
 
@@ -37,6 +38,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
     private static final int GET_LATEST_PHOTO_ACTION_KEY = 6;
     private static final int DELETE_ALL_ACTION_KEY = 7;
     private static final int DELETE_SELECTED_ACTION_KEY = 8;
+    private static final int SCAN_PHOTO_FILE_ACTION_KEY = 9;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,6 +51,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, GetLatestPhotoAction.PATH, GET_LATEST_PHOTO_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteAllAction.PATH, DELETE_ALL_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteSelectedAction.PATH, DELETE_SELECTED_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, ScanPhotoFilesAction.PATH, SCAN_PHOTO_FILE_ACTION_KEY);
     }
 
     private GhostPhotoDatabaseHelper databaseHelper;
@@ -330,10 +333,13 @@ public class GhostPhotoContentProvider extends ContentProvider {
             @Nullable String[] selectionArgs) {
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        ContentResolver contentResolver = getContext().getContentResolver();
 
         switch (uriMatcher.match(uri)) {
             case END_SHOOT_ACTION_KEY:
                 return endShoot(database);
+            case SCAN_PHOTO_FILE_ACTION_KEY:
+                return ScanPhotoFilesHelper.scan(database, contentResolver);
             default:
                 return 0;
         }

@@ -130,12 +130,25 @@ public class GhostPhotoContract {
     }
 
     public static final class DeleteAllAction {
+
         public static final String PATH = "deleteAll";
         public static final Uri CONTENT_URI = createContentUri(PATH);
     }
 
     public static final class DeleteSelectedAction {
+
         public static final String PATH = "deleteSelected";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    /**
+     * A content provider action that causes all the photo files to be checked if they still exist.
+     * If the user has deleted the photo files, the database entries are updated. If a photo shoot
+     * has no more photos left, it is deleted as well.
+     */
+    public static final class ScanPhotoFilesAction {
+
+        public static final String PATH = "scanPhotoFiles";
         public static final Uri CONTENT_URI = createContentUri(PATH);
     }
 }
