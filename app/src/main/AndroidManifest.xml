@@ -51,7 +51,12 @@
             android:parentActivityName=".activities.camera.PhotoActivity" />
         <activity
             android:name=".activities.review.ReviewPhotoShootActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.review.ListShootsActivity" />
+        <activity
+            android:name=".activities.review.ComparePhotosActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.review.ReviewPhotoShootActivity" />
     </application>
 
 </manifest>

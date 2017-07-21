@@ -5,7 +5,6 @@ import android.database.DataSetObserver;
 import android.provider.BaseColumns;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 
 /**
  * A cursor adapter for {@link Adapter}. Apparently, Android oversaw providing this.
@@ -58,7 +57,6 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         int count = (cursor != null) ? cursor.getCount() : 0;
-        Log.i(LOG_TAG, "getItemCount: Called with item count " + count);
         return count;
     }
 

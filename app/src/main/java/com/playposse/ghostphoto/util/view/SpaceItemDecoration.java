@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -38,8 +37,8 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         outRect.top = vertical[0];
         outRect.bottom = vertical[1];
 
-        Log.i(LOG_TAG, "getItemOffsets: position: " + position + " left: " + horizontal[0]
-                + " right: " + horizontal[1]);
+//        Log.i(LOG_TAG, "getItemOffsets: position: " + position + " left: " + horizontal[0]
+//                + " right: " + horizontal[1]);
     }
 
     private int[] calculateSpacing(int position, int max, int spacing) {
@@ -47,13 +46,13 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         double widthReduction = spacing * (max - 1.0) / max;
         double left = 0;
         double right = widthReduction - left;
-        Log.i(LOG_TAG, "calculateSpacing: space: " + spacing + " widthReduction: " + widthReduction);
-        Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
+//        Log.i(LOG_TAG, "calculateSpacing: space: " + spacing + " widthReduction: " + widthReduction);
+//        Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
 
         for (int i = 0; i < position; i++) {
             left = spacing - right;
             right = widthReduction - left;
-            Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
+//            Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
         }
         return new int[]{(int) left, (int) right};
     }
