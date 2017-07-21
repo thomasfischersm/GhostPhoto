@@ -1,4 +1,4 @@
-package com.playposse.ghostphoto.util;
+package com.playposse.ghostphoto.util.view;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;

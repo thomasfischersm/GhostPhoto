@@ -1,4 +1,4 @@
-package com.playposse.ghostphoto.util;
+package com.playposse.ghostphoto.util.view;
 
 import android.content.Context;
 import android.graphics.Rect;

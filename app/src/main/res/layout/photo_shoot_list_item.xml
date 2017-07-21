@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.playposse.ghostphoto.util.SquareImageView
+    <com.playposse.ghostphoto.util.view.SquareImageView
         android:id="@+id/photoImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

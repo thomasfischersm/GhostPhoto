@@ -24,10 +24,10 @@ import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
 import com.playposse.ghostphoto.util.DateUtil;
-import com.playposse.ghostphoto.util.RecyclerViewCursorAdapter;
-import com.playposse.ghostphoto.util.ResponsiveGridLayoutManager;
+import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
+import com.playposse.ghostphoto.util.view.ResponsiveGridLayoutManager;
 import com.playposse.ghostphoto.util.SmartCursor;
-import com.playposse.ghostphoto.util.SpaceItemDecoration;
+import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
 
 import java.text.ParseException;
 import java.util.Date;
