@@ -22,6 +22,12 @@ class ScanPhotoFilesHelper {
 
     private static final String LOG_TAG = ScanPhotoFilesHelper.class.getSimpleName();
 
+    private static final String SQL_SELECT_EMPTY_PHOTO_SHOOT =
+            "select "
+                    + "a._id "
+                    + "from photo_shoot a "
+                    + "where (select count(*) from photo where shoot_id=a._id) = 0";
+
     static int scan(SQLiteDatabase database, ContentResolver contentResolver) {
         Map<Long, Uri> photoUris = listPhotoUris(database);
         int deletedPhotoCount = deleteNonexistentPhotos(photoUris, database);
@@ -81,21 +87,16 @@ class ScanPhotoFilesHelper {
     }
 
     private static int deleteEmptyPhotoShoots(SQLiteDatabase database) {
-        Cursor cursor = database.rawQuery(PhotoShootTable.SQL_SELECT, null);
-        SmartCursor smartCursor = new SmartCursor(cursor, PhotoShootTable.SELECT_COLUMN_NAMES);
+        Cursor cursor = database.rawQuery(SQL_SELECT_EMPTY_PHOTO_SHOOT, null);
 
         try {
             int deleteCount = 0;
 
             while (cursor.moveToNext()) {
-                long photoCount = smartCursor.getLong(PhotoShootTable.PHOTO_COUNT_COLUMN);
-                if (photoCount == 0) {
-                    // Delete the empty photo shoot.
-                    long id = smartCursor.getLong(PhotoShootTable.ID_COLUMN);
-                    String whereClause = PhotoShootTable.ID_COLUMN + " = " + id;
-                    deleteCount += database.delete(PhotoShootTable.TABLE_NAME, whereClause, null);
-
-                }
+                // Delete the empty photo shoot.
+                long id = cursor.getLong(0);
+                String whereClause = PhotoShootTable.ID_COLUMN + " = " + id;
+                deleteCount += database.delete(PhotoShootTable.TABLE_NAME, whereClause, null);
             }
 
             return deleteCount;
