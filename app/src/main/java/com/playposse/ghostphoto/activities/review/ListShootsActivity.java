@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
@@ -159,8 +160,8 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 holder.getPhotoImageView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: Open comparison activity.
-                        Log.d(LOG_TAG, "onClick: Open comparison for shoot" + photoShootId);
+                        startActivity(ExtraConstants.createReviewPhotoShootIntent(getApplicationContext(), photoShootId));
+                        Log.d(LOG_TAG, "onClick: Open comparison for shoot " + photoShootId);
                     }
                 });
             } catch (ParseException ex) {

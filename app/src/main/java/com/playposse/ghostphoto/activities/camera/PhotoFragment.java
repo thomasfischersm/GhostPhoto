@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
@@ -342,7 +343,9 @@ public class PhotoFragment extends BasicPhotoFragment {
     private void showThumbNail(String photoContentUri) {
         if (photoContentUri != null) {
             Uri contentUri = Uri.parse(photoContentUri);
-            thumbNailImageView.setImageURI(contentUri);
+            Glide.with(getActivity())
+                    .load(contentUri)
+                    .into(thumbNailImageView);
 
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     actionButton.getWidth(),

@@ -49,6 +49,9 @@
         <activity
             android:name=".activities.review.ListShootsActivity"
             android:parentActivityName=".activities.camera.PhotoActivity" />
+        <activity
+            android:name=".activities.review.ReviewPhotoShootActivity"
+            android:parentActivityName=".activities.review.ListShootsActivity" />
     </application>
 
 </manifest>
