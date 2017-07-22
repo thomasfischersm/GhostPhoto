@@ -27,7 +27,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 /**
- * A {@link ContentProvider} to store informations about the photos that were taken.
+ * A {@link ContentProvider} to store information about the photos that were taken.
  */
 public class GhostPhotoContentProvider extends ContentProvider {
 

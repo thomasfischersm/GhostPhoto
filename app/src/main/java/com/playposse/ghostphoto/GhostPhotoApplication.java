@@ -10,6 +10,8 @@ import com.google.android.gms.analytics.Tracker;
  */
 public class GhostPhotoApplication extends Application {
 
+    public static final String FILE_PROVIDER_AUTHORITY = "com.playposse.ghostphoto.fileprovider";
+
     private Tracker tracker;
 
     @Override
