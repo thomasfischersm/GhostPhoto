@@ -129,7 +129,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
-                    + " and " + PhotoTable.IS_SELECTED_COLUMN + " = 0";
+                    + " and not(" + PhotoTable.IS_SELECTED_COLUMN + ")";
             return new CursorLoader(
                     getApplicationContext(),
                     PhotoTable.CONTENT_URI,
@@ -158,7 +158,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
-                    + " and " + PhotoTable.IS_SELECTED_COLUMN + " = 1";
+                    + " and " + PhotoTable.IS_SELECTED_COLUMN;
             return new CursorLoader(
                     getApplicationContext(),
                     PhotoTable.CONTENT_URI,
