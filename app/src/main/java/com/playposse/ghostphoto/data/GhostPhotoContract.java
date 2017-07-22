@@ -135,9 +135,9 @@ public class GhostPhotoContract {
         public static final Uri CONTENT_URI = createContentUri(PATH);
     }
 
-    public static final class DeleteSelectedAction {
+    public static final class DeleteUnselectedAction {
 
-        public static final String PATH = "deleteSelected";
+        public static final String PATH = "deleteUnselected";
         public static final Uri CONTENT_URI = createContentUri(PATH);
     }
 

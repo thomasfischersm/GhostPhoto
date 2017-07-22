@@ -14,7 +14,7 @@ import android.util.Log;
 
 import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
-import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteSelectedAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteUnselectedAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
@@ -37,7 +37,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
     private static final int ADD_PHOTO_KEY = 5;
     private static final int GET_LATEST_PHOTO_ACTION_KEY = 6;
     private static final int DELETE_ALL_ACTION_KEY = 7;
-    private static final int DELETE_SELECTED_ACTION_KEY = 8;
+    private static final int DELETE_UNSELECTED_ACTION_KEY = 8;
     private static final int SCAN_PHOTO_FILE_ACTION_KEY = 9;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -50,7 +50,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, AddPhotoAction.PATH, ADD_PHOTO_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, GetLatestPhotoAction.PATH, GET_LATEST_PHOTO_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteAllAction.PATH, DELETE_ALL_ACTION_KEY);
-        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteSelectedAction.PATH, DELETE_SELECTED_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteUnselectedAction.PATH, DELETE_UNSELECTED_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, ScanPhotoFilesAction.PATH, SCAN_PHOTO_FILE_ACTION_KEY);
     }
 
@@ -212,8 +212,8 @@ public class GhostPhotoContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case DELETE_ALL_ACTION_KEY:
                 return deleteAll(database, contentResolver, selectionArgs);
-            case DELETE_SELECTED_ACTION_KEY:
-                return deleteSelected(database, contentResolver, selectionArgs);
+            case DELETE_UNSELECTED_ACTION_KEY:
+                return deleteUnselected(database, contentResolver, selectionArgs);
             default:
                 return 0;
 
@@ -280,7 +280,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         return photoDeleteCount;
     }
 
-    private int deleteSelected(
+    private int deleteUnselected(
             SQLiteDatabase database,
             ContentResolver contentResolver,
             String[] selectionArgs) {
@@ -296,7 +296,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         Cursor cursor = database.query(
                 PhotoTable.TABLE_NAME,
                 new String[]{PhotoTable.ID_COLUMN},
-                "(shoot_id=" + shootId + ") and (is_selected=1)",
+                "(shoot_id=" + shootId + ") and not(is_selected)",
                 null,
                 null,
                 null,
@@ -315,7 +315,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         // Delete selected photos.
         int photoDeleteCount = database.delete(
                 PhotoTable.TABLE_NAME,
-                "(shoot_id=" + shootId + ") and (is_selected=1)",
+                "(shoot_id=" + shootId + ") and not(is_selected)",
                 null);
 
         // Notify of changes.

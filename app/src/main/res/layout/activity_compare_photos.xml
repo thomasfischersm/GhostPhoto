@@ -16,7 +16,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ImageView
+    <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/firstImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,7 +24,7 @@
         android:scaleType="fitCenter"
         android:contentDescription="@string/full_photo_content_description" />
 
-    <ImageView
+    <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/secondImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
