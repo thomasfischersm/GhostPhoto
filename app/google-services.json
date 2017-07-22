@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "178514594583",
-    "project_id": "ghost-photo"
+    "firebase_url": "https://ghost-photo.firebaseio.com",
+    "project_id": "ghost-photo",
+    "storage_bucket": "ghost-photo.appspot.com"
   },
   "client": [
     {
@@ -11,7 +13,16 @@
           "package_name": "com.playposse.ghostphoto"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "178514594583-ms4r9fg3dh6m346rnv4pd77k5k616m6t.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "178514594583-ovoj1nhcn14itq00nqf512gsj7bhi43e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCf9CtZtm3IQdQ-vEUHh5mfjObtLve9Ygc"
@@ -29,7 +40,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
