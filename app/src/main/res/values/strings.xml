@@ -86,10 +86,24 @@
     <string name="all_photos_label">All photos</string>
     <string name="selected_photos_label">Selected photos</string>
     <string name="selected_photos_hint">Drag photos here to keep them.</string>
+    <string name="delete_photos_content_description">Button to delete unselected or all photos.</string>
+    <string name="share_photos_content_description">Button to share selected photos.</string>
+    <string name="delete_photos_dialog_title">Delete</string>
+    <string name="delete_unselected_photos_option">Unselected photos</string>
+    <string name="delete_all_photos_option">All photos</string>
+    <array name="delete_photos_dialog_options">
+        <item>@string/delete_unselected_photos_option</item>
+        <item>@string/delete_all_photos_option</item>
+    </array>
+    <string name="delete_photos_toast">Deleted %1$d photos.</string>
 
 
     <!-- Compare two photos activity -->
     <string name="full_photo_content_description">
         Shows a full photo for comparison to the photo next to it.
     </string>
+
+
+    <!-- Common strings. -->
+    <string name="cancel_button_label">Cancel</string>
 </resources>

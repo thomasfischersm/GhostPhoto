@@ -24,17 +24,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteUnselectedAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
+import com.playposse.ghostphoto.util.ToastUtil;
+import com.playposse.ghostphoto.util.view.DialogUtil;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
 
@@ -60,6 +66,8 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     private RecyclerView selectedPhotosRecyclerView;
     private TextView selectedPhotosHintTextView;
     private LinearLayout rootView;
+    private ImageButton deleteButton;
+    private ImageButton shareButton;
 
     private PhotoAdapter allPhotosAdapter;
     private PhotoAdapter selectedPhotosAdapter;
@@ -79,6 +87,8 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         selectedPhotosRecyclerView = (RecyclerView) findViewById(R.id.selectedPhotosRecyclerView);
         selectedPhotosHintTextView = (TextView) findViewById(R.id.selectedPhotosHintTextView);
         rootView = (LinearLayout) findViewById(R.id.rootView);
+        deleteButton = (ImageButton) findViewById(R.id.deleteButton);
+        shareButton = (ImageButton) findViewById(R.id.shareButton);
 
         initActionBar();
 
@@ -110,6 +120,20 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         getLoaderManager().initLoader(ALL_PHOTO_LOADER, null, new AllPhotoLoader());
         getLoaderManager().initLoader(SELECTED_PHOTO_LOADER, null, new SelectedPhotoLoader());
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteClicked();
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShareClicked();
+            }
+        });
     }
 
     @Override
@@ -119,6 +143,55 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         new ComparePhotosTouchListener().onTouch(rootView, ev);
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void onDeleteClicked() {
+        List<Runnable> actionList = new ArrayList<>(2);
+
+        actionList.add(new Runnable() {
+            @Override
+            public void run() {
+                onDeleteUnselected();
+            }
+        });
+
+        actionList.add(new Runnable() {
+            @Override
+            public void run() {
+                onDeleteAll();
+            }
+        });
+
+        DialogUtil.showMultiChoiceDialog(
+                this,
+                R.string.delete_photos_dialog_title,
+                R.array.delete_photos_dialog_options,
+                actionList);
+    }
+
+    private void onDeleteUnselected() {
+        int count = getContentResolver().delete(
+                DeleteUnselectedAction.CONTENT_URI,
+                null,
+                new String[]{Long.toString(photoShootIndex)});
+
+        ToastUtil.sendToast(this, Toast.LENGTH_SHORT, R.string.delete_photos_toast, count);
+    }
+
+    private void onDeleteAll() {
+        int count = getContentResolver().delete(
+                DeleteAllAction.CONTENT_URI,
+                null,
+                new String[]{Long.toString(photoShootIndex)});
+
+        ToastUtil.sendToast(this, Toast.LENGTH_SHORT, R.string.delete_photos_toast, count);
+
+        // Because all photos are gone, direct to the previous activity.
+        finish();
+    }
+
+    private void onShareClicked() {
+
     }
 
     /**

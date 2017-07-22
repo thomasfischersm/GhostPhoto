@@ -23,6 +23,9 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.StartShootAction;
 import com.playposse.ghostphoto.util.DatabaseDumper;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 /**
  * A {@link ContentProvider} to store informations about the photos that were taken.
  */
@@ -240,7 +243,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         // Delete physical photos.
         Cursor cursor = database.query(
                 PhotoTable.TABLE_NAME,
-                new String[]{PhotoTable.ID_COLUMN},
+                new String[]{PhotoTable.FILE_URI_COLUMN},
                 "shoot_id = " + shootId,
                 null,
                 null,
@@ -248,10 +251,15 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 null);
 
         try {
-            int idColumnIndex = cursor.getColumnIndex(PhotoTable.ID_COLUMN);
+            int fileUriColumnIndex = cursor.getColumnIndex(PhotoTable.FILE_URI_COLUMN);
             while (cursor.moveToNext()) {
-                String uri = cursor.getString(idColumnIndex);
-                contentResolver.delete(Uri.parse(uri), null, null);
+                String photoUri = cursor.getString(fileUriColumnIndex);
+                try {
+                    File file = new File(new java.net.URI(photoUri));
+                    file.delete();
+                } catch (URISyntaxException ex) {
+                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                }
             }
         } finally {
             cursor.close();
@@ -295,7 +303,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         // Delete physical photos.
         Cursor cursor = database.query(
                 PhotoTable.TABLE_NAME,
-                new String[]{PhotoTable.ID_COLUMN},
+                new String[]{PhotoTable.FILE_URI_COLUMN},
                 "(shoot_id=" + shootId + ") and not(is_selected)",
                 null,
                 null,
@@ -303,10 +311,15 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 null);
 
         try {
-            int idColumnIndex = cursor.getColumnIndex(PhotoTable.ID_COLUMN);
+            int fileUriColumnIndex = cursor.getColumnIndex(PhotoTable.FILE_URI_COLUMN);
             while (cursor.moveToNext()) {
-                String uri = cursor.getString(idColumnIndex);
-                contentResolver.delete(Uri.parse(uri), null, null);
+                String photoUri = cursor.getString(fileUriColumnIndex);
+                try {
+                    File file = new File(new java.net.URI(photoUri));
+                    file.delete();
+                } catch (URISyntaxException ex) {
+                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                }
             }
         } finally {
             cursor.close();

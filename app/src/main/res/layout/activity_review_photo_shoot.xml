@@ -36,8 +36,15 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/allPhotosRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/delete_photos_content_description"
+                android:src="@drawable/ic_delete_black_24dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +70,17 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/selectedPhotosRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:contentDescription="@string/share_photos_content_description"
+                android:src="@drawable/ic_share_black_24dp" />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
