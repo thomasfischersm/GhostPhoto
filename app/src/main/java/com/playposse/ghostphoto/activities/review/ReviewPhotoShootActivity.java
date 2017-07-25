@@ -79,6 +79,8 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.review_photo_shoot_title);
+
         photoIdTag = getResources().getIdentifier("photo_id_tag", "id", getPackageName());
 
         setContentView(R.layout.activity_review_photo_shoot);

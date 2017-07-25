@@ -38,6 +38,8 @@ public class ComparePhotosActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.compare_photos_title);
+
         setContentView(R.layout.activity_compare_photos);
 
         initActionBar();

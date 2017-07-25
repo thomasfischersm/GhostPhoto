@@ -57,6 +57,8 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
         initActionBar();
 
+        setTitle(R.string.list_shoots_title);
+
         shootRecyclerView = (RecyclerView) findViewById(R.id.shootRecyclerView);
         loadingMessageTextView = (TextView) findViewById(R.id.loadingMessageTextView);
         emptyMessageTextView = (TextView) findViewById(R.id.emptyMessageTextView);
