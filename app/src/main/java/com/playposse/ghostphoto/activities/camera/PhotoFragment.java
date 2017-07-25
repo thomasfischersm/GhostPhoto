@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
@@ -208,6 +210,8 @@ public class PhotoFragment extends BasicPhotoFragment {
                         showThumbNail(null);
                     }
                 });
+
+        showActionButtonHint();
     }
 
     @Override
@@ -298,6 +302,8 @@ public class PhotoFragment extends BasicPhotoFragment {
                 return null;
             }
         }.execute();
+
+        showThumbnailHint();
     }
 
     @Override
@@ -500,6 +506,62 @@ public class PhotoFragment extends BasicPhotoFragment {
         });
 
         animator.start();
+    }
+
+    private void showActionButtonHint() {
+        if (!GhostPhotoPreferences.hasActionButtonHintBeenSeen(getActivity())) {
+            GhostPhotoPreferences.setHasActionButtonHintBeenSeen(getActivity(), true);
+            TapTargetView.showFor(getActivity(),
+                    TapTarget.forView(
+                            actionButton,
+                            getString(R.string.action_button_hint_title),
+                            getString(R.string.action_button_hint_message))
+                            // All options below are optional
+                            .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                            .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                            .targetCircleColor(R.color.emphasis)   // Specify a color for the target circle
+                            .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                            .titleTextColor(R.color.primaryText)      // Specify the color of the title text
+                            .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                            .descriptionTextColor(R.color.primaryText)  // Specify the color of the description text
+//                        .textColor(R.color.secondaryTextColorDark)            // Specify a color for both the title and description text
+                            .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                            //.dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                            .tintTarget(true)                   // Whether to tint the target view's color
+                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                            //.icon(Drawable)                     // Specify a custom drawable to draw as the target
+                            .targetRadius(60));                 // Specify the target radius (in dp)
+        }
+    }
+
+    private void showThumbnailHint() {
+        if (!GhostPhotoPreferences.hasThumbnailHintBeenSeen(getActivity())) {
+            GhostPhotoPreferences.setHasThumbnailHintBeenSeen(getActivity(), true);
+            TapTargetView.showFor(getActivity(),
+                    TapTarget.forView(
+                            thumbNailImageView,
+                            getString(R.string.thumbnail_hint_title),
+                            getString(R.string.thumbnail_hint_message))
+                            // All options below are optional
+                            .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                            .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                            .targetCircleColor(R.color.emphasis)   // Specify a color for the target circle
+                            .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                            .titleTextColor(R.color.primaryText)      // Specify the color of the title text
+                            .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                            .descriptionTextColor(R.color.primaryText)  // Specify the color of the description text
+//                        .textColor(R.color.secondaryTextColorDark)            // Specify a color for both the title and description text
+                            .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                            //.dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                            .tintTarget(true)                   // Whether to tint the target view's color
+                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                            //.icon(Drawable)                     // Specify a custom drawable to draw as the target
+                            .targetRadius(60));                  // Specify the target radius (in dp)
+        }
     }
 
     /**

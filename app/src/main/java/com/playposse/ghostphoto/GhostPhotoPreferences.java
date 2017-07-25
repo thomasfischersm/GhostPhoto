@@ -20,8 +20,11 @@ public final class GhostPhotoPreferences {
 
     private static final String FLASH_MODE_KEY = "flashMode";
     private static final String HAS_REVIEW_HINT_BEEN_SEEN = "hasReviewHintBeenSeen";
+    private static final String HAS_ACTION_BUTTON_HINT_BEEN_SEEN = "hasActionButtonHintBeenSeen";
+    private static final String HAS_THUMBNAIL_HINT_BEEN_SEEN = "hasThumbnailHintBeenSeen";
 
     private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
+    private static final boolean HINT_DEFAULT = false;
 
     private static final String NULL_STRING = "-1";
     private static final int NULL_VALUE = -1;
@@ -37,6 +40,22 @@ public final class GhostPhotoPreferences {
 
     public static void setFlashMode(Context context, FlashMode flashMode) {
         setString(context, FLASH_MODE_KEY, flashMode.name());
+    }
+
+    public static boolean hasActionButtonHintBeenSeen(Context context) {
+        return getBoolean(context, HAS_ACTION_BUTTON_HINT_BEEN_SEEN, HINT_DEFAULT);
+    }
+
+    public static void setHasActionButtonHintBeenSeen(Context context, boolean flag) {
+        setBoolean(context, HAS_ACTION_BUTTON_HINT_BEEN_SEEN, flag);
+    }
+
+    public static boolean hasThumbnailHintBeenSeen(Context context) {
+        return getBoolean(context, HAS_THUMBNAIL_HINT_BEEN_SEEN, HINT_DEFAULT);
+    }
+
+    public static void setHasThumbnailHintBeenSeen(Context context, boolean flag) {
+        setBoolean(context, HAS_THUMBNAIL_HINT_BEEN_SEEN, flag);
     }
 
     private static String getString(Context context, String key) {

@@ -35,6 +35,14 @@
     <string name="thumbnail_content_description">
         A thumbnail of the last photo. Clicking it opens a review of all taken photos.
     </string>
+    <string name="action_button_hint_title">Start photo session</string>
+    <string name="action_button_hint_message">
+        Tap the start button to start taking photos at the set time interval.
+    </string>
+    <string name="thumbnail_hint_title">Review photos</string>
+    <string name="thumbnail_hint_message">
+        Tap the thumbnail to review your photos.
+    </string>
 
 
     <!-- About activity -->
