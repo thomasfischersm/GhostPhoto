@@ -19,6 +19,7 @@ public final class GhostPhotoPreferences {
     private static final String PREFS_NAME = "GhostPhotoPreferences";
 
     private static final String FLASH_MODE_KEY = "flashMode";
+    private static final String HAS_REVIEW_HINT_BEEN_SEEN = "hasReviewHintBeenSeen";
 
     private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
 
@@ -72,7 +73,7 @@ public final class GhostPhotoPreferences {
         }
     }
 
-    private static boolean getBoolean(Context context, String key, boolean defaultValue) {
+    public static boolean getBoolean(Context context, String key, boolean defaultValue) {
         try {
             SharedPreferences sharedPreferences =
                     context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -83,7 +84,7 @@ public final class GhostPhotoPreferences {
         }
     }
 
-    private static void setBoolean(Context context, String key, boolean value) {
+    public static void setBoolean(Context context, String key, boolean value) {
         Log.i(LOG_CAT, "Setting preference boolean for key " + key + " to " + value);
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

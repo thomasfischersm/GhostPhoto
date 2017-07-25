@@ -96,6 +96,12 @@
         <item>@string/delete_all_photos_option</item>
     </array>
     <string name="delete_photos_toast">Deleted %1$d photos.</string>
+    <string name="review_photo_shoot_feature_discovery">
+        Move photos into the left column to select them. Then delete all the unselected photos.\n
+        - To select: Long tap and drag photo to the right.\n
+        - To view: Tap a photo.\n
+        - To compare two photos: Use multi-touch. Put one finger on each photo at the same time.\n
+    </string>
 
 
     <!-- Compare two photos activity -->
@@ -106,4 +112,5 @@
 
     <!-- Common strings. -->
     <string name="cancel_button_label">Cancel</string>
+    <string name="dismiss_link">Dismiss</string>
 </resources>

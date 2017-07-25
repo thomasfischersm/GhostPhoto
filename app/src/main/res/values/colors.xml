@@ -10,6 +10,7 @@
     <color name="unselectedText">#F5F5F5</color>
 
     <color name="primaryText">#FFFFFF</color>
+    <color name="linkText">#3F51B5</color>
 
     <!-- Drag and drop colors -->
     <color name="availableDragTargetTint">#80558B2F</color>

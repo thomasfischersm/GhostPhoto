@@ -19,6 +19,7 @@ public class GhostPhotoApplication extends Application {
         super.onCreate();
 
 //        getApplicationContext().deleteDatabase("ghostPhotoDb");
+        GhostPhotoPreferences.reset(getApplicationContext());
     }
 
     /**
