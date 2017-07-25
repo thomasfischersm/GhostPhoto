@@ -72,7 +72,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     private PhotoAdapter allPhotosAdapter;
     private PhotoAdapter selectedPhotosAdapter;
 
-    private long photoShootIndex;
+    private long photoShootId;
     private int photoIdTag = 1;
 
     @Override
@@ -92,7 +92,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         initActionBar();
 
-        photoShootIndex = ExtraConstants.getPhotoShootIndex(getIntent());
+        photoShootId = ExtraConstants.getPhotoShootIndex(getIntent());
 
         PhotoDragListener photoDragListener = new PhotoDragListener();
 
@@ -173,16 +173,22 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         int count = getContentResolver().delete(
                 DeleteUnselectedAction.CONTENT_URI,
                 null,
-                new String[]{Long.toString(photoShootIndex)});
+                new String[]{Long.toString(photoShootId)});
 
         ToastUtil.sendToast(this, Toast.LENGTH_SHORT, R.string.delete_photos_toast, count);
+
+        // Check if the photo shoot still exists. It may have been completely emptied.
+        if (!doesPhotoShootExist()) {
+            // Return to parent activity because the photo shoot is gone.
+            finish();
+        }
     }
 
     private void onDeleteAll() {
         int count = getContentResolver().delete(
                 DeleteAllAction.CONTENT_URI,
                 null,
-                new String[]{Long.toString(photoShootIndex)});
+                new String[]{Long.toString(photoShootId)});
 
         ToastUtil.sendToast(this, Toast.LENGTH_SHORT, R.string.delete_photos_toast, count);
 
@@ -192,10 +198,30 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
     private void onShareClicked() {
         try {
-            IntegrationUtil.shareSelectedPhotos(this, photoShootIndex);
+            IntegrationUtil.shareSelectedPhotos(this, photoShootId);
         } catch (URISyntaxException ex) {
             Log.e(LOG_TAG, "onShareClicked: Failed to handle photo Uri", ex);
 
+        }
+    }
+
+    private boolean doesPhotoShootExist() {
+        Cursor cursor = getContentResolver().query(
+                PhotoTable.CONTENT_URI,
+                PhotoTable.COLUMN_NAMES,
+                PhotoTable.SHOOT_ID_COLUMN + " = " + Long.toString(photoShootId),
+                null,
+                null);
+
+        if (cursor == null) {
+            Log.e(LOG_TAG, "doesPhotoShootExist: Failed to get a cursor!");
+            throw new NullPointerException();
+        }
+
+        try {
+            return cursor.getCount() > 0;
+        } finally {
+            cursor.close();
         }
     }
 
@@ -206,7 +232,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
+            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootId
                     + " and not(" + PhotoTable.IS_SELECTED_COLUMN + ")";
             return new CursorLoader(
                     getApplicationContext(),
@@ -235,7 +261,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
+            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootId
                     + " and " + PhotoTable.IS_SELECTED_COLUMN;
             return new CursorLoader(
                     getApplicationContext(),

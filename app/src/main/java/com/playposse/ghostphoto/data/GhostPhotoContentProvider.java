@@ -325,17 +325,51 @@ public class GhostPhotoContentProvider extends ContentProvider {
             cursor.close();
         }
 
-        // Delete selected photos.
+        // Delete unselected photos.
         int photoDeleteCount = database.delete(
                 PhotoTable.TABLE_NAME,
                 "(shoot_id=" + shootId + ") and not(is_selected)",
                 null);
+
+        // Check if the photo shoot is now empty. If so, delete it as well.
+        if (doesPhotoShootExist(database, shootId)) {
+            int shootDeleteCount = database.delete(
+                    PhotoShootTable.TABLE_NAME,
+                    "_id=" + Long.toString(shootId),
+                    null);
+
+            if (shootDeleteCount != 1) {
+                Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo shoot " + shootId);
+            }
+        }
 
         // Notify of changes.
         contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
         contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
 
         return photoDeleteCount;
+    }
+
+    private boolean doesPhotoShootExist(SQLiteDatabase database, long photoShootId) {
+        Cursor cursor = database.query(
+                PhotoShootTable.TABLE_NAME,
+                PhotoShootTable.COLUMN_NAMES,
+                "_id=" + Long.toString(photoShootId),
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor == null) {
+            Log.e(LOG_TAG, "doesPhotoShootExist: Failed to get a cursor!");
+            throw new NullPointerException();
+        }
+
+        try {
+            return cursor.getCount() > 0;
+        } finally {
+            cursor.close();
+        }
     }
 
     @Override
