@@ -22,6 +22,7 @@ public final class GhostPhotoPreferences {
     private static final String HAS_REVIEW_HINT_BEEN_SEEN = "hasReviewHintBeenSeen";
     private static final String HAS_ACTION_BUTTON_HINT_BEEN_SEEN = "hasActionButtonHintBeenSeen";
     private static final String HAS_THUMBNAIL_HINT_BEEN_SEEN = "hasThumbnailHintBeenSeen";
+    private static final String HAS_SEEN_INTRO_DECK_KEY = "hasSeenIntroDeck";
 
     private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
     private static final boolean HINT_DEFAULT = false;
@@ -56,6 +57,17 @@ public final class GhostPhotoPreferences {
 
     public static void setHasThumbnailHintBeenSeen(Context context, boolean flag) {
         setBoolean(context, HAS_THUMBNAIL_HINT_BEEN_SEEN, flag);
+    }
+
+    public static void setHasSeenIntroDeck(Context context, boolean hasSeenIntroDeck) {
+        setBoolean(context, HAS_SEEN_INTRO_DECK_KEY, hasSeenIntroDeck);
+    }
+
+    public static boolean hasSeenIntroDeck(Context context) {
+        return getBoolean(
+                context,
+                HAS_SEEN_INTRO_DECK_KEY,
+                HINT_DEFAULT);
     }
 
     private static String getString(Context context, String key) {

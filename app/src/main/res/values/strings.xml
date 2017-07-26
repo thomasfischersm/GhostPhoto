@@ -20,6 +20,32 @@
     </string>
 
 
+    <!-- Introduction activity -->
+    <string name="background_content_description">A decorative background image.</string>
+    <string name="getting_started_button">Get started</string>
+    <string name="selfie_photo_content_description">A photo that shows a woman taking a selfie.</string>
+    <string name="free_selfie_photo_content_description">
+        A man taking a jumping selfie with Ghost Photo without being constraint to holding the
+        camera.
+    </string>
+    <string name="intro_free_selfie_title">Free the selfie!</string>
+    <string name="intro_free_selfie_body">
+        Typical selfies constrain the users to holding the camera at arm\'s length.\n
+        \n
+        Ghost Photo frees you to put the photo down, run around, jump, and pose to your heart\'s
+        content. Ghost Photo takes a photo every second (customizable) to be sure to capture all
+        the special moments.
+    </string>
+    <string name="review_grid_content_description">An illustration to suggest a grid of photos.</string>
+    <string name="intro_review_title">Review photos</string>
+    <string name="intro_review_body">
+        The best photographers take hundreds or even thousands of photos to capture that one perfect
+        shot.\n
+        \n
+        Ghost Photo comes with a photo review tool to organize the photos and discard the rest.
+    </string>
+
+
     <!-- Photo activity -->
     <string name="flash_content_description">An icon that indicates the flash mode.</string>
     <string name="flash_off_content_description">An icon to set the flash to off.</string>
@@ -73,6 +99,8 @@
         Camera by Iconsparty from the Noun Project\n
         Ghost by Visual Glow from the Noun Project\n
         Star by Ralf Schmitzer from the Noun Project\n
+        Photo of woman taking a selfie by Annie Spratt on Unsplash\n
+        Photo of man jumping by Havilah Galaxy on Unsplash\n
         \n
         © 2017 Thomas Fischer
     </string>

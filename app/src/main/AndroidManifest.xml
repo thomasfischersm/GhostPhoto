@@ -25,8 +25,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="5e6d81f10c3b91abdbb377d69ca013c8a8fecb3e"
-            />
+            android:value="5e6d81f10c3b91abdbb377d69ca013c8a8fecb3e" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -43,13 +42,14 @@
             android:authorities="com.playposse.ghostphoto.provider"
             android:exported="false" />
 
-        <activity android:name=".activities.camera.PhotoActivity">
+        <activity android:name=".activities.other.IntroductionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.camera.PhotoActivity" />
         <activity
             android:name=".activities.other.AboutActivity"
             android:parentActivityName=".activities.camera.PhotoActivity" />

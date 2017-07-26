@@ -26,11 +26,18 @@ public abstract class AnalyticsUtil {
     }
 
     public static void sendEvent(Application application, String action) {
-        GhostPhotoApplication lsystemApplication = (GhostPhotoApplication) application;
-        Tracker tracker = lsystemApplication.getDefaultTracker();
+        GhostPhotoApplication ghostPhotoApplication = (GhostPhotoApplication) application;
+        Tracker tracker = ghostPhotoApplication.getDefaultTracker();
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory(DEFAULT_CATEGORY)
                 .setAction(action)
                 .build());
+    }
+
+    public static void reportScreenName(Application defaultApp, String screenName) {
+        GhostPhotoApplication app = (GhostPhotoApplication) defaultApp;
+        Tracker tracker = app.getDefaultTracker();
+        tracker.setScreenName(screenName);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }
