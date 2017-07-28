@@ -3,14 +3,12 @@ package com.playposse.ghostphoto.activities.review;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v13.view.ViewCompat;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +35,7 @@ import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteUnselectedAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
+import com.playposse.ghostphoto.data.QueryUtil;
 import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.ToastUtil;
@@ -419,7 +418,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
                     String photoIdStr =
                             event.getClipData().getItemAt(0).getText().toString();
                     long photoId = Long.parseLong(photoIdStr);
-                    new SelectPhotoAsyncTask(photoId, isSelectedPhotosTarget).execute();
+                    QueryUtil.selectPhoto(getContentResolver(), photoId, isSelectedPhotosTarget);
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
                     view.setBackgroundColor(0);
@@ -437,31 +436,6 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         private int getActiveDragTargetTint() {
             return ContextCompat.getColor(getApplicationContext(), R.color.activeDragTargetTint);
-        }
-    }
-
-    /**
-     * An {@link AsyncTask} that selects or deselects a photo.
-     */
-    private class SelectPhotoAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final long photoId;
-        private final boolean isSelected;
-
-        private SelectPhotoAsyncTask(long photoId, boolean isSelected) {
-            this.photoId = photoId;
-            this.isSelected = isSelected;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(PhotoTable.IS_SELECTED_COLUMN, isSelected);
-
-            String whereClause = PhotoTable.ID_COLUMN + " = " + photoId;
-
-            getContentResolver().update(PhotoTable.CONTENT_URI, contentValues, whereClause, null);
-            return null;
         }
     }
 

@@ -46,7 +46,7 @@
     </string>
 
 
-    <!-- Photo activity -->
+    <!-- Take photo activity -->
     <string name="flash_content_description">An icon that indicates the flash mode.</string>
     <string name="flash_off_content_description">An icon to set the flash to off.</string>
     <string name="flash_auto_content_description">An icon to set the flash to auto.</string>
@@ -140,6 +140,14 @@
         - To view: Tap a photo.\n
         - To compare two photos: Use multi-touch. Put one finger on each photo at the same time.\n
     </string>
+
+
+    <!-- View photo activity -->
+    <string name="photo_content_description">Full view of a single photo.</string>
+    <string name="select_button_content_description">Button to select/unselect the current photo.</string>
+    <string name="edit_in_button_content_description">Button to edit the current photo.</string>
+    <string name="share_button_content_description">Button to share the current photo.</string>
+    <string name="delete_button_content_description">Button to delete the current photo.</string>
 
 
     <!-- Compare two photos activity -->
