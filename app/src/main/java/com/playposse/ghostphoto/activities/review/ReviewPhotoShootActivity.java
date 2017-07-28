@@ -43,7 +43,6 @@ import com.playposse.ghostphoto.util.view.DialogUtil;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -330,17 +329,10 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             photoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        File file = new File(new java.net.URI(photoUri));
-                        Context context = getApplicationContext();
-                        IntegrationUtil.openExternalActivityToShowPhoto(context, file);
-                    } catch (URISyntaxException ex) {
-                        Log.e(LOG_TAG, "onClick: Failed to open external photo viewer", ex);
-                    }
+                    Context context = getApplicationContext();
+                    startActivity(ExtraConstants.createViewPhotoIntent(context, photoId));
                 }
             });
-
-            // Compare two photos.
 
             // Drag photo to selected or unselected.
             photoImageView.setOnLongClickListener(new View.OnLongClickListener() {

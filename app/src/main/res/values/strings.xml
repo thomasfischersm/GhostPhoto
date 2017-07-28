@@ -148,6 +148,8 @@
     <string name="edit_in_button_content_description">Button to edit the current photo.</string>
     <string name="share_button_content_description">Button to share the current photo.</string>
     <string name="delete_button_content_description">Button to delete the current photo.</string>
+    <string name="confirm_delete_photo_dialog">Confirm to delete the photo</string>
+    <string name="confirm_delete_photo_dialog_body"></string>
 
 
     <!-- Compare two photos activity -->
@@ -159,5 +161,9 @@
 
     <!-- Common strings. -->
     <string name="cancel_button_label">Cancel</string>
+    <string name="delete_button_label">Delete</string>
     <string name="dismiss_link">Dismiss</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

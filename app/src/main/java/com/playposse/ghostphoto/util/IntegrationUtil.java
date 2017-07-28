@@ -50,6 +50,18 @@ public final class IntegrationUtil {
         }
     }
 
+    public static void sharePhoto(Context context, File photoFile) {
+        // Prepare share intent.
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        Uri publicUri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, photoFile);
+
+        // Start the share activity.
+        intent.putExtra(Intent.EXTRA_STREAM, publicUri);
+        context.startActivity(Intent.createChooser(intent, null));
+    }
+
     public static void shareSelectedPhotos(Context context, long photoShootIndex)
             throws URISyntaxException {
 
@@ -74,7 +86,6 @@ public final class IntegrationUtil {
             // Prepare share intent.
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
             intent.setType("image/jpeg");
 
             // Add selected photos to intent.
@@ -91,6 +102,29 @@ public final class IntegrationUtil {
             context.startActivity(intent);
         } finally {
             cursor.close();
+        }
+    }
+
+    public static void openExternalActivityToEditPhoto(Context context, File photoFile) {
+        try {
+            Uri uri = FileProvider.getUriForFile(
+                    context,
+                    "com.playposse.ghostphoto.fileprovider",
+                    photoFile);
+            Log.i(LOG_TAG, "Starting intent to view " + uri);
+
+            Intent intent = new Intent()
+                    .setAction(Intent.ACTION_EDIT)
+                    .setDataAndType(uri, "image/jpeg")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            PackageManager packageManager = context.getPackageManager();
+            if (intent.resolveActivity(packageManager) != null) {
+                context.startActivity(Intent.createChooser(intent, null));
+            }
+        } catch (Throwable ex) {
+            Log.e(LOG_TAG, "Failed to view photo in photoviewer");
+            throw ex;
         }
     }
 }

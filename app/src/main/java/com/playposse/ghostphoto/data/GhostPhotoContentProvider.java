@@ -213,6 +213,12 @@ public class GhostPhotoContentProvider extends ContentProvider {
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         switch (uriMatcher.match(uri)) {
+            case PHOTO_TABLE_KEY:
+                int photoDeleteCount =
+                        database.delete(PhotoTable.TABLE_NAME, selection, selectionArgs);
+                contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
+                contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
+                return photoDeleteCount;
             case DELETE_ALL_ACTION_KEY:
                 return deleteAll(database, contentResolver, selectionArgs);
             case DELETE_UNSELECTED_ACTION_KEY:

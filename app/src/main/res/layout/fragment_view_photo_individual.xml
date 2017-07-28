@@ -1,0 +1,8 @@
+<com.alexvasilkov.gestures.views.GestureImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/photoImageView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="@string/photo_content_description"
+    android:scaleType="fitCenter"
+    tools:context="com.playposse.ghostphoto.activities.review.ViewPhotoIndividualFragment" />

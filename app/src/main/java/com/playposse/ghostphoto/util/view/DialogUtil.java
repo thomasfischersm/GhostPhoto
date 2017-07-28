@@ -55,4 +55,40 @@ public final class DialogUtil {
                 .show();
 
     }
+
+    /**
+     * Shows a dialog with a message that the user can agree with or reject.
+     */
+    public static void confirm(
+            Context context,
+            int titleId,
+            int messageResId,
+            int positiveResId,
+            int negativeResId,
+            final Runnable confirmationRunnable) {
+
+        new AlertDialog.Builder(context)
+                .setTitle(titleId)
+                .setMessage(messageResId)
+                .setNegativeButton(
+                        negativeResId,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                )
+                .setPositiveButton(
+                        positiveResId,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                confirmationRunnable.run();
+                            }
+                        }
+                )
+                .show();
+    }
 }
