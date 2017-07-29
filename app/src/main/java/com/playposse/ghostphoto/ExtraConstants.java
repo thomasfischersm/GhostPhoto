@@ -29,9 +29,10 @@ public class ExtraConstants {
         return intent.getLongExtra(PHOTO_INDEX_ID, -1);
     }
 
-    public static Intent createViewPhotoIntent(Context context, long photoIndex) {
+    public static Intent createViewPhotoIntent(Context context, long photoShootId, long photoId) {
         return new Intent(context, ViewPhotoActivity.class)
-                .putExtra(PHOTO_INDEX_ID, photoIndex);
+                .putExtra(PHOTO_SHOOT_INDEX_ID, photoShootId)
+                .putExtra(PHOTO_INDEX_ID, photoId);
     }
 
     public static long[] getPhotoIndexes(Intent intent) {

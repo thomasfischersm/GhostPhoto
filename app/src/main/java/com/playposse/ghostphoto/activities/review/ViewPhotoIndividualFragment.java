@@ -1,12 +1,12 @@
 package com.playposse.ghostphoto.activities.review;
 
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.data.GhostPhotoContract;
 import com.playposse.ghostphoto.util.SmartCursor;
@@ -67,7 +68,7 @@ public class ViewPhotoIndividualFragment
 
         photoImageView = (ImageView) rootView.findViewById(R.id.photoImageView);
 
-        getActivity().getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         return rootView;
     }
@@ -85,7 +86,7 @@ public class ViewPhotoIndividualFragment
     }
 
     @Override
-    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         SmartCursor smartCursor = new SmartCursor(cursor, GhostPhotoContract.PhotoTable.COLUMN_NAMES);
 
         if (cursor.moveToFirst()) {
@@ -93,8 +94,9 @@ public class ViewPhotoIndividualFragment
             isSelected = smartCursor.getBoolean(GhostPhotoContract.PhotoTable.IS_SELECTED_COLUMN);
 
             Uri contentUri = Uri.parse(photoUri);
-            Glide.with(this)
+            Glide.with(this).asBitmap()
                     .load(contentUri)
+                    .apply(RequestOptions.noTransformation())
                     .into(photoImageView);
 
 //            if (isSelected) {
@@ -114,7 +116,7 @@ public class ViewPhotoIndividualFragment
     }
 
     @Override
-    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
         photoImageView.setImageBitmap(null);
     }
 }

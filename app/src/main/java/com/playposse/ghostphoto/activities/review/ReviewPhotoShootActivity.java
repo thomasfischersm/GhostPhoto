@@ -330,7 +330,9 @@ public class ReviewPhotoShootActivity extends ParentActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = getApplicationContext();
-                    startActivity(ExtraConstants.createViewPhotoIntent(context, photoId));
+                    Intent intent =
+                            ExtraConstants.createViewPhotoIntent(context, photoShootId, photoId);
+                    startActivity(intent);
                 }
             });
 

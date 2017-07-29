@@ -92,6 +92,7 @@ public class ViewPhotoContainerFragment
         if (pagerAdapter == null) {
             pagerAdapter = new PhotoShootPagerAdapter(getFragmentManager(), cursor);
             viewPager.setAdapter(pagerAdapter);
+            pagerAdapter.moveToInitialPhoto();
         } else {
             pagerAdapter.swapCursor(cursor);
         }
@@ -115,7 +116,6 @@ public class ViewPhotoContainerFragment
             super(fm);
 
             swapCursor(cursor);
-            findInitialPhoto();
         }
 
         private void swapCursor(Cursor cursor) {
@@ -124,12 +124,14 @@ public class ViewPhotoContainerFragment
             notifyDataSetChanged();
         }
 
-        private void findInitialPhoto() {
+        private void moveToInitialPhoto() {
             if (cursor != null) {
+                cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
                     long photoId = smartCursor.getLong(PhotoTable.ID_COLUMN);
                     if (initialPhotoId == photoId) {
                         viewPager.setCurrentItem(cursor.getPosition());
+                        return;
                     }
                 }
             }
@@ -137,6 +139,7 @@ public class ViewPhotoContainerFragment
 
         @Override
         public Fragment getItem(int position) {
+            cursor.moveToPosition(position);
             long photoId = smartCursor.getLong(PhotoTable.ID_COLUMN);
             return ViewPhotoIndividualFragment.newInstance(photoId);
         }
