@@ -2,7 +2,9 @@ package com.playposse.ghostphoto.activities.review;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -14,6 +16,7 @@ import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.view.DialogUtil;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 /**
  * An {@link Activity} to view a single photo.
@@ -22,7 +25,7 @@ import java.io.File;
  * not allow to launch Snapseed or similar through an "Edit In" action. Being able to have a
  * workflow to edit the photo is essential.
  */
-public class ViewPhotoActivity extends ParentActivity {
+public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionChangeListener {
 
     private static final String LOG_TAG = ViewPhotoActivity.class.getSimpleName();
 
@@ -33,6 +36,7 @@ public class ViewPhotoActivity extends ParentActivity {
     private ImageButton deleteButton;
 
     private long photoShootId;
+    private long initialPhotoId;
     private long photoId;
     private Boolean isSelected = null;
     private File photoFile = null;
@@ -46,14 +50,15 @@ public class ViewPhotoActivity extends ParentActivity {
         initActionBar();
 
         photoShootId = ExtraConstants.getPhotoShootIndex(getIntent());
-        photoId = ExtraConstants.getPhotoIndex(getIntent());
+        initialPhotoId = ExtraConstants.getPhotoIndex(getIntent());
 
         selectButton = (ImageButton) findViewById(R.id.selectButton);
         editInButton = (ImageButton) findViewById(R.id.editInButton);
         shareButton = (ImageButton) findViewById(R.id.shareButton);
         deleteButton = (ImageButton) findViewById(R.id.deleteButton);
 
-        photoContainerFragment = ViewPhotoContainerFragment.newInstance(photoShootId, photoId);
+        photoContainerFragment =
+                ViewPhotoContainerFragment.newInstance(photoShootId, initialPhotoId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragmentContainer, photoContainerFragment)
@@ -63,8 +68,9 @@ public class ViewPhotoActivity extends ParentActivity {
             @Override
             public void onClick(View v) {
                 if (isSelected != null) {
-                    QueryUtil.selectPhoto(getContentResolver(), photoId, !isSelected);
-                    finish();
+                    isSelected = !isSelected;
+                    QueryUtil.selectPhoto(getContentResolver(), photoId, isSelected);
+                    refreshSelectButton();
                 }
             }
         });
@@ -110,6 +116,27 @@ public class ViewPhotoActivity extends ParentActivity {
 
     private void onConfirmedDelete() {
         QueryUtil.deletePhoto(getContentResolver(), photoId);
-        finish();
+    }
+
+    @Override
+    public void onPhotoSelected(long photoId, boolean isSelected, Uri photoUri) {
+        this.photoId = photoId;
+        this.isSelected = isSelected;
+
+        refreshSelectButton();
+
+        try {
+            this.photoFile = new File(new java.net.URI(photoUri.toString()));
+        } catch (URISyntaxException ex) {
+            Log.e(LOG_TAG, "onPhotoSelected: Failed to create photo File object", ex);
+        }
+    }
+
+    private void refreshSelectButton() {
+        if (isSelected) {
+            selectButton.setImageResource(R.drawable.ic_select_off);
+        } else {
+            selectButton.setImageResource(R.drawable.ic_select);
+        }
     }
 }

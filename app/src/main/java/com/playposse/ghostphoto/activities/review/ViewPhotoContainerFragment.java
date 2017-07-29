@@ -1,6 +1,8 @@
 package com.playposse.ghostphoto.activities.review;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,6 +38,8 @@ public class ViewPhotoContainerFragment
 
     private ViewPager viewPager;
     private PhotoShootPagerAdapter pagerAdapter;
+    private PhotoSelectionChangeListener photoListener;
+
 
     public ViewPhotoContainerFragment() {
         // Required empty public constructor
@@ -75,6 +79,22 @@ public class ViewPhotoContainerFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof PhotoSelectionChangeListener) {
+            photoListener = (PhotoSelectionChangeListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        photoListener = null;
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String where = PhotoTable.SHOOT_ID_COLUMN + "=" + photoShootId;
         String orderBy = PhotoTable.CREATED_COLUMN + " asc";
@@ -92,6 +112,7 @@ public class ViewPhotoContainerFragment
         if (pagerAdapter == null) {
             pagerAdapter = new PhotoShootPagerAdapter(getFragmentManager(), cursor);
             viewPager.setAdapter(pagerAdapter);
+            viewPager.addOnPageChangeListener(new PhotoPageChangeListener());
             pagerAdapter.moveToInitialPhoto();
         } else {
             pagerAdapter.swapCursor(cursor);
@@ -145,12 +166,53 @@ public class ViewPhotoContainerFragment
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
         public int getCount() {
             if (cursor != null) {
                 return cursor.getCount();
             } else {
                 return 0;
             }
+        }
+
+        private void notifyPhotoListener(int position) {
+            if (photoListener != null) {
+                cursor.moveToPosition(position);
+                long photoId = smartCursor.getLong(PhotoTable.ID_COLUMN);
+                boolean isSelected = smartCursor.getBoolean(PhotoTable.IS_SELECTED_COLUMN);
+                Uri photoUri = smartCursor.getUri(PhotoTable.FILE_URI_COLUMN);
+
+                photoListener.onPhotoSelected(photoId, isSelected, photoUri);
+            }
+        }
+    }
+
+    /**
+     * A listener that waits for the user to swipe to another photo and then calls the parent
+     * activity to update the photo index.
+     */
+    private class PhotoPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(
+                int position,
+                float positionOffset,
+                int positionOffsetPixels) {
+            // Ignore.
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            pagerAdapter.notifyPhotoListener(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            // Ignore.
         }
     }
 }

@@ -19,9 +19,6 @@ import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.data.GhostPhotoContract;
 import com.playposse.ghostphoto.util.SmartCursor;
 
-import java.io.File;
-import java.net.URISyntaxException;
-
 /**
  * A {@link Fragment} that shows a single photo.
  */
@@ -38,8 +35,6 @@ public class ViewPhotoIndividualFragment
     private ImageView photoImageView;
 
     private long photoId;
-    private Boolean isSelected = null;
-    private File photoFile = null;
 
     public static ViewPhotoIndividualFragment newInstance(long photoId) {
         ViewPhotoIndividualFragment fragment = new ViewPhotoIndividualFragment();
@@ -91,25 +86,12 @@ public class ViewPhotoIndividualFragment
 
         if (cursor.moveToFirst()) {
             String photoUri = smartCursor.getString(GhostPhotoContract.PhotoTable.FILE_URI_COLUMN);
-            isSelected = smartCursor.getBoolean(GhostPhotoContract.PhotoTable.IS_SELECTED_COLUMN);
-
             Uri contentUri = Uri.parse(photoUri);
-            Glide.with(this).asBitmap()
+
+            Glide.with(this)
                     .load(contentUri)
                     .apply(RequestOptions.noTransformation())
                     .into(photoImageView);
-
-//            if (isSelected) {
-//                selectButton.setImageResource(R.drawable.ic_select_off);
-//            } else {
-//                selectButton.setImageResource(R.drawable.ic_select);
-//            }
-
-            try {
-                photoFile = new File(new java.net.URI(photoUri));
-            } catch (URISyntaxException ex) {
-                Log.d(LOG_TAG, "onLoadFinished: Failed to create photo file for editing.", ex);
-            }
         } else {
             Log.e(LOG_TAG, "onLoadFinished: Failed to load photo cursor");
         }
