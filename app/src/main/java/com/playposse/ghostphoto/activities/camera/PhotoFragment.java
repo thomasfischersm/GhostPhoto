@@ -341,7 +341,10 @@ public class PhotoFragment extends BasicPhotoFragment {
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 // getActivity() may return null during screen rotation changes. If the user has
                 // a late enough SDK, try using getContext().
-                getContext().sendBroadcast(mediaScanIntent);
+                Context context = getContext();
+                if (context != null) {
+                    context.sendBroadcast(mediaScanIntent);
+                }
             }
         }
     }
