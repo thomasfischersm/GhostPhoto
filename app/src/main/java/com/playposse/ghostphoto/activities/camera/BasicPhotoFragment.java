@@ -42,6 +42,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.playposse.ghostphoto.R;
@@ -165,6 +166,11 @@ public abstract class BasicPhotoFragment
     private AutoFitTextureView mTextureView;
 
     /**
+     * A layout that shows the user that the camera is in the process of being loaded.
+     */
+    private LinearLayout loadingLayout;
+
+    /**
      * A {@link CameraCaptureSession } for camera preview.
      */
     private CameraCaptureSession mCaptureSession;
@@ -197,6 +203,7 @@ public abstract class BasicPhotoFragment
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             // This method is called when the camera is opened.  We start camera preview here.
+            hideLoadingLayout();
             mCameraOpenCloseLock.release();
             mCameraDevice = cameraDevice;
             createCameraPreviewSession();
@@ -441,6 +448,7 @@ public abstract class BasicPhotoFragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        loadingLayout = (LinearLayout) view.findViewById(R.id.loadingLayout);
     }
 
     private File generateNextFileName() {
@@ -470,8 +478,10 @@ public abstract class BasicPhotoFragment
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
         // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
+            showLoadingLayout();
             openCamera(mTextureView.getWidth(), mTextureView.getHeight());
         } else {
+            hideLoadingLayout();
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
     }
@@ -971,6 +981,26 @@ public abstract class BasicPhotoFragment
 
     public File getLastFile() {
         return lastFile;
+    }
+
+    private void showLoadingLayout() {
+        mTextureView.post(new Runnable() {
+            @Override
+            public void run() {
+        loadingLayout.setVisibility(View.VISIBLE);
+        mTextureView.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    private void hideLoadingLayout() {
+        mTextureView.post(new Runnable() {
+            @Override
+            public void run() {
+                mTextureView.setVisibility(View.VISIBLE);
+                loadingLayout.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     /**

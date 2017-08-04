@@ -69,6 +69,8 @@
     <string name="thumbnail_hint_message">
         Tap the thumbnail to review your photos.
     </string>
+    <string name="camera_loading_message">Loading...</string>
+    <string name="loading_icon_content_content_description">Icon suggesting that the camera is loading.</string>
 
 
     <!-- About activity -->
