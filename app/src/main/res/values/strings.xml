@@ -106,7 +106,6 @@
         \n
         © 2017 Thomas Fischer
     </string>
-    <string name="feedback_email_subject">Feedback About Ghost Photo Android App</string>
 
 
     <!-- List shoots activity -->
@@ -165,7 +164,20 @@
     <string name="cancel_button_label">Cancel</string>
     <string name="delete_button_label">Delete</string>
     <string name="dismiss_link">Dismiss</string>
+    <string name="dialog_continue_button">Continue</string>
+    <string name="dialog_cancel_button">Cancel</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Options menu -->
+    <string name="send_feedback_menu">Send feedback</string>
+    <string name="about_menu">About</string>
+    <string name="vertical_ellipsis">&#8942;</string>
+
+
+    <!-- Send Us Feedback option -->
+    <string name="feedback_dialog_title">Send us feedback!</string>
+    <string name="feedback_dialog_message">An e-mail will be opened where you can send me feedback.</string>
+    <string name="feedback_email_recipient">thomas@playposse.com</string>
+    <string name="feedback_email_subject">Feedback About Ghost Photo App</string>
+    <string name="feedback_email_body">Please, send me your feedback. I care about hearing from you.</string>
 </resources>

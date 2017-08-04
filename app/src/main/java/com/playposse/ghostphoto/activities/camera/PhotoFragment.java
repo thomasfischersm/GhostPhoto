@@ -19,6 +19,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
@@ -26,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -71,6 +73,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private final Timer timer = new Timer();
 
     private ImageView flashImageView;
+    private TextView optionsMenuLink;
     private TextView halfSecondTextView;
     private TextView secondTextView;
     private TextView threeSecondTextView;
@@ -97,6 +100,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         super.onViewCreated(rootView, savedInstanceState);
 
         flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
+        optionsMenuLink = (TextView) rootView.findViewById(R.id.optionsMenuLink);
         halfSecondTextView = (TextView) rootView.findViewById(R.id.halfSecondTextView);
         secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
         threeSecondTextView = (TextView) rootView.findViewById(R.id.threeSecondTextView);
@@ -155,6 +159,13 @@ public class PhotoFragment extends BasicPhotoFragment {
             @Override
             public void onClick(View v) {
                 startFlashLayoutRevealAnimation();
+            }
+        });
+
+        optionsMenuLink.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowOptionsMenu();
             }
         });
 
@@ -565,6 +576,18 @@ public class PhotoFragment extends BasicPhotoFragment {
                             //.icon(Drawable)                     // Specify a custom drawable to draw as the target
                             .targetRadius(60));                  // Specify the target radius (in dp)
         }
+    }
+
+    private void onShowOptionsMenu() {
+        PopupMenu popup = new PopupMenu(getActivity(), optionsMenuLink);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return getActivity().onOptionsItemSelected(item);
+            }
+        });
+        popup.inflate(R.menu.options_menu);
+        popup.show();
     }
 
     /**
