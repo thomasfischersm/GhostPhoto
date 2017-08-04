@@ -212,15 +212,6 @@
                 android:padding="2dp"
                 android:text="@string/ten_second_interval"
                 android:textColor="@android:color/white" />
-
-            <ImageView
-                android:id="@+id/infoButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/description_info"
-                android:src="@drawable/ic_info_outline_black_24dp"
-                android:tint="@android:color/white" />
         </LinearLayout>
 
         <RelativeLayout

@@ -38,7 +38,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
-import com.playposse.ghostphoto.activities.other.AboutActivity;
 import com.playposse.ghostphoto.activities.review.ListShootsActivity;
 import com.playposse.ghostphoto.constants.ActionState;
 import com.playposse.ghostphoto.constants.FlashMode;
@@ -78,7 +77,6 @@ public class PhotoFragment extends BasicPhotoFragment {
     private TextView secondTextView;
     private TextView threeSecondTextView;
     private TextView tenSecondTextView;
-    private ImageView infoButton;
     private FloatingActionButton actionButton;
     private ImageView thumbNailImageView;
     private FrameLayout flashSelectionLayout;
@@ -105,7 +103,6 @@ public class PhotoFragment extends BasicPhotoFragment {
         secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
         threeSecondTextView = (TextView) rootView.findViewById(R.id.threeSecondTextView);
         tenSecondTextView = (TextView) rootView.findViewById(R.id.tenSecondTextView);
-        infoButton = (ImageView) rootView.findViewById(R.id.infoButton);
         actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
         thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
         flashSelectionLayout = (FrameLayout) rootView.findViewById(R.id.flashSelectionLayout);
@@ -145,13 +142,6 @@ public class PhotoFragment extends BasicPhotoFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ListShootsActivity.class));
-            }
-        });
-
-        infoButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), AboutActivity.class));
             }
         });
 
