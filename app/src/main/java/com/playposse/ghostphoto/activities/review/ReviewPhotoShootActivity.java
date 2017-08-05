@@ -36,6 +36,8 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteUnselectedAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.data.QueryUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
 import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.ToastUtil;
@@ -182,6 +184,8 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             // Return to parent activity because the photo shoot is gone.
             finish();
         }
+
+        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deleteUnselected, "");
     }
 
     private void onDeleteAll() {
@@ -194,11 +198,15 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         // Because all photos are gone, direct to the previous activity.
         finish();
+
+        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deleteAll, "");
     }
 
     private void onShareClicked() {
         try {
             IntegrationUtil.shareSelectedPhotos(this, photoShootId);
+
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sharePhotoShoot, "");
         } catch (URISyntaxException ex) {
             Log.e(LOG_TAG, "onShareClicked: Failed to handle photo Uri", ex);
 

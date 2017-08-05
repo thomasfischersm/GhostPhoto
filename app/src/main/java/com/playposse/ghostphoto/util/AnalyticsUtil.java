@@ -19,6 +19,18 @@ public abstract class AnalyticsUtil {
 
     private static final String DEFAULT_CATEGORY = "Action";
 
+    public enum AnalyticsCategory {
+        sharePhoto,
+        sharePhotoShoot,
+        deleteAll,
+        deleteUnselected,
+        deletePhoto,
+        selectPhoto,
+        rotatePhoto,
+        editPhoto,
+        sendFeedback
+    }
+
     private AnalyticsUtil() {}
 
     public  static void sendEvent(Fragment fragment, String action) {
@@ -39,5 +51,18 @@ public abstract class AnalyticsUtil {
         Tracker tracker = app.getDefaultTracker();
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public static void reportEvent(
+            Application defaultApp,
+            AnalyticsCategory category,
+            String action) {
+
+        GhostPhotoApplication app = (GhostPhotoApplication) defaultApp;
+        Tracker tracker = app.getDefaultTracker();
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category.name())
+                .setAction(action)
+                .build());
     }
 }

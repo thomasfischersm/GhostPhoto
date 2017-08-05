@@ -14,6 +14,8 @@ import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.data.QueryUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
 import com.playposse.ghostphoto.util.BitmapRotationUtil;
 import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.ToastUtil;
@@ -77,6 +79,11 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                     isSelected = !isSelected;
                     QueryUtil.selectPhoto(getContentResolver(), photoId, isSelected);
                     refreshSelectButton();
+
+                    AnalyticsUtil.reportEvent(
+                            getApplication(),
+                            AnalyticsCategory.selectPhoto,
+                            Boolean.toString(isSelected));
                 }
             }
         });
@@ -95,6 +102,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                     IntegrationUtil.openExternalActivityToEditPhoto(
                             getApplicationContext(),
                             photoFile);
+                    AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.editPhoto, "");
                 }
             }
         });
@@ -104,6 +112,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
             public void onClick(View v) {
                 if (photoFile != null) {
                     IntegrationUtil.sharePhoto(getApplicationContext(), photoFile);
+                    AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sharePhoto, "");
                 }
             }
         });
@@ -129,6 +138,8 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
 
     private void onConfirmedDelete() {
         QueryUtil.deletePhoto(getContentResolver(), photoId);
+
+        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deletePhoto, "");
     }
 
     @Override
@@ -164,6 +175,8 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                             onRotateComplete(newFile);
                         }
                     });
+
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.rotatePhoto, "");
         }
     }
 

@@ -15,6 +15,8 @@ import com.google.android.gms.analytics.Tracker;
 import com.playposse.ghostphoto.GhostPhotoApplication;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.other.AboutActivity;
+import com.playposse.ghostphoto.util.AnalyticsUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
 import com.playposse.ghostphoto.util.EmailUtil;
 
 import io.fabric.sdk.android.Fabric;
@@ -63,6 +65,7 @@ public class ParentActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.send_feedback_menu_item:
                 EmailUtil.sendFeedbackAction(this);
+                AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sendFeedback, "");
                 return true;
             case R.id.about_menu_item:
                 startActivity(new Intent(this, AboutActivity.class));
