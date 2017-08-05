@@ -152,7 +152,9 @@ public class ViewPhotoContainerFragment
                 while (cursor.moveToNext()) {
                     long photoId = smartCursor.getLong(PhotoTable.ID_COLUMN);
                     if (initialPhotoId == photoId) {
-                        viewPager.setCurrentItem(cursor.getPosition());
+                        int position = cursor.getPosition();
+                        viewPager.setCurrentItem(position);
+                        notifyPhotoListener(position);
                         return;
                     }
                 }
