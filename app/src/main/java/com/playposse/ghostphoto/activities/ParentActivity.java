@@ -10,9 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.playposse.ghostphoto.GhostPhotoApplication;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.other.AboutActivity;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
@@ -45,10 +42,7 @@ public class ParentActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        GhostPhotoApplication application = (GhostPhotoApplication) getApplication();
-        Tracker tracker = application.getDefaultTracker();
-        tracker.setScreenName(getClass().getSimpleName());
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AnalyticsUtil.reportScreenName(getApplication(), getClass().getSimpleName());
     }
 
     protected void initActionBar() {

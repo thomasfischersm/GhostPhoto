@@ -33,7 +33,7 @@ public abstract class AnalyticsUtil {
 
     private AnalyticsUtil() {}
 
-    public  static void sendEvent(Fragment fragment, String action) {
+    public static void sendEvent(Fragment fragment, String action) {
         sendEvent(fragment.getActivity().getApplication(), action);
     }
 
