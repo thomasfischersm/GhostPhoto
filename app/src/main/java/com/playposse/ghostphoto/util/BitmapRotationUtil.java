@@ -43,10 +43,18 @@ public class BitmapRotationUtil {
         try {
             resultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
             outStream.flush();
-            return resultFile;
         } finally {
             outStream.close();
         }
+
+        // Delete the old file.
+        boolean deleteSuccess = sourceFile.delete();
+        if (!deleteSuccess) {
+            Log.e(LOG_TAG, "rotate: Failed to delete source file after rotating: "
+                    + sourceFile.getAbsolutePath());
+        }
+
+        return resultFile;
     }
 
     /**
