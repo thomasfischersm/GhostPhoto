@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.playposse.ghostphoto.data.GhostPhotoContract;
+import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -68,14 +68,26 @@ public final class IntegrationUtil {
         ContentResolver contentResolver = context.getContentResolver();
 
         // Query content provider for selected photos.
-        String whereClause = GhostPhotoContract.PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
-                + " and " + GhostPhotoContract.PhotoTable.IS_SELECTED_COLUMN;
+        String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex
+                + " and " + PhotoTable.IS_SELECTED_COLUMN;
         Cursor cursor = contentResolver.query(
-                GhostPhotoContract.PhotoTable.CONTENT_URI,
-                new String[]{GhostPhotoContract.PhotoTable.FILE_URI_COLUMN},
+                PhotoTable.CONTENT_URI,
+                new String[]{PhotoTable.FILE_URI_COLUMN},
                 whereClause,
                 null,
-                GhostPhotoContract.PhotoTable.ID_COLUMN + " asc");
+                PhotoTable.ID_COLUMN + " asc");
+
+        if (cursor.getCount() == 0) {
+            // There are no selected photos. So, share all photos.
+            cursor.close();
+
+            cursor = contentResolver.query(
+                    PhotoTable.CONTENT_URI,
+                    new String[]{PhotoTable.FILE_URI_COLUMN},
+                    PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootIndex,
+                    null,
+                    PhotoTable.ID_COLUMN + " asc");
+        }
 
         if (cursor == null) {
             Log.e(LOG_TAG, "onShareClicked: Cursor was unexpectedly null!");

@@ -336,6 +336,15 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 PhotoTable.TABLE_NAME,
                 "(shoot_id=" + shootId + ") and not(is_selected)",
                 null);
+        Log.d(LOG_TAG, "deleteUnselected: BEFFFFFFFFFFFFFFFORE");
+        DatabaseDumper.dumpTables(databaseHelper);
+
+        // Make selected photos unselected photos.
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PhotoTable.IS_SELECTED_COLUMN, 0);
+        database.update(PhotoTable.TABLE_NAME, contentValues, "shoot_id=" + shootId, null);
+        Log.d(LOG_TAG, "deleteUnselected: AFFFFFFFFFFFFTERRRRR");
+        DatabaseDumper.dumpTables(databaseHelper);
 
         // Check if the photo shoot is now empty. If so, delete it as well.
         if (doesPhotoShootExist(database, shootId)) {

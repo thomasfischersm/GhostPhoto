@@ -20,7 +20,8 @@
     <com.playposse.ghostphoto.util.view.NotificationCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:message="@string/review_photo_shoot_feature_discovery" android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:message="@string/review_photo_shoot_feature_discovery"
         app:preferenceKey="hasReviewHintBeenSeen" />
 
     <LinearLayout
@@ -67,8 +68,9 @@
             <TextView
                 android:id="@+id/selectedPhotosHintTextView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/selected_photos_hint"
                 android:visibility="gone" />
@@ -86,7 +88,6 @@
                 android:layout_gravity="end"
                 android:contentDescription="@string/share_photos_content_description"
                 android:src="@drawable/ic_share_black_24dp" />
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -279,11 +279,9 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             if (cursor.getCount() > 0) {
                 selectedPhotosRecyclerView.setVisibility(View.VISIBLE);
                 selectedPhotosHintTextView.setVisibility(View.GONE);
-                shareButton.setVisibility(View.VISIBLE);
             } else {
                 selectedPhotosRecyclerView.setVisibility(View.GONE);
                 selectedPhotosHintTextView.setVisibility(View.VISIBLE);
-                shareButton.setVisibility(View.GONE);
             }
         }
 
@@ -292,7 +290,6 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             selectedPhotosAdapter.swapCursor(null);
             selectedPhotosRecyclerView.setVisibility(View.GONE);
             selectedPhotosHintTextView.setVisibility(View.VISIBLE);
-            shareButton.setVisibility(View.GONE);
         }
     }
 
