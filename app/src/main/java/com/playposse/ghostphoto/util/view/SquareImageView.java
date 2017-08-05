@@ -2,6 +2,7 @@ package com.playposse.ghostphoto.util.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 /**
@@ -25,7 +26,12 @@ public class SquareImageView extends android.support.v7.widget.AppCompatImageVie
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = getMeasuredWidth();
-        setMeasuredDimension(width, width);
+        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            int width = getMeasuredWidth();
+            setMeasuredDimension(width, width);
+        } else {
+            int height = getMeasuredHeight();
+            setMeasuredDimension(height, height);
+        }
     }
 }
