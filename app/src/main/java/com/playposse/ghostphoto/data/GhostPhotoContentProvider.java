@@ -396,6 +396,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
             case PHOTO_TABLE_KEY:
                 int photoCount =
                         database.update(PhotoTable.TABLE_NAME, values, selection, selectionArgs);
+                contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
                 contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
                 return photoCount;
             case END_SHOOT_ACTION_KEY:

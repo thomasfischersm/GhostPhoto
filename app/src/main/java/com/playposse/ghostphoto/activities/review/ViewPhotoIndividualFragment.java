@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.playposse.ghostphoto.R;
-import com.playposse.ghostphoto.data.GhostPhotoContract;
+import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.SmartCursor;
 
 /**
@@ -70,11 +70,11 @@ public class ViewPhotoIndividualFragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String whereClause = GhostPhotoContract.PhotoTable.ID_COLUMN + " = " + photoId;
+        String whereClause = PhotoTable.ID_COLUMN + " = " + photoId;
         return new CursorLoader(
                 getContext(),
-                GhostPhotoContract.PhotoTable.CONTENT_URI,
-                GhostPhotoContract.PhotoTable.COLUMN_NAMES,
+                PhotoTable.CONTENT_URI,
+                PhotoTable.COLUMN_NAMES,
                 whereClause,
                 null,
                 null);
@@ -82,10 +82,10 @@ public class ViewPhotoIndividualFragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        SmartCursor smartCursor = new SmartCursor(cursor, GhostPhotoContract.PhotoTable.COLUMN_NAMES);
+        SmartCursor smartCursor = new SmartCursor(cursor, PhotoTable.COLUMN_NAMES);
 
         if (cursor.moveToFirst()) {
-            String photoUri = smartCursor.getString(GhostPhotoContract.PhotoTable.FILE_URI_COLUMN);
+            String photoUri = smartCursor.getString(PhotoTable.FILE_URI_COLUMN);
             Uri contentUri = Uri.parse(photoUri);
 
             Glide.with(this)

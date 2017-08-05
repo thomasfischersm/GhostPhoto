@@ -116,6 +116,7 @@ public class ViewPhotoContainerFragment
             pagerAdapter.moveToInitialPhoto();
         } else {
             pagerAdapter.swapCursor(cursor);
+            pagerAdapter.notifyPhotoListener(viewPager.getCurrentItem());
         }
     }
 
@@ -186,7 +187,7 @@ public class ViewPhotoContainerFragment
                 boolean isSelected = smartCursor.getBoolean(PhotoTable.IS_SELECTED_COLUMN);
                 Uri photoUri = smartCursor.getUri(PhotoTable.FILE_URI_COLUMN);
 
-                photoListener.onPhotoSelected(photoId, isSelected, photoUri);
+                photoListener.onPhotoShown(photoId, isSelected, photoUri);
             }
         }
     }

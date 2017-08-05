@@ -34,6 +34,14 @@
             android:contentDescription="@string/select_button_content_description" />
 
         <ImageButton
+            android:id="@+id/rotateButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_rotate_left_black_24dp"
+            android:contentDescription="@string/rotate_content_description" />
+
+        <ImageButton
             android:id="@+id/editInButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

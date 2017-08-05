@@ -146,11 +146,13 @@
     <!-- View photo activity -->
     <string name="photo_content_description">Full view of a single photo.</string>
     <string name="select_button_content_description">Button to select/unselect the current photo.</string>
+    <string name="rotate_content_description">Button to rotate the photo 90 degrees.</string>
     <string name="edit_in_button_content_description">Button to edit the current photo.</string>
     <string name="share_button_content_description">Button to share the current photo.</string>
     <string name="delete_button_content_description">Button to delete the current photo.</string>
     <string name="confirm_delete_photo_dialog">Confirm to delete the photo</string>
     <string name="confirm_delete_photo_dialog_body"></string>
+    <string name="rotation_toast">Computing rotation...</string>
 
 
     <!-- Compare two photos activity -->

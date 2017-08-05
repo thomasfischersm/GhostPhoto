@@ -9,5 +9,5 @@ import android.net.Uri;
  */
 public interface PhotoSelectionChangeListener {
 
-    void onPhotoSelected(long photoId, boolean isSelected, Uri photoUri);
+    void onPhotoShown(long photoId, boolean isSelected, Uri photoUri);
 }
