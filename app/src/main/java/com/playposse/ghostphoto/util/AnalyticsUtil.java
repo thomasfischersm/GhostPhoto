@@ -58,6 +58,10 @@ public abstract class AnalyticsUtil {
             AnalyticsCategory category,
             String action) {
 
+        if (StringUtil.isEmpty(action)) {
+            action = category.name();
+        }
+
         GhostPhotoApplication app = (GhostPhotoApplication) defaultApp;
         Tracker tracker = app.getDefaultTracker();
         tracker.send(new HitBuilders.EventBuilder()
