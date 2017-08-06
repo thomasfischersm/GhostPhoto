@@ -212,6 +212,18 @@
                 android:padding="2dp"
                 android:text="@string/ten_second_interval"
                 android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/customTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:padding="2dp"
+                android:text="@string/custom_interval"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <RelativeLayout

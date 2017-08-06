@@ -19,13 +19,14 @@ public final class GhostPhotoPreferences {
     private static final String PREFS_NAME = "GhostPhotoPreferences";
 
     private static final String FLASH_MODE_KEY = "flashMode";
-    private static final String HAS_REVIEW_HINT_BEEN_SEEN = "hasReviewHintBeenSeen";
     private static final String HAS_ACTION_BUTTON_HINT_BEEN_SEEN = "hasActionButtonHintBeenSeen";
     private static final String HAS_THUMBNAIL_HINT_BEEN_SEEN = "hasThumbnailHintBeenSeen";
     private static final String HAS_SEEN_INTRO_DECK_KEY = "hasSeenIntroDeck";
+    private static final String CUSTOM_PHOTO_INTERVAL_SECONDS_KEY = "customPhotoIntervalSeconds";
 
     private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
     private static final boolean HINT_DEFAULT = false;
+    private static final int CUSTOM_INTERVAL_DEFAULT = 30;
 
     private static final String NULL_STRING = "-1";
     private static final int NULL_VALUE = -1;
@@ -70,6 +71,14 @@ public final class GhostPhotoPreferences {
                 HINT_DEFAULT);
     }
 
+    public static void setCustomPhotoIntervalSeconds(Context context, int seconds) {
+        setInt(context, CUSTOM_PHOTO_INTERVAL_SECONDS_KEY, seconds);
+    }
+
+    public static int getCustomPhotoIntervalSeconds(Context context) {
+        return getInt(context, CUSTOM_PHOTO_INTERVAL_SECONDS_KEY, CUSTOM_INTERVAL_DEFAULT);
+    }
+
     private static String getString(Context context, String key) {
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -92,6 +101,11 @@ public final class GhostPhotoPreferences {
                 context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Integer value = sharedPreferences.getInt(key, -1);
         return (value != -1) ? value : null;
+    }
+
+    private static int getInt(Context context, String key, int defaultValue) {
+        Integer value = getInt(context, key);
+        return (value != null) ? value : defaultValue;
     }
 
     private static void setInt(Context context, String key, Integer value) {

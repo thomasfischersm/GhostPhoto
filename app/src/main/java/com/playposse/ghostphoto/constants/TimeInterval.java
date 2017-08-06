@@ -7,7 +7,8 @@ public enum TimeInterval {
     halfSecond(500),
     oneSecond(1_000),
     threeSeconds(3_000),
-    tenSeconds(10_000),;
+    tenSeconds(10_000),
+    custom(-1);
 
     private final long timeInMs;
 

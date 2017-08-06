@@ -203,6 +203,16 @@
                 android:gravity="center_vertical"
                 android:text="@string/ten_second_interval"
                 android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/customTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/custom_interval"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <RelativeLayout

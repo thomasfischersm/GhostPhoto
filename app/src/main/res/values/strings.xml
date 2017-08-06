@@ -55,6 +55,7 @@
     <string name="second_interval">1s</string>
     <string name="three_second_interval">3s</string>
     <string name="ten_second_interval">10s</string>
+    <string name="custom_interval">Custom</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_auto">Flash auto</string>
     <string name="flash_on">Flash on</string>
@@ -71,6 +72,7 @@
     </string>
     <string name="camera_loading_message">Loading...</string>
     <string name="loading_icon_content_content_description">Icon suggesting that the camera is loading.</string>
+    <string name="custom_interval_dialog_title">Pick a custom time interval in seconds.</string>
 
 
     <!-- About activity -->
@@ -168,6 +170,7 @@
     <string name="dismiss_link">Dismiss</string>
     <string name="dialog_continue_button">Continue</string>
     <string name="dialog_cancel_button">Cancel</string>
+    <string name="confirm_button_label">Confirm</string>
 
 
     <!-- Options menu -->

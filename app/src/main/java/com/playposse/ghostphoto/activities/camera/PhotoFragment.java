@@ -49,6 +49,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
+import com.playposse.ghostphoto.util.view.NumberPickerDialogBuilder;
 
 import java.io.File;
 import java.util.Map;
@@ -69,6 +70,9 @@ public class PhotoFragment extends BasicPhotoFragment {
 
     private static final int LOADER_ID = 2;
 
+    private static final int MINIMUM_CUSTOM_TIME_INTERVAL = 1;
+    private static final int MAXIMUM_CUSTOM_TIME_INTERVAL = 60;
+
     private final Timer timer = new Timer();
 
     private ImageView flashImageView;
@@ -77,6 +81,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private TextView secondTextView;
     private TextView threeSecondTextView;
     private TextView tenSecondTextView;
+    private TextView customTextView;
     private FloatingActionButton actionButton;
     private ImageView thumbNailImageView;
     private FrameLayout flashSelectionLayout;
@@ -85,6 +90,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private LinearLayout flashOnLayout;
 
     private TimeInterval currentTimeInterval = TimeInterval.oneSecond;
+    private int customInterval = 30;
     private ActionState actionState = ActionState.stopped;
     private PhotoTimerTask currentTimerTask = null;
     private BiMap<TimeInterval, TextView> timeIntervalToViewMap = HashBiMap.create();
@@ -103,6 +109,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
         threeSecondTextView = (TextView) rootView.findViewById(R.id.threeSecondTextView);
         tenSecondTextView = (TextView) rootView.findViewById(R.id.tenSecondTextView);
+        customTextView = (TextView) rootView.findViewById(R.id.customTextView);
         actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
         thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
         flashSelectionLayout = (FrameLayout) rootView.findViewById(R.id.flashSelectionLayout);
@@ -110,10 +117,13 @@ public class PhotoFragment extends BasicPhotoFragment {
         flashAutoLayout = (LinearLayout) rootView.findViewById(R.id.flashAutoLayout);
         flashOnLayout = (LinearLayout) rootView.findViewById(R.id.flashOnLayout);
 
+        customInterval = GhostPhotoPreferences.getCustomPhotoIntervalSeconds(getActivity());
+
         initTextView(halfSecondTextView, TimeInterval.halfSecond);
         initTextView(secondTextView, TimeInterval.oneSecond);
         initTextView(threeSecondTextView, TimeInterval.threeSeconds);
         initTextView(tenSecondTextView, TimeInterval.tenSeconds);
+        initTextView(customTextView, TimeInterval.custom);
 
         flashOffLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.off));
         flashAutoLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.auto));
@@ -233,6 +243,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         outState.putString(ACTION_STATE_KEY, actionState.name());
         outState.putString(TIME_INTERVAL_KEY, currentTimeInterval.name());
+        outState.putString(FLASH_MODE_KEY, currentFlashMode.name());
     }
 
     private void initTextView(TextView textView, TimeInterval timeInterval) {
@@ -254,8 +265,13 @@ public class PhotoFragment extends BasicPhotoFragment {
             currentTimerTask.cancel();
         }
 
+        long timeInMs = currentTimeInterval.getTimeInMs();
+        if (timeInMs <=0) {
+            timeInMs = customInterval * 1_000;
+        }
+
         currentTimerTask = new PhotoTimerTask();
-        timer.scheduleAtFixedRate(currentTimerTask, 0, currentTimeInterval.getTimeInMs());
+        timer.scheduleAtFixedRate(currentTimerTask, 0, timeInMs);
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         AnalyticsUtil.sendEvent(this, AnalyticsUtil.START_TAKING_PHOTOS_ACTION);
 
@@ -589,10 +605,31 @@ public class PhotoFragment extends BasicPhotoFragment {
         public void onClick(View view) {
             currentTimeInterval = timeIntervalToViewMap.inverse().get((TextView) view);
 
+            if (currentTimeInterval == TimeInterval.custom) {
+                showCustomTimeIntervalDialog();
+            }
+
             refreshTimeIntervalViews();
             AnalyticsUtil.sendEvent(
                     getActivity().getApplication(),
                     AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.getTimeInMs());
+        }
+
+        private void showCustomTimeIntervalDialog() {
+            NumberPickerDialogBuilder.build(
+                    getActivity(),
+                    getString(R.string.custom_interval_dialog_title),
+                    customInterval,
+                    MINIMUM_CUSTOM_TIME_INTERVAL,
+                    MAXIMUM_CUSTOM_TIME_INTERVAL,
+                    new NumberPickerDialogBuilder.NumberPickerDialogCallback() {
+                        @Override
+                        public void onPickedNumber(int number) {
+                            customInterval = number;
+                            GhostPhotoPreferences
+                                    .setCustomPhotoIntervalSeconds(getActivity(), number);
+                        }
+                    });
         }
     }
 
