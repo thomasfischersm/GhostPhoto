@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ghost Photo</string>
+    <string name="app_name">Jump-In-Front Camera</string>
 
     <!-- Strings from the original Android documentation example. -->
     <string name="picture">Picture</string>
@@ -25,15 +25,15 @@
     <string name="getting_started_button">Get started</string>
     <string name="selfie_photo_content_description">A photo that shows a woman taking a selfie.</string>
     <string name="free_selfie_photo_content_description">
-        A man taking a jumping selfie with Ghost Photo without being constraint to holding the
+        A man taking a jumping selfie with Jump-In-Front Camera without being constraint to holding the
         camera.
     </string>
     <string name="intro_free_selfie_title">Free the selfie!</string>
     <string name="intro_free_selfie_body">
         Typical selfies constrain the users to holding the camera at arm\'s length.\n
         \n
-        Ghost Photo frees you to put the photo down, run around, jump, and pose to your heart\'s
-        content. Ghost Photo takes a photo every second (customizable) to be sure to capture all
+        Jump-In-Front Camera frees you to put the photo down, run around, jump, and pose to your heart\'s
+        content. Jump-In-Front Camera takes a photo every second (customizable) to be sure to capture all
         the special moments.
     </string>
     <string name="review_grid_content_description">An illustration to suggest a grid of photos.</string>
@@ -42,7 +42,7 @@
         The best photographers take hundreds or even thousands of photos to capture that one perfect
         shot.\n
         \n
-        Ghost Photo comes with a photo review tool to organize the photos and discard the rest.
+        Jump-In-Front Camera comes with a photo review tool to organize the photos and discard the rest.
     </string>
 
 
@@ -78,24 +78,24 @@
     <!-- About activity -->
     <string name="about_app_heading">About</string>
     <string name="about_app_body_text">
-        Ghost Photo is an app that takes photos on its own in a regular interval. It\'s like a ghost
+        Jump-In-Front Camera is an app that takes photos on its own in a regular interval. It\'s like a ghost
         that photographs you.\n
         \n
         If you want to take a selfie, the back facing camera makes higher quality photos. Putting
         the camera down instead of holding it steps up the photo quality another notch. But how do
-        you trigger the photos then? A timer takes one photo. With Ghost Photo, you can make the
+        you trigger the photos then? A timer takes one photo. With Jump-In-Front Camera, you can make the
         phone take a series of photos while you post. At the end, simply look through the photos
         and pick the best one.\n\nWhen taking a group photo, there is often a runner. The runner
         presses the timer button and runs to the group. Some smart people simply turn on a video
         and screen grab the perfect shot out of it. The problem is that the camera can make higher
-        quality photos for still shots than ongoing video. So, Photo Ghost comes to the rescue.
+        quality photos for still shots than ongoing video. So, Jump-In-Front Camera comes to the rescue.
         It\'ll steadily snap photos at the highest still photo quality. You pick the best one and
         delete the rest.
     </string>
     <string name="about_feedback_heading">Send Us Feedback!</string>
     <string name="about_feedback_body_text">
         I love to hear from you. Send your feedback to
-        <a href="mailto:thomas@playposse.com?subject=Feedback About Ghost Photo Android App">thomas@playposse.com</a>.
+        <a href="mailto:thomas@playposse.com?subject=Feedback About Jump-In-Front Camera Android App">thomas@playposse.com</a>.
     </string>
     <string name="about_credits_heading">Copyright And Credits</string>
     <string name="about_credits_body_text">
@@ -123,7 +123,7 @@
 
     <!-- Review photo shoot activity -->
     <string name="review_photo_shoot_title">Review photo session</string>
-    <string name="review_photo_content_description">A photo that was taken with Ghost Photo</string>
+    <string name="review_photo_content_description">A photo that was taken with Jump-In-Front Camera</string>
     <string name="all_photos_label">All photos</string>
     <string name="selected_photos_label">Selected photos</string>
     <string name="selected_photos_hint">Drag photos here to keep them.</string>
@@ -183,6 +183,6 @@
     <string name="feedback_dialog_title">Send us feedback!</string>
     <string name="feedback_dialog_message">An e-mail will be opened where you can send me feedback.</string>
     <string name="feedback_email_recipient">thomas@playposse.com</string>
-    <string name="feedback_email_subject">Feedback About Ghost Photo App</string>
+    <string name="feedback_email_subject">Feedback About Jump-In-Front Camera App</string>
     <string name="feedback_email_body">Please, send me your feedback. I care about hearing from you.</string>
 </resources>
