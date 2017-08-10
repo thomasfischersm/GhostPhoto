@@ -360,6 +360,15 @@ public class PhotoFragment extends BasicPhotoFragment {
         }
     }
 
+    /**
+     * Called when the pre-capture sequence is complete, and the actual frame is about to be taken.
+     * This is the most precise moment to play a trigger sound.
+     */
+    @Override
+    protected void onAboutToTakePhoto() {
+        playSound();
+    }
+
     private void addPhotoToGallery(File photoFile) {
         if (photoFile != null) {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -690,7 +699,6 @@ public class PhotoFragment extends BasicPhotoFragment {
                 @Override
                 public void run() {
                     takePicture();
-                    playSound();
                     AnalyticsUtil.sendEvent(
                             getActivity().getApplication(),
                             AnalyticsUtil.TAKE_PHOTO_ACTION);

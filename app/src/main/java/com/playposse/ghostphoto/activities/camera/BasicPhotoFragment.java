@@ -946,12 +946,21 @@ public abstract class BasicPhotoFragment
 
             mCaptureSession.stopRepeating();
             mCaptureSession.capture(captureBuilder.build(), captureCallback, null);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onAboutToTakePhoto();
+                }
+            });
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
     protected abstract void onAfterPhotoTaken(File photoFile);
+
+    protected abstract void onAboutToTakePhoto();
 
     /**
      * Retrieves the JPEG orientation from the specified screen rotation.
