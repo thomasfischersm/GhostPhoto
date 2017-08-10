@@ -142,6 +142,15 @@ public class GhostPhotoContract {
     }
 
     /**
+     * An action that deletes all the photo files in the entire directory.
+     */
+    public static final class DeleteDirectoryContentAction {
+
+        public static final String PATH = "deleteDirectoryContent";
+        public static final Uri CONTENT_URI = createContentUri(PATH);
+    }
+
+    /**
      * A content provider action that causes all the photo files to be checked if they still exist.
      * If the user has deleted the photo files, the database entries are updated. If a photo shoot
      * has no more photos left, it is deleted as well.

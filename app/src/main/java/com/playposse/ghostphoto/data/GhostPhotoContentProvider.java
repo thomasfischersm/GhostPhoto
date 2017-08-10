@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.util.Log;
 
 import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
+import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteDirectoryContentAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteUnselectedAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
@@ -42,6 +44,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
     private static final int DELETE_ALL_ACTION_KEY = 7;
     private static final int DELETE_UNSELECTED_ACTION_KEY = 8;
     private static final int SCAN_PHOTO_FILE_ACTION_KEY = 9;
+    private static final int DELETE_DIRECTORY_CONTENT_ACTION_KEY = 10;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -55,6 +58,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteAllAction.PATH, DELETE_ALL_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteUnselectedAction.PATH, DELETE_UNSELECTED_ACTION_KEY);
         uriMatcher.addURI(GhostPhotoContract.AUTHORITY, ScanPhotoFilesAction.PATH, SCAN_PHOTO_FILE_ACTION_KEY);
+        uriMatcher.addURI(GhostPhotoContract.AUTHORITY, DeleteDirectoryContentAction.PATH, DELETE_DIRECTORY_CONTENT_ACTION_KEY);
     }
 
     private GhostPhotoDatabaseHelper databaseHelper;
@@ -223,6 +227,8 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 return deleteAll(database, contentResolver, selectionArgs);
             case DELETE_UNSELECTED_ACTION_KEY:
                 return deleteUnselected(database, contentResolver, selectionArgs);
+            case DELETE_DIRECTORY_CONTENT_ACTION_KEY:
+                return deleteDirectoryContent(database, contentResolver);
             default:
                 return 0;
 
@@ -363,6 +369,61 @@ public class GhostPhotoContentProvider extends ContentProvider {
         contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
 
         return photoDeleteCount;
+    }
+
+    /**
+     * Deletes the entire directory content.
+     */
+    private int deleteDirectoryContent(SQLiteDatabase database, ContentResolver contentResolver) {
+        // Delete all photos.
+        Cursor cursor = database.query(
+                PhotoTable.TABLE_NAME,
+                new String[]{PhotoTable.FILE_URI_COLUMN},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        int deleteCount = 0;
+        String[] absolutePaths = new String[cursor.getCount()];
+        try {
+            int fileUriColumnIndex = cursor.getColumnIndex(PhotoTable.FILE_URI_COLUMN);
+            while (cursor.moveToNext()) {
+                String photoUri = cursor.getString(fileUriColumnIndex);
+                try {
+                    File file = new File(new java.net.URI(photoUri));
+                    boolean deleteResult = file.delete();
+                    if (deleteResult) {
+                        deleteCount++;
+                    } else {
+                        Log.e(LOG_TAG,
+                                "deleteDirectoryContent: Failed to delete file without error: "
+                                        + photoUri);
+                    }
+                    absolutePaths[cursor.getPosition()] = file.getAbsolutePath();
+                } catch (URISyntaxException ex) {
+                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // Clear up the database tables.
+        database.execSQL("delete from " + PhotoTable.TABLE_NAME);
+        database.execSQL("delete from " + PhotoShootTable.TABLE_NAME);
+        database.execSQL("vacuum");
+
+        // Notify of changes.
+        contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
+        contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
+
+        // Tell the media scanner to clear up any remaining references
+        MediaScannerConnection.scanFile(getContext(), absolutePaths, null, null);
+
+        return deleteCount;
     }
 
     private boolean doesPhotoShootExist(SQLiteDatabase database, long photoShootId) {

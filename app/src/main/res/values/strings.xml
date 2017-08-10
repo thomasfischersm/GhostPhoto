@@ -175,9 +175,15 @@
 
 
     <!-- Options menu -->
+    <string name="delete_directory_content">Delete all photo shoots</string>
     <string name="send_feedback_menu">Send feedback</string>
     <string name="about_menu">About</string>
     <string name="vertical_ellipsis">&#8942;</string>
+
+
+    <!-- Confirm delete directory content -->
+    <string name="confirm_delete_directory_title">Confirm</string>
+    <string name="confirm_delete_directory_message">All photo sets and photos will be deleted.</string>
 
 
     <!-- Send Us Feedback option -->
