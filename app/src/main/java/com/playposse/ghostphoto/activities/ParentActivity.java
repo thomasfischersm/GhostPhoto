@@ -100,6 +100,7 @@ public class ParentActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             getContentResolver().delete(GhostPhotoContract.DeleteDirectoryContentAction.CONTENT_URI, null, null);
             startActivity(new Intent(ParentActivity.this, PhotoActivity.class));
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deleteDirectory, "");
             return null;
         }
     }
