@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +41,7 @@ import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.review.ListShootsActivity;
 import com.playposse.ghostphoto.constants.ActionState;
+import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
 import com.playposse.ghostphoto.constants.TimeInterval;
 import com.playposse.ghostphoto.data.GhostPhotoContract;
@@ -67,6 +69,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private static final String ACTION_STATE_KEY = "actionState";
     private static final String TIME_INTERVAL_KEY = "timeInterval";
     private static final String FLASH_MODE_KEY = "flashMode";
+    private static final String CAMERA_TYPE = "cameraType";
 
     private static final int LOADER_ID = 2;
 
@@ -76,6 +79,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private final Timer timer = new Timer();
 
     private ImageView flashImageView;
+    private ImageView switchCameraImageView;
     private TextView optionsMenuLink;
     private TextView halfSecondTextView;
     private TextView secondTextView;
@@ -104,6 +108,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         super.onViewCreated(rootView, savedInstanceState);
 
         flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
+        switchCameraImageView = (ImageView) rootView.findViewById(R.id.switchCameraImageView);
         optionsMenuLink = (TextView) rootView.findViewById(R.id.optionsMenuLink);
         halfSecondTextView = (TextView) rootView.findViewById(R.id.halfSecondTextView);
         secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
@@ -166,6 +171,13 @@ public class PhotoFragment extends BasicPhotoFragment {
             @Override
             public void onClick(View v) {
                 onShowOptionsMenu();
+            }
+        });
+
+        switchCameraImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSwitchCamera();
             }
         });
 
@@ -244,6 +256,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         outState.putString(ACTION_STATE_KEY, actionState.name());
         outState.putString(TIME_INTERVAL_KEY, currentTimeInterval.name());
         outState.putString(FLASH_MODE_KEY, currentFlashMode.name());
+        outState.putString(CAMERA_TYPE, getCurrentCameraType().name());
     }
 
     private void initTextView(TextView textView, TimeInterval timeInterval) {
@@ -468,6 +481,11 @@ public class PhotoFragment extends BasicPhotoFragment {
             if (savedFlashModeStr != null) {
                 currentFlashMode = FlashMode.valueOf(savedFlashModeStr);
             }
+
+            String savedCameraType = savedInstanceState.getString(CAMERA_TYPE);
+            if (savedCameraType != null) {
+                setCurrentCameraType(CameraType.valueOf(savedCameraType));
+            }
         }
     }
 
@@ -594,6 +612,14 @@ public class PhotoFragment extends BasicPhotoFragment {
         });
         popup.inflate(R.menu.options_menu);
         popup.show();
+    }
+
+    private void onSwitchCamera() {
+        switchCameraType();
+        switchCameraImageView.animate()
+                .rotationBy(180)
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
     }
 
     /**

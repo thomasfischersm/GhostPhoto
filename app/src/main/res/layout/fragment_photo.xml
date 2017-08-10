@@ -48,14 +48,26 @@
             android:src="@drawable/ic_flash_auto_black_24dp"
             android:tint="@color/selectedText" />
 
+        <ImageView
+            android:id="@+id/switchCameraImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp"
+            android:src="@drawable/ic_loop_black_24dp"
+            android:tint="@color/selectedText"
+            android:contentDescription="@string/switch_camera_content_description" />
+
         <TextView
             android:id="@+id/optionsMenuLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingStart="8dp"
             android:text="@string/vertical_ellipsis"
             android:textColor="@color/selectedText"
             android:textSize="24sp"

@@ -51,6 +51,7 @@
     <string name="flash_off_content_description">An icon to set the flash to off.</string>
     <string name="flash_auto_content_description">An icon to set the flash to auto.</string>
     <string name="flash_on_content_description">An icon to set the flash to on.</string>
+    <string name="switch_camera_content_description">An icon that switches between the front and back camera.</string>
     <string name="half_second_interval">.5s</string>
     <string name="second_interval">1s</string>
     <string name="three_second_interval">3s</string>

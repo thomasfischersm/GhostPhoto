@@ -46,6 +46,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.playposse.ghostphoto.R;
+import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
 
 import java.io.File;
@@ -196,6 +197,16 @@ public abstract class BasicPhotoFragment
     protected FlashMode currentFlashMode = FlashMode.auto;
 
     /**
+     * Stores which camera to use.
+     */
+    private CameraType currentCameraType = CameraType.back;
+
+    /**
+     * Stores if the current camera supports auto-focus.
+     */
+    private boolean autoFocusSupported;
+
+    /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -315,7 +326,8 @@ public abstract class BasicPhotoFragment
                     if (afState == null) {
                         captureStillPicture(1, isCompleted);
                     } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
-                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
+                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState ||
+                            !autoFocusSupported) {
                         // CONTROL_AE_STATE can be null on some devices
                         Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
                         if (aeState == null ||
@@ -355,6 +367,7 @@ public abstract class BasicPhotoFragment
                                         @NonNull CaptureRequest request,
                                         @NonNull CaptureResult partialResult) {
 
+            Log.d(LOG_TAG, "onCaptureProgressed: Got partial result");
             process(partialResult, false);
         }
 
@@ -363,6 +376,7 @@ public abstract class BasicPhotoFragment
                                        @NonNull CaptureRequest request,
                                        @NonNull TotalCaptureResult result) {
 
+            Log.d(LOG_TAG, "onCaptureCompleted: Got complete capture.");
             process(result, true);
         }
 
@@ -540,7 +554,7 @@ public abstract class BasicPhotoFragment
 
                 // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                if (facing != null && (facing != currentCameraType.getCameraCharacteristics())) {
                     continue;
                 }
 
@@ -624,6 +638,20 @@ public abstract class BasicPhotoFragment
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = (available == null) ? false : available;
+
+                // Check if auto-focus is supported. Front facing cameras don't tend to support
+                // that.
+                int[] afAvailableModes =
+                        characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+
+                if ((afAvailableModes == null)
+                        || (afAvailableModes.length == 0)
+                        || ((afAvailableModes.length == 1)
+                        && (afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF))) {
+                    autoFocusSupported = false;
+                } else {
+                    autoFocusSupported = true;
+                }
 
                 mCameraId = cameraId;
                 return;
@@ -939,6 +967,14 @@ public abstract class BasicPhotoFragment
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
+    public CameraType getCurrentCameraType() {
+        return currentCameraType;
+    }
+
+    public void setCurrentCameraType(CameraType currentCameraType) {
+        this.currentCameraType = currentCameraType;
+    }
+
     /**
      * Unlock the focus. This method should be called when still image capture sequence is
      * finished.
@@ -1001,6 +1037,20 @@ public abstract class BasicPhotoFragment
                 loadingLayout.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    /**
+     * Switches from back-facing to front-facing camera and back.
+     */
+    protected void switchCameraType() {
+        if (!isCameraOpen) {
+            // Ignore.
+            return;
+        }
+        closeCamera();
+        currentCameraType =
+                (currentCameraType == CameraType.back) ? CameraType.front : CameraType.back;
+        openCamera(mTextureView.getWidth(), mTextureView.getHeight());
     }
 
     /**
