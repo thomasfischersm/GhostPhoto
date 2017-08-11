@@ -100,7 +100,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
             public void onClick(View v) {
                 if (photoFile != null) {
                     IntegrationUtil.openExternalActivityToEditPhoto(
-                            getApplicationContext(),
+                            ViewPhotoActivity.this,
                             photoFile);
                     AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.editPhoto, "");
                 }
