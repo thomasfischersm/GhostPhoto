@@ -111,7 +111,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
             @Override
             public void onClick(View v) {
                 if (photoFile != null) {
-                    IntegrationUtil.sharePhoto(getApplicationContext(), photoFile);
+                    IntegrationUtil.sharePhoto(ViewPhotoActivity.this, photoFile);
                     AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sharePhoto, "");
                 }
             }

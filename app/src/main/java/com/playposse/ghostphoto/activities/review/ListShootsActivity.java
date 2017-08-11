@@ -162,7 +162,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 holder.getPhotoImageView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(ExtraConstants.createReviewPhotoShootIntent(getApplicationContext(), photoShootId));
+                        startActivity(ExtraConstants.createReviewPhotoShootIntent(ListShootsActivity.this, photoShootId));
                         Log.d(LOG_TAG, "onClick: Open comparison for shoot " + photoShootId);
                     }
                 });
