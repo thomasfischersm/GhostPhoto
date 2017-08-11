@@ -66,6 +66,7 @@
             android:name=".activities.review.ViewPhotoActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.review.ReviewPhotoShootActivity" />
+        <activity android:name=".activities.other.HandleDirectoryCreationErrorActivity"></activity>
     </application>
 
 </manifest>

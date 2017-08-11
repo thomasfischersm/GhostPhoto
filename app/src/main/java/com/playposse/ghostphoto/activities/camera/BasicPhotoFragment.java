@@ -8,6 +8,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -32,6 +33,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -46,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.playposse.ghostphoto.R;
+import com.playposse.ghostphoto.activities.other.HandleDirectoryCreationErrorActivity;
 import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
 
@@ -72,7 +75,7 @@ public abstract class BasicPhotoFragment
 
     private static final String LOG_TAG = BasicPhotoFragment.class.getSimpleName();
 
-    private static final String DIR_NAME = "GhostPhoto";
+    public static final String DIR_NAME = "GhostPhoto";
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -272,7 +275,9 @@ public abstract class BasicPhotoFragment
         public void onImageAvailable(ImageReader reader) {
             Log.d(LOG_TAG, "onImageAvailable: Image is available");
             lastFile = generateNextFileName();
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
+            if (lastFile != null) {
+                mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), lastFile));
+            }
         }
 
     };
@@ -465,6 +470,7 @@ public abstract class BasicPhotoFragment
         loadingLayout = (LinearLayout) view.findViewById(R.id.loadingLayout);
     }
 
+    @Nullable
     private File generateNextFileName() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
@@ -473,7 +479,12 @@ public abstract class BasicPhotoFragment
 
         if (!photoDir.exists()) {
             if (!photoDir.mkdir()) {
-                throw new RuntimeException("Failed to create photo directory: " + photoDir);
+                startActivity(new Intent(
+                        getActivity(),
+                        HandleDirectoryCreationErrorActivity.class));
+                Log.e(LOG_TAG, "generateNextFileName: Failed to create photo directory: "
+                        + photoDir);
+                return null;
             }
         }
 
@@ -527,6 +538,11 @@ public abstract class BasicPhotoFragment
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if ((grantResults.length == 2)
+                    && (grantResults[1] != PackageManager.PERMISSION_GRANTED)) {
+                startActivity(
+                        new Intent(getActivity(), HandleDirectoryCreationErrorActivity.class));
+            }
             if (grantResults.length != 2
                     || grantResults[0] != PackageManager.PERMISSION_GRANTED
                     || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
@@ -1032,8 +1048,8 @@ public abstract class BasicPhotoFragment
         mTextureView.post(new Runnable() {
             @Override
             public void run() {
-        loadingLayout.setVisibility(View.VISIBLE);
-        mTextureView.setVisibility(View.INVISIBLE);
+                loadingLayout.setVisibility(View.VISIBLE);
+                mTextureView.setVisibility(View.INVISIBLE);
             }
         });
     }

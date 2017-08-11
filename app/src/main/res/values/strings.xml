@@ -192,4 +192,17 @@
     <string name="feedback_email_recipient">thomas@playposse.com</string>
     <string name="feedback_email_subject">Feedback About Jump-In-Front Camera App</string>
     <string name="feedback_email_body">Please, send me your feedback. I care about hearing from you.</string>
+
+
+    <!-- Activity to recover from photo directory creation  failure -->
+    <string name="directory_permission_error_title">Can\'t save photos without permission!</string>
+    <string name="directory_permission_error_message">Please, press the button and grant permission.</string>
+    <string name="directory_permission_error_button">Grant permission</string>
+    <string name="directory_creation_error_title">Failed to create the photo directory.</string>
+    <string name="directory_creation_error_message">
+        To be able to save photos, the app failed to create this directory: %1$s. Please, try to
+        create it manually and then tap the button.
+    </string>
+    <string name="directory_creation_error_button">Try again</string>
+    <string name="failed_to_create_directory_toast">Failed to detect and/or create directory.</string>
 </resources>
