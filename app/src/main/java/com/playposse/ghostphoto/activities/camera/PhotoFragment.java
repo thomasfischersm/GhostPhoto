@@ -1,6 +1,8 @@
 package com.playposse.ghostphoto.activities.camera;
 
 import android.animation.Animator;
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,7 +15,6 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -98,6 +99,12 @@ public class PhotoFragment extends BasicPhotoFragment {
     private ActionState actionState = ActionState.stopped;
     private PhotoTimerTask currentTimerTask = null;
     private BiMap<TimeInterval, TextView> timeIntervalToViewMap = HashBiMap.create();
+
+    /**
+     * The {@link Context} is needed after the {@link Fragment} is detached from the
+     * {@link Activity} because some photo operations could finish late.
+     */
+    private Context applicationContext;
 
     public static PhotoFragment newInstance() {
         return new PhotoFragment();
@@ -259,6 +266,13 @@ public class PhotoFragment extends BasicPhotoFragment {
         outState.putString(CAMERA_TYPE, getCurrentCameraType().name());
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        applicationContext = context.getApplicationContext();
+    }
+
     private void initTextView(TextView textView, TimeInterval timeInterval) {
         timeIntervalToViewMap.put(timeInterval, textView);
         textView.setOnClickListener(new TimeIntervalOnClickListener());
@@ -351,7 +365,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                     contentValues.put(
                             PhotoTable.FILE_URI_COLUMN,
                             fileUri.toString());
-                    getActivity()
+                    applicationContext
                             .getContentResolver()
                             .insert(AddPhotoAction.CONTENT_URI, contentValues);
                     return null;
@@ -375,16 +389,7 @@ public class PhotoFragment extends BasicPhotoFragment {
             Uri contentUri = Uri.fromFile(photoFile);
             mediaScanIntent.setData(contentUri);
 
-            if (getActivity() != null) {
-                getActivity().sendBroadcast(mediaScanIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // getActivity() may return null during screen rotation changes. If the user has
-                // a late enough SDK, try using getContext().
-                Context context = getContext();
-                if (context != null) {
-                    context.sendBroadcast(mediaScanIntent);
-                }
-            }
+            applicationContext.sendBroadcast(mediaScanIntent);
         }
     }
 
