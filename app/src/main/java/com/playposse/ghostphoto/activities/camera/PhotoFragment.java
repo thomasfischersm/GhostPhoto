@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -389,7 +390,18 @@ public class PhotoFragment extends BasicPhotoFragment {
             Uri contentUri = Uri.fromFile(photoFile);
             mediaScanIntent.setData(contentUri);
 
-            applicationContext.sendBroadcast(mediaScanIntent);
+            if (applicationContext != null) {
+                applicationContext.sendBroadcast(mediaScanIntent);
+            } else if (getActivity() != null) {
+                getActivity().sendBroadcast(mediaScanIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // getActivity() may return null during screen rotation changes. If the user has
+                // a late enough SDK, try using getContext().
+                Context context = getContext();
+                if (context != null) {
+                    context.sendBroadcast(mediaScanIntent);
+                }
+            }
         }
     }
 
