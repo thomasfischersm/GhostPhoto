@@ -804,6 +804,12 @@ public abstract class BasicPhotoFragment
                                 // Flash is automatically enabled when necessary.
                                 setFlash(mPreviewRequestBuilder);
 
+                                if (!isCameraOpen) {
+                                    // The camera is already closed. Skip this to avoid causing an
+                                    // exception.
+                                    return;
+                                }
+
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
                                 mCaptureSession.setRepeatingRequest(mPreviewRequest,

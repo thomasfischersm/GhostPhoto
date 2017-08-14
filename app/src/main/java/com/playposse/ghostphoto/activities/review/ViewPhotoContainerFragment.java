@@ -183,7 +183,7 @@ public class ViewPhotoContainerFragment
         }
 
         private void notifyPhotoListener(int position) {
-            if (photoListener != null) {
+            if ((photoListener != null) && (cursor.getColumnCount() > 0)) {
                 cursor.moveToPosition(position);
                 long photoId = smartCursor.getLong(PhotoTable.ID_COLUMN);
                 boolean isSelected = smartCursor.getBoolean(PhotoTable.IS_SELECTED_COLUMN);

@@ -361,6 +361,11 @@ public class PhotoFragment extends BasicPhotoFragment {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
+                    Context context = getUsefulContext();
+                    if (context == null) {
+                        return null;
+                    }
+
                     Uri fileUri = Uri.fromFile(photoFile);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(
@@ -372,6 +377,20 @@ public class PhotoFragment extends BasicPhotoFragment {
                     return null;
                 }
             }.execute();
+        }
+    }
+
+    private Context getUsefulContext() {
+        if (applicationContext != null) {
+            return applicationContext;
+        } else if (getActivity() != null) {
+            return getActivity();
+        } if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // getActivity() may return null during screen rotation changes. If the user has
+            // a late enough SDK, try using getContext().
+            return getContext();
+        } else {
+            return null;
         }
     }
 
@@ -390,17 +409,9 @@ public class PhotoFragment extends BasicPhotoFragment {
             Uri contentUri = Uri.fromFile(photoFile);
             mediaScanIntent.setData(contentUri);
 
-            if (applicationContext != null) {
-                applicationContext.sendBroadcast(mediaScanIntent);
-            } else if (getActivity() != null) {
-                getActivity().sendBroadcast(mediaScanIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // getActivity() may return null during screen rotation changes. If the user has
-                // a late enough SDK, try using getContext().
-                Context context = getContext();
-                if (context != null) {
-                    context.sendBroadcast(mediaScanIntent);
-                }
+            Context context = getUsefulContext();
+            if (context != null) {
+                context.sendBroadcast(mediaScanIntent);
             }
         }
     }
