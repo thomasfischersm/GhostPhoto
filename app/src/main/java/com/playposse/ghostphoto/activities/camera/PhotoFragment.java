@@ -362,7 +362,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                 @Override
                 protected Void doInBackground(Void... params) {
                     Context context = getUsefulContext();
-                    if (context == null) {
+                    if ((context == null) || (context.getContentResolver() == null)) {
                         return null;
                     }
 
