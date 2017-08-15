@@ -371,7 +371,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                     contentValues.put(
                             PhotoTable.FILE_URI_COLUMN,
                             fileUri.toString());
-                    applicationContext
+                    context
                             .getContentResolver()
                             .insert(AddPhotoAction.CONTENT_URI, contentValues);
                     return null;
