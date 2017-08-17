@@ -2,22 +2,10 @@
     <string name="app_name">Jump-In-Front Camera</string>
 
     <!-- Strings from the original Android documentation example. -->
-    <string name="picture">Picture</string>
-    <string name="description_info">Info</string>
     <string name="request_permission">
         This app takes photos and stores them to external storage. To do that, it needs permission.
     </string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-    <string name="intro_message">
-        <![CDATA[
-
-
-            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-            you can display camera preview and take pictures.
-
-
-        ]]>
-    </string>
 
 
     <!-- Introduction activity -->
@@ -155,7 +143,7 @@
     <string name="delete_button_content_description">Button to delete the current photo.</string>
     <string name="confirm_delete_photo_dialog">Confirm to delete the photo</string>
     <string name="confirm_delete_photo_dialog_body"></string>
-    <string name="rotation_toast">Computing rotation...</string>
+    <string name="rotation_toast">Computing rotation…</string>
 
 
     <!-- Compare two photos activity -->
