@@ -27,12 +27,14 @@ import static com.playposse.ghostphoto.activities.camera.BasicPhotoFragment.DIR_
  * An {@link Activity} that tries to guide the user through handling photo directory creation
  * errors.
  */
-public class HandleDirectoryCreationErrorActivity extends ParentActivity {
+public class PermissionRecoveryActivity extends ParentActivity {
 
-    private static final int REQUEST_STORAGE_PERMISSION = 2;
+    private static final int REQUEST_CAMERA_PERMISSION = 2;
+    private static final int REQUEST_STORAGE_PERMISSION = 3;
 
     private LinearLayout requestPermissionLayout;
-    private Button requestPermissionButton;
+    private Button requestCameraPermissionButton;
+    private Button requestStoragePermissionButton;
     private LinearLayout directoryCreationErrorLayout;
     private TextView directoryCreationErrorMessageTextView;
     private Button createDirectoryButton;
@@ -41,12 +43,13 @@ public class HandleDirectoryCreationErrorActivity extends ParentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_handle_directory_creation_error);
+        setContentView(R.layout.permission_recovery_activity);
 
         initActionBar();
 
         requestPermissionLayout = (LinearLayout) findViewById(R.id.requestPermissionLayout);
-        requestPermissionButton = (Button) findViewById(R.id.requestPermissionButton);
+        requestCameraPermissionButton = (Button) findViewById(R.id.requestCameraPermissionButton);
+        requestStoragePermissionButton = (Button) findViewById(R.id.requestStoragePermissionButton);
         directoryCreationErrorLayout = (LinearLayout) findViewById(R.id.directoryCreationErrorLayout);
         directoryCreationErrorMessageTextView = (TextView) findViewById(R.id.directoryCreationErrorMessageTextView);
         createDirectoryButton = (Button) findViewById(R.id.createDirectoryButton);
@@ -57,10 +60,17 @@ public class HandleDirectoryCreationErrorActivity extends ParentActivity {
 
         updateLayoutVisibility();
 
-        requestPermissionButton.setOnClickListener(new View.OnClickListener() {
+        requestCameraPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onRequestPermissionClicked();
+                onRequestCameraPermissionClicked();
+            }
+        });
+
+        requestStoragePermissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRequestStoragePermissionClicked();
             }
         });
 
@@ -73,9 +83,15 @@ public class HandleDirectoryCreationErrorActivity extends ParentActivity {
     }
 
     private void updateLayoutVisibility() {
-        if (!hasFilePermission()) {
+        boolean hasStoragePermission = hasStoragePermission();
+        boolean hasCameraPermission = hasCameraPermission();
+        if (!hasStoragePermission || !hasCameraPermission) {
             requestPermissionLayout.setVisibility(View.VISIBLE);
             directoryCreationErrorLayout.setVisibility(View.INVISIBLE);
+            requestCameraPermissionButton
+                    .setVisibility(hasCameraPermission ? View.GONE : View.VISIBLE);
+            requestStoragePermissionButton
+                    .setVisibility(hasStoragePermission ? View.GONE : View.VISIBLE);
         } else if (!doesPhotoDirectoryExist()) {
             requestPermissionLayout.setVisibility(View.INVISIBLE);
             directoryCreationErrorLayout.setVisibility(View.VISIBLE);
@@ -100,7 +116,15 @@ public class HandleDirectoryCreationErrorActivity extends ParentActivity {
         startActivity(new Intent(this, PhotoActivity.class));
     }
 
-    private void onRequestPermissionClicked() {
+    private void onRequestCameraPermissionClicked() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{
+                        Manifest.permission.CAMERA},
+                REQUEST_CAMERA_PERMISSION);
+    }
+
+    private void onRequestStoragePermissionClicked() {
         ActivityCompat.requestPermissions(
                 this,
                 new String[]{
@@ -116,8 +140,13 @@ public class HandleDirectoryCreationErrorActivity extends ParentActivity {
         }
     }
 
-    private boolean hasFilePermission() {
+    private boolean hasStoragePermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean hasCameraPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED;
     }
 

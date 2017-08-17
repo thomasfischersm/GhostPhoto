@@ -48,7 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.playposse.ghostphoto.R;
-import com.playposse.ghostphoto.activities.other.HandleDirectoryCreationErrorActivity;
+import com.playposse.ghostphoto.activities.other.PermissionRecoveryActivity;
 import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
 
@@ -81,7 +81,7 @@ public abstract class BasicPhotoFragment
      * Conversion from screen rotation to JPEG orientation.
      */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_ALL_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
     static {
@@ -481,7 +481,7 @@ public abstract class BasicPhotoFragment
             if (!photoDir.mkdir()) {
                 startActivity(new Intent(
                         getActivity(),
-                        HandleDirectoryCreationErrorActivity.class));
+                        PermissionRecoveryActivity.class));
                 Log.e(LOG_TAG, "generateNextFileName: Failed to create photo directory: "
                         + photoDir);
                 return null;
@@ -530,24 +530,19 @@ public abstract class BasicPhotoFragment
                     new String[]{
                             Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CAMERA_PERMISSION);
+                    REQUEST_ALL_PERMISSIONS);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if ((grantResults.length == 2)
-                    && (grantResults[1] != PackageManager.PERMISSION_GRANTED)) {
+        if (requestCode == REQUEST_ALL_PERMISSIONS) {
+            if ((grantResults.length != 2)
+                    || (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                    || (grantResults[1] != PackageManager.PERMISSION_GRANTED)) {
                 startActivity(
-                        new Intent(getActivity(), HandleDirectoryCreationErrorActivity.class));
-            }
-            if (grantResults.length != 2
-                    || grantResults[0] != PackageManager.PERMISSION_GRANTED
-                    || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.request_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                        new Intent(getActivity(), PermissionRecoveryActivity.class));
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1199,7 +1194,7 @@ public abstract class BasicPhotoFragment
                                     new String[]{
                                             Manifest.permission.CAMERA,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    REQUEST_CAMERA_PERMISSION);
+                                    REQUEST_ALL_PERMISSIONS);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel,

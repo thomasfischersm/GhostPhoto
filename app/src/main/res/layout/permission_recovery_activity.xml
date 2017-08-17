@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.playposse.ghostphoto.activities.other.HandleDirectoryCreationErrorActivity">
+    tools:context="com.playposse.ghostphoto.activities.other.PermissionRecoveryActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -32,21 +32,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/directory_permission_error_title"
+                android:text="@string/permission_error_title"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/directory_permission_error_message" />
+                android:text="@string/permission_error_message" />
 
             <Button
-                android:id="@+id/requestPermissionButton"
+                android:id="@+id/requestCameraPermissionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/directory_permission_error_button" />
+                android:text="@string/camera_permission_button" />
+
+            <Button
+                android:id="@+id/requestStoragePermissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/storage_permission_button" />
         </LinearLayout>
 
         <LinearLayout
