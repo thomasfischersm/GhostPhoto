@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.analytics.globalConfigResource"
             android:resource="@xml/analytics_global_config" />
@@ -47,7 +47,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.camera.PhotoActivity" />
+        <activity
+            android:name=".activities.camera.PhotoActivity"
+            android:theme="@style/TranslucentAppTheme" />
         <activity
             android:name=".activities.other.AboutActivity"
             android:parentActivityName=".activities.camera.PhotoActivity" />
