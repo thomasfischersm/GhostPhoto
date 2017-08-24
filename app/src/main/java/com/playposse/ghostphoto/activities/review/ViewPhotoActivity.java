@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
@@ -36,11 +39,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
     private static final String LOG_TAG = ViewPhotoActivity.class.getSimpleName();
 
     private ViewPhotoContainerFragment photoContainerFragment;
-    private ImageButton selectButton;
-    private ImageButton rotateButton;
-    private ImageButton editInButton;
-    private ImageButton shareButton;
-    private ImageButton deleteButton;
+    private CheckBox keepCheckBox;
 
     private long photoShootId;
     private long initialPhotoId;
@@ -59,11 +58,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
         photoShootId = ExtraConstants.getPhotoShootIndex(getIntent());
         initialPhotoId = ExtraConstants.getPhotoIndex(getIntent());
 
-        selectButton = (ImageButton) findViewById(R.id.selectButton);
-        rotateButton = (ImageButton) findViewById(R.id.rotateButton);
-        editInButton = (ImageButton) findViewById(R.id.editInButton);
-        shareButton = (ImageButton) findViewById(R.id.shareButton);
-        deleteButton = (ImageButton) findViewById(R.id.deleteButton);
+        keepCheckBox = (CheckBox) findViewById(R.id.keepCheckBox);
 
         photoContainerFragment =
                 ViewPhotoContainerFragment.newInstance(photoShootId, initialPhotoId);
@@ -72,11 +67,11 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                 .add(R.id.fragmentContainer, photoContainerFragment)
                 .commit();
 
-        selectButton.setOnClickListener(new View.OnClickListener() {
+        keepCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (isSelected != null) {
-                    isSelected = !isSelected;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if ((isSelected != null) && (isSelected != isChecked)) {
+                    isSelected = isChecked;
                     QueryUtil.selectPhoto(getContentResolver(), photoId, isSelected);
                     refreshSelectButton();
 
@@ -87,59 +82,35 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                 }
             }
         });
-
-        rotateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRotateClicked();
-            }
-        });
-
-        editInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (photoFile != null) {
-                    IntegrationUtil.openExternalActivityToEditPhoto(
-                            ViewPhotoActivity.this,
-                            photoFile);
-                    AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.editPhoto, "");
-                }
-            }
-        });
-
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (photoFile != null) {
-                    IntegrationUtil.sharePhoto(ViewPhotoActivity.this, photoFile);
-                    AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sharePhoto, "");
-                }
-            }
-        });
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogUtil.confirm(
-                        ViewPhotoActivity.this,
-                        R.string.confirm_delete_photo_dialog,
-                        R.string.confirm_delete_photo_dialog_body,
-                        R.string.delete_button_label,
-                        R.string.cancel_button_label,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                onConfirmedDelete();
-                            }
-                        });
-            }
-        });
     }
 
-    private void onConfirmedDelete() {
-        QueryUtil.deletePhoto(getContentResolver(), photoId);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
-        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deletePhoto, "");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.view_photo_options_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_photos_menu_item:
+                onDeleteClicked();
+                return true;
+            case R.id.share_photos_menu_item:
+                onShareClicked();
+                return true;
+            case R.id.edit_menu_item:
+                onEditClicked();
+                return true;
+            case R.id.rotate_menu_item:
+                onRotateClicked();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -157,11 +128,45 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
     }
 
     private void refreshSelectButton() {
-        if (isSelected) {
-            selectButton.setImageResource(R.drawable.ic_select_off);
-        } else {
-            selectButton.setImageResource(R.drawable.ic_select);
+        keepCheckBox.setChecked(isSelected);
+    }
+
+
+    private void onEditClicked() {
+        if (photoFile != null) {
+            IntegrationUtil.openExternalActivityToEditPhoto(
+                    ViewPhotoActivity.this,
+                    photoFile);
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.editPhoto, "");
         }
+    }
+
+    private void onShareClicked() {
+        if (photoFile != null) {
+            IntegrationUtil.sharePhoto(ViewPhotoActivity.this, photoFile);
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.sharePhoto, "");
+        }
+    }
+
+    private void onDeleteClicked() {
+        DialogUtil.confirm(
+                ViewPhotoActivity.this,
+                R.string.confirm_delete_photo_dialog,
+                R.string.confirm_delete_photo_dialog_body,
+                R.string.delete_button_label,
+                R.string.cancel_button_label,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onConfirmedDelete();
+                    }
+                });
+    }
+
+    private void onConfirmedDelete() {
+        QueryUtil.deletePhoto(getContentResolver(), photoId);
+
+        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deletePhoto, "");
     }
 
     private void onRotateClicked() {

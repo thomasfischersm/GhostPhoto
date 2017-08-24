@@ -142,6 +142,7 @@
     <string name="confirm_delete_photo_dialog">Confirm to delete the photo</string>
     <string name="confirm_delete_photo_dialog_body"></string>
     <string name="rotation_toast">Computing rotation…</string>
+    <string name="keep_label">Keep</string>
 
 
     <!-- Compare two photos activity -->
@@ -170,6 +171,11 @@
     <!-- Review photo shoot menu -->
     <string name="delete_photos_menu">Delete photos</string>
     <string name="share_photos_menu">Share photos</string>
+
+
+    <!-- View photo shoot menu -->
+    <string name="edit_menu">Edit</string>
+    <string name="rotate_menu">Rotate</string>
 
 
     <!-- Confirm delete directory content -->
