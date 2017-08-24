@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,11 +84,11 @@ public class PhotoFragment extends BasicPhotoFragment {
     private ImageView flashImageView;
     private ImageView switchCameraImageView;
     private TextView optionsMenuLink;
-    private TextView halfSecondTextView;
-    private TextView secondTextView;
-    private TextView threeSecondTextView;
-    private TextView tenSecondTextView;
-    private TextView customTextView;
+    private Button halfSecondTextView;
+    private Button secondTextView;
+    private Button threeSecondTextView;
+    private Button tenSecondTextView;
+    private Button customTextView;
     private FloatingActionButton actionButton;
     private ImageView thumbNailImageView;
     private FrameLayout flashSelectionLayout;
@@ -99,7 +100,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     private int customInterval = 30;
     private ActionState actionState = ActionState.stopped;
     private PhotoTimerTask currentTimerTask = null;
-    private BiMap<TimeInterval, TextView> timeIntervalToViewMap = HashBiMap.create();
+    private BiMap<TimeInterval, Button> timeIntervalToViewMap = HashBiMap.create();
 
     /**
      * The {@link Context} is needed after the {@link Fragment} is detached from the
@@ -118,11 +119,11 @@ public class PhotoFragment extends BasicPhotoFragment {
         flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
         switchCameraImageView = (ImageView) rootView.findViewById(R.id.switchCameraImageView);
         optionsMenuLink = (TextView) rootView.findViewById(R.id.optionsMenuLink);
-        halfSecondTextView = (TextView) rootView.findViewById(R.id.halfSecondTextView);
-        secondTextView = (TextView) rootView.findViewById(R.id.secondTextView);
-        threeSecondTextView = (TextView) rootView.findViewById(R.id.threeSecondTextView);
-        tenSecondTextView = (TextView) rootView.findViewById(R.id.tenSecondTextView);
-        customTextView = (TextView) rootView.findViewById(R.id.customTextView);
+        halfSecondTextView = (Button) rootView.findViewById(R.id.halfSecondTextView);
+        secondTextView = (Button) rootView.findViewById(R.id.secondTextView);
+        threeSecondTextView = (Button) rootView.findViewById(R.id.threeSecondTextView);
+        tenSecondTextView = (Button) rootView.findViewById(R.id.tenSecondTextView);
+        customTextView = (Button) rootView.findViewById(R.id.customTextView);
         actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
         thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
         flashSelectionLayout = (FrameLayout) rootView.findViewById(R.id.flashSelectionLayout);
@@ -274,9 +275,9 @@ public class PhotoFragment extends BasicPhotoFragment {
         applicationContext = context.getApplicationContext();
     }
 
-    private void initTextView(TextView textView, TimeInterval timeInterval) {
-        timeIntervalToViewMap.put(timeInterval, textView);
-        textView.setOnClickListener(new TimeIntervalOnClickListener());
+    private void initTextView(Button button, TimeInterval timeInterval) {
+        timeIntervalToViewMap.put(timeInterval, button);
+        button.setOnClickListener(new TimeIntervalOnClickListener());
     }
 
     private void refreshActionButton() {
@@ -458,23 +459,25 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void refreshTimeIntervalViews() {
-        for (Map.Entry<TimeInterval, TextView> entry : timeIntervalToViewMap.entrySet()) {
+        for (Map.Entry<TimeInterval, Button> entry : timeIntervalToViewMap.entrySet()) {
             makeBoldOrNormal(entry.getValue(), entry.getKey() == currentTimeInterval);
         }
     }
 
-    private void makeBoldOrNormal(TextView textView, boolean isBold) {
+    private void makeBoldOrNormal(Button button, boolean isBold) {
         Context context = getActivity();
         if (isBold) {
-            textView.setTypeface(null, Typeface.BOLD);
-            textView.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
-            textView.setTextSize(
+            button.setSelected(true);
+            button.setTypeface(null, Typeface.BOLD);
+            button.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
+            button.setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.selectedText));
         } else {
-            textView.setTypeface(null, Typeface.NORMAL);
-            textView.setTextColor(ContextCompat.getColor(context, R.color.unselectedText));
-            textView.setTextSize(
+            button.setSelected(false);
+            button.setTypeface(null, Typeface.NORMAL);
+            button.setTextColor(ContextCompat.getColor(context, R.color.unselectedText));
+            button.setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.unselectedText));
         }

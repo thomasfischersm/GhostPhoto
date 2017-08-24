@@ -15,4 +15,10 @@
     <!-- Drag and drop colors -->
     <color name="availableDragTargetTint">#80558B2F</color>
     <color name="activeDragTargetTint">#80AED581</color>
+
+    <!-- Colors for the round buttons -->
+    <color name="roundButton">#666666</color>
+    <color name="roundButtonPressed">#999999</color>
+    <color name="roundButtonSelected">#ff5724</color>
+    <color name="roundButtonText">@android:color/white</color>
 </resources>

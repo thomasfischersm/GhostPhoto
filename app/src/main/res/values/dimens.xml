@@ -11,4 +11,7 @@
 
     <!-- Sets the spacing between items in the photo shoot activity. -->
     <dimen name="photo_shoot_spacing">6dp</dimen>
+
+    <!-- Sets the diameter for round buttons. -->
+    <dimen name="round_button_diameter">56dp</dimen>
 </resources>

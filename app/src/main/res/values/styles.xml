@@ -29,4 +29,22 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@android:color/darker_gray</item>
     </style>
+
+    <!-- A style that is applied to round buttons. -->
+    <style name="roundButtonStyle">
+        <item name="android:layout_height">@dimen/round_button_diameter</item>
+        <item name="android:layout_width">@dimen/round_button_diameter</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/round_button_states</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/roundButtonText</item>
+    </style>
+
+    <!-- A style that is applied to Space views to become default 1 weight spacers in a
+     LinearLayout. -->
+    <style name="defaultSpacer">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 </resources>
