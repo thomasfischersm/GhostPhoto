@@ -84,6 +84,8 @@ public class PhotoFragment extends BasicPhotoFragment {
     private ImageView flashImageView;
     private ImageView switchCameraImageView;
     private TextView optionsMenuLink;
+    private Button selectedIntervalButton;
+    private FrameLayout intervalSelectionLayout;
     private Button halfSecondTextView;
     private Button secondTextView;
     private Button threeSecondTextView;
@@ -119,6 +121,8 @@ public class PhotoFragment extends BasicPhotoFragment {
         flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
         switchCameraImageView = (ImageView) rootView.findViewById(R.id.switchCameraImageView);
         optionsMenuLink = (TextView) rootView.findViewById(R.id.optionsMenuLink);
+        selectedIntervalButton = (Button) rootView.findViewById(R.id.selectedIntervalButton);
+        intervalSelectionLayout = (FrameLayout) rootView.findViewById(R.id.intervalSelectionLayout);
         halfSecondTextView = (Button) rootView.findViewById(R.id.halfSecondTextView);
         secondTextView = (Button) rootView.findViewById(R.id.secondTextView);
         threeSecondTextView = (Button) rootView.findViewById(R.id.threeSecondTextView);
@@ -133,11 +137,11 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         customInterval = GhostPhotoPreferences.getCustomPhotoIntervalSeconds(getActivity());
 
-        initTextView(halfSecondTextView, TimeInterval.halfSecond);
-        initTextView(secondTextView, TimeInterval.oneSecond);
-        initTextView(threeSecondTextView, TimeInterval.threeSeconds);
-        initTextView(tenSecondTextView, TimeInterval.tenSeconds);
-        initTextView(customTextView, TimeInterval.custom);
+        initIntevalButton(halfSecondTextView, TimeInterval.halfSecond);
+        initIntevalButton(secondTextView, TimeInterval.oneSecond);
+        initIntevalButton(threeSecondTextView, TimeInterval.threeSeconds);
+        initIntevalButton(tenSecondTextView, TimeInterval.tenSeconds);
+        initIntevalButton(customTextView, TimeInterval.custom);
 
         flashOffLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.off));
         flashAutoLayout.setOnClickListener(new FlashModeOnClickListener(FlashMode.auto));
@@ -187,6 +191,21 @@ public class PhotoFragment extends BasicPhotoFragment {
             @Override
             public void onClick(View v) {
                 onSwitchCamera();
+            }
+        });
+
+        selectedIntervalButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntervalLayoutRevealAnimation();
+            }
+        });
+
+        intervalSelectionLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the selection panel if the user clicks away.
+                startIntervalLayoutHideAnimation();
             }
         });
 
@@ -275,7 +294,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         applicationContext = context.getApplicationContext();
     }
 
-    private void initTextView(Button button, TimeInterval timeInterval) {
+    private void initIntevalButton(Button button, TimeInterval timeInterval) {
         timeIntervalToViewMap.put(timeInterval, button);
         button.setOnClickListener(new TimeIntervalOnClickListener());
     }
@@ -459,6 +478,9 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void refreshTimeIntervalViews() {
+        selectedIntervalButton.setSelected(true);
+        selectedIntervalButton.setText(currentTimeInterval.getString(getResources()));
+
         for (Map.Entry<TimeInterval, Button> entry : timeIntervalToViewMap.entrySet()) {
             makeBoldOrNormal(entry.getValue(), entry.getKey() == currentTimeInterval);
         }
@@ -586,6 +608,63 @@ public class PhotoFragment extends BasicPhotoFragment {
         animator.start();
     }
 
+    private void startIntervalLayoutRevealAnimation() {
+        int centerX = (selectedIntervalButton.getLeft() + selectedIntervalButton.getRight()) / 2;
+        int centerY = (selectedIntervalButton.getTop() + selectedIntervalButton.getBottom()) / 2;
+        int startRadius = 0;
+        int endRadius = intervalSelectionLayout.getHeight();
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                intervalSelectionLayout,
+                centerX,
+                centerY,
+                startRadius,
+                endRadius);
+
+        intervalSelectionLayout.setVisibility(View.VISIBLE);
+        selectedIntervalButton.setVisibility(View.GONE);
+        animator.start();
+    }
+
+    private void startIntervalLayoutHideAnimation() {
+        int centerX = (selectedIntervalButton.getLeft() + selectedIntervalButton.getRight()) / 2;
+        int centerY = (selectedIntervalButton.getTop() + selectedIntervalButton.getBottom()) / 2;
+        int startRadius = intervalSelectionLayout.getHeight();
+        int endRadius = 0;
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                intervalSelectionLayout,
+                centerX,
+                centerY,
+                startRadius,
+                endRadius);
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                intervalSelectionLayout.setVisibility(View.GONE);
+                selectedIntervalButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                // Nothing to do.
+            }
+        });
+
+        animator.start();
+    }
+
     private void showActionButtonHint() {
         if (!GhostPhotoPreferences.hasActionButtonHintBeenSeen(getActivity())) {
             GhostPhotoPreferences.setHasActionButtonHintBeenSeen(getActivity(), true);
@@ -676,6 +755,9 @@ public class PhotoFragment extends BasicPhotoFragment {
             }
 
             refreshTimeIntervalViews();
+
+            startIntervalLayoutHideAnimation();
+
             AnalyticsUtil.sendEvent(
                     getActivity().getApplication(),
                     AnalyticsUtil.SET_INTERVAL_ACTION + currentTimeInterval.getTimeInMs());

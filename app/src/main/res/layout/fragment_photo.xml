@@ -165,13 +165,13 @@
         </LinearLayout>
     </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/intervalSelectionLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/panelBackground"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clickable="true"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -211,6 +211,19 @@
                 style="@style/roundButtonStyle"
                 android:text="@string/custom_interval" />
         </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/panelBackground"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/selectedIntervalButton"
+            style="@style/roundButtonStyle" />
 
         <RelativeLayout
             android:id="@+id/secondPanelLayout"
