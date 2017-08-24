@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/delete_photos_menu_item"
-        android:icon="@drawable/ic_delete_black_24dp"
+        android:icon="@drawable/ic_delete_white_24dp"
         android:title="@string/delete_photos_menu"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/share_photos_menu_item"
-        android:icon="@drawable/ic_share_black_24dp"
+        android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/share_photos_menu"
         app:showAsAction="always" />
 </menu>
