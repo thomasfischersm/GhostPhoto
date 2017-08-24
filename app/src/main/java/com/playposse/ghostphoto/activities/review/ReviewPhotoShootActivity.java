@@ -18,11 +18,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,8 +68,6 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     private RecyclerView selectedPhotosRecyclerView;
     private TextView selectedPhotosHintTextView;
     private LinearLayout rootView;
-    private ImageButton deleteButton;
-    private ImageButton shareButton;
 
     private PhotoAdapter allPhotosAdapter;
     private PhotoAdapter selectedPhotosAdapter;
@@ -89,8 +89,6 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         selectedPhotosRecyclerView = (RecyclerView) findViewById(R.id.selectedPhotosRecyclerView);
         selectedPhotosHintTextView = (TextView) findViewById(R.id.selectedPhotosHintTextView);
         rootView = (LinearLayout) findViewById(R.id.rootView);
-        deleteButton = (ImageButton) findViewById(R.id.deleteButton);
-        shareButton = (ImageButton) findViewById(R.id.shareButton);
 
         initActionBar();
 
@@ -122,20 +120,6 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         getLoaderManager().initLoader(ALL_PHOTO_LOADER, null, new AllPhotoLoader());
         getLoaderManager().initLoader(SELECTED_PHOTO_LOADER, null, new SelectedPhotoLoader());
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDeleteClicked();
-            }
-        });
-
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onShareClicked();
-            }
-        });
     }
 
     @Override
@@ -145,6 +129,29 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         new ComparePhotosTouchListener().onTouch(rootView, ev);
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.review_photo_shoot_options_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_photos_menu_item:
+                onDeleteClicked();
+                return true;
+            case R.id.share_photos_menu_item:
+                onShareClicked();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onDeleteClicked() {
