@@ -192,6 +192,35 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 return id;
             } else {
                 Log.e(LOG_TAG, "getActivePhotoShootId: Failed to find active photo shoot!");
+                // This photo must be struggling behind a close photo shoot.
+                return getLastActivePhotoShootId(database, contentResolver);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
+    private long getLastActivePhotoShootId(
+            SQLiteDatabase database,
+            ContentResolver contentResolver) {
+
+        Cursor cursor = database.query(
+                PhotoShootTable.TABLE_NAME,
+                new String[]{PhotoShootTable._ID, PhotoShootTable.STATE_COLUMN},
+                null,
+                null,
+                null,
+                null,
+                PhotoShootTable.ID_COLUMN + " desc");
+
+        try {
+            if (cursor.moveToNext()) {
+                int idColumnIndex = cursor.getColumnIndex(PhotoShootTable.ID_COLUMN);
+                long id = cursor.getLong(idColumnIndex);
+                Log.d(LOG_TAG, "getLastActivePhotoShootId: Found active shoot: " + id);
+                return id;
+            } else {
+                Log.e(LOG_TAG, "getLastActivePhotoShootId: Failed to find active photo shoot!");
                 // Try to recover by creating a new photo shoot.
                 Uri uri = startShoot(database, contentResolver);
                 long id = ContentUris.parseId(uri);
@@ -485,7 +514,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 Integer.toString(PhotoShootTable.COMPLETED_STATE));
         int rowCount = database.update(
                 PhotoShootTable.TABLE_NAME,
-                contentValues, "state=" + PhotoShootTable.ACTIVE_STATE,
+                contentValues, "state = " + PhotoShootTable.ACTIVE_STATE,
                 null);
         DatabaseDumper.dumpTables(databaseHelper);
         return rowCount;
