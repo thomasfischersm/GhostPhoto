@@ -47,12 +47,12 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         double left = 0;
         double right = widthReduction - left;
 //        Log.i(LOG_TAG, "calculateSpacing: space: " + spacing + " widthReduction: " + widthReduction);
-//        Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
+//        Log.i(LOG_TAG, "calculateSpacing: left: " + left + " right: " + right);
 
         for (int i = 0; i < position; i++) {
             left = spacing - right;
             right = widthReduction - left;
-//            Log.i(LOG_TAG, "calculateSpacing: left: " + left + " rigth: " + right);
+//            Log.i(LOG_TAG, "calculateSpacing: left: " + left + " right: " + right);
         }
         return new int[]{(int) left, (int) right};
     }

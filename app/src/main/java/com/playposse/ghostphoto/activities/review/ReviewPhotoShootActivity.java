@@ -51,6 +51,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v7.widget.RecyclerView.HORIZONTAL;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
@@ -108,7 +109,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         // Build selectedPhotosRecyclerView.
         GridLayoutManager selectedPhotosLayoutManager =
-                new GridLayoutManager(this, 1, VERTICAL, false);
+                new GridLayoutManager(this, 1, HORIZONTAL, false);
         selectedPhotosRecyclerView.setLayoutManager(selectedPhotosLayoutManager);
         selectedPhotosAdapter = new PhotoAdapter();
         selectedPhotosRecyclerView.setAdapter(selectedPhotosAdapter);
@@ -316,7 +317,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             View view = LayoutInflater.from(context).inflate(
-                    R.layout.photo_list_item,
+                    R.layout.photo_horizontal_list_item,
                     parent,
                     false);
             return new PhotoViewHolder(view);
@@ -394,9 +395,9 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final int layoutResId;
             if (viewType == UNSELECTED_VIEW_TYPE) {
-                layoutResId = R.layout.photo_list_item;
+                layoutResId = R.layout.photo_vertical_list_item;
             } else {
-                layoutResId = R.layout.selected_photo_list_item;
+                layoutResId = R.layout.selected_photo_vertical_list_item;
             }
 
             Context context = parent.getContext();
