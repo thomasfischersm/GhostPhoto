@@ -24,5 +24,17 @@
         android:id="@+id/rotate_menu_item"
         android:icon="@drawable/ic_rotate_left_white_24dp"
         android:title="@string/rotate_menu"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/rotate_left_menu_item"
+                android:icon="@drawable/ic_rotate_left_white_24dp"
+                android:title="@string/rotate_left_menu" />
+
+            <item
+                android:id="@+id/rotate_right_menu_item"
+                android:icon="@drawable/ic_rotate_right_white_24dp"
+                android:title="@string/rotate_right_menu" />
+        </menu>
+    </item>
 </menu>

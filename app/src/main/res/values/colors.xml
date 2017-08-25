@@ -25,6 +25,7 @@
     <!-- Tint for selected photos. -->
     <color name="selectedPhotoTint">#99FFFFFF</color>
 
-    <!-- Background color for context  menu. -->
-    <color name="contextMenuBackground">#99000000</color>
+    <!-- Background color action bar and popup menu. -->
+    <color name="actionBarBackground">#00000000</color>
+    <color name="popupMenuBackground">#99000000</color>
 </resources>

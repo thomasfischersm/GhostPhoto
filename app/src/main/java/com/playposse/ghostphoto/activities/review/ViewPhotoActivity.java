@@ -11,12 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.GridLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
@@ -27,7 +23,6 @@ import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
 import com.playposse.ghostphoto.util.BitmapRotationUtil;
 import com.playposse.ghostphoto.util.IntegrationUtil;
-import com.playposse.ghostphoto.util.RevealAnimationUtil;
 import com.playposse.ghostphoto.util.ToastUtil;
 import com.playposse.ghostphoto.util.view.DialogUtil;
 
@@ -47,11 +42,6 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
 
     private ViewPhotoContainerFragment photoContainerFragment;
     private CheckBox keepCheckBox;
-    private GridLayout rotateLayout;
-    private ImageView rotateLeftImageView;
-    private TextView rotateLeftTextView;
-    private ImageView rotateRightImageView;
-    private TextView rotateRightTextView;
 
     @Nullable
     private ActionMenuItemView rotateMenuItemView;
@@ -74,11 +64,6 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
         initialPhotoId = ExtraConstants.getPhotoIndex(getIntent());
 
         keepCheckBox = (CheckBox) findViewById(R.id.keepCheckBox);
-        rotateLayout = (GridLayout) findViewById(R.id.rotateLayout);
-        rotateLeftImageView = (ImageView) findViewById(R.id.rotateLeftImageView);
-        rotateLeftTextView = (TextView) findViewById(R.id.rotateLeftTextView);
-        rotateRightImageView = (ImageView) findViewById(R.id.rotateRightImageView);
-        rotateRightTextView = (TextView) findViewById(R.id.rotateRightTextView);
 
         photoContainerFragment =
                 ViewPhotoContainerFragment.newInstance(photoShootId, initialPhotoId);
@@ -100,34 +85,6 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                             AnalyticsCategory.selectPhoto,
                             Boolean.toString(isSelected));
                 }
-            }
-        });
-
-        rotateLeftImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRotateLeftClicked();
-            }
-        });
-
-        rotateLeftTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRotateLeftClicked();
-            }
-        });
-
-        rotateRightImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRotateRightClicked();
-            }
-        });
-
-        rotateRightTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRotateRightClicked();
             }
         });
     }
@@ -154,9 +111,11 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
             case R.id.edit_menu_item:
                 onEditClicked();
                 return true;
-            case R.id.rotate_menu_item:
-                rotateMenuItemView = findViewById(R.id.rotate_menu_item);
-                onRotateClicked();
+            case R.id.rotate_left_menu_item:
+                onRotateLeftClicked();
+                return true;
+            case R.id.rotate_right_menu_item:
+                onRotateRightClicked();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -218,13 +177,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
         AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.deletePhoto, "");
     }
 
-    private void onRotateClicked() {
-        RevealAnimationUtil.startRevealAnimation(rotateMenuItemView, rotateLayout, false);
-    }
-
     private void onRotateLeftClicked() {
-        RevealAnimationUtil.startHideAnimation(rotateMenuItemView, rotateLayout, false);
-
         if (photoFile != null) {
             ToastUtil.sendShortToast(ViewPhotoActivity.this, R.string.rotation_toast);
 
@@ -243,8 +196,6 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
     }
 
     private void onRotateRightClicked() {
-        RevealAnimationUtil.startHideAnimation(rotateMenuItemView, rotateLayout, false);
-
         if (photoFile != null) {
             ToastUtil.sendShortToast(ViewPhotoActivity.this, R.string.rotation_toast);
 
