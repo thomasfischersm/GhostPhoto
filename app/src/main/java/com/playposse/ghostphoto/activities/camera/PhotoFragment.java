@@ -568,7 +568,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void startIntervalLayoutHideAnimation() {
-        RevealAnimationUtil.startRevealAnimation(selectedIntervalButton, intervalSelectionLayout);
+        RevealAnimationUtil.startHideAnimation(selectedIntervalButton, intervalSelectionLayout);
     }
 
     private void showActionButtonHint() {
