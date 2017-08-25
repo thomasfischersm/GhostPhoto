@@ -372,7 +372,6 @@ public abstract class BasicPhotoFragment
                                         @NonNull CaptureRequest request,
                                         @NonNull CaptureResult partialResult) {
 
-            Log.d(LOG_TAG, "onCaptureProgressed: Got partial result");
             process(partialResult, false);
         }
 
@@ -381,7 +380,6 @@ public abstract class BasicPhotoFragment
                                        @NonNull CaptureRequest request,
                                        @NonNull TotalCaptureResult result) {
 
-            Log.d(LOG_TAG, "onCaptureCompleted: Got complete capture.");
             process(result, true);
         }
 

@@ -18,6 +18,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
@@ -29,7 +33,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -565,7 +568,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void startIntervalLayoutHideAnimation() {
-        RevealAnimationUtil.startHideAnimation(selectedIntervalButton, intervalSelectionLayout);
+        RevealAnimationUtil.startRevealAnimation(selectedIntervalButton, intervalSelectionLayout);
     }
 
     private void showActionButtonHint() {
@@ -625,15 +628,22 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void onShowOptionsMenu() {
-        PopupMenu popup = new PopupMenu(getActivity(), optionsMenuLink);
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        PopupMenu menu = new PopupMenu(getActivity(), optionsMenuLink);
+        menu.inflate(R.menu.options_menu);
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 return getActivity().onOptionsItemSelected(item);
             }
         });
-        popup.inflate(R.menu.options_menu);
-        popup.show();
+
+        // Make the background transparent.
+        Context wrapper = new ContextThemeWrapper(getActivity(), R.style.ManualPopupMenuStyle);
+
+        MenuPopupHelper menuHelper =
+                new MenuPopupHelper(wrapper, (MenuBuilder) menu.getMenu(), optionsMenuLink);
+        menuHelper.setForceShowIcon(true);
+        menuHelper.show();
     }
 
     private void onSwitchCamera() {
