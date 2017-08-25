@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.common.collect.BiMap;
@@ -441,6 +442,7 @@ public class PhotoFragment extends BasicPhotoFragment {
             Uri contentUri = Uri.parse(photoContentUri);
             Glide.with(getActivity())
                     .load(contentUri)
+                    .apply(RequestOptions.circleCropTransform())
                     .into(thumbNailImageView);
 
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
