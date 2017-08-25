@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    app:contentPaddingBottom="-4dp"
+    app:contentPaddingTop="-4dp">
 
-    <com.playposse.ghostphoto.util.view.SquareImageView
-        android:id="@+id/photoImageView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/cover_photo_content_description"
-        android:scaleType="centerCrop" />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/scrim_bg"
-        android:orientation="vertical"
-        android:paddingTop="8dp">
-
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="wrap_content"
+        <com.playposse.ghostphoto.util.view.SquareImageView
+            android:id="@+id/photoImageView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="4dp"
-            android:textColor="@color/primaryText" />
+            android:adjustViewBounds="true"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/cover_photo_content_description"
+            android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/photoCountTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"
-            android:textColor="@color/primaryText" />
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/scrim_bg"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="4dp"
+                android:textColor="@color/primaryText" />
+
+            <TextView
+                android:id="@+id/photoCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="4dp"
+                android:textColor="@color/primaryText" />
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
