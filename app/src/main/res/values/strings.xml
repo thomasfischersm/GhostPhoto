@@ -173,6 +173,11 @@
     <string name="share_photos_menu">Share photos</string>
 
 
+    <!-- Rotate context menu -->
+    <string name="rotate_left_menu">Rotate left</string>
+    <string name="rotate_right_menu">Rotate right</string>
+
+
     <!-- View photo shoot menu -->
     <string name="edit_menu">Edit</string>
     <string name="rotate_menu">Rotate</string>

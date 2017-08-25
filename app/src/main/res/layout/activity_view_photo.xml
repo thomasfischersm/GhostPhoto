@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.playposse.ghostphoto.activities.review.ViewPhotoActivity">
 
     <android.support.v7.widget.Toolbar
@@ -19,12 +18,14 @@
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal">
 
         <CheckBox
@@ -37,4 +38,48 @@
             android:layout_height="wrap_content"
             android:text="@string/keep_label" />
     </LinearLayout>
-</LinearLayout>
+
+    <GridLayout
+        android:id="@+id/rotateLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:background="@color/contextMenuBackground"
+        android:columnCount="2"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:rowCount="2"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/rotateLeftImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/rotate_left_menu"
+            android:src="@drawable/ic_rotate_left_white_24dp" />
+
+        <TextView
+            android:id="@+id/rotateLeftTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/rotate_left_menu"
+            android:textColor="@color/primaryText" />
+
+        <ImageView
+            android:id="@+id/rotateRightImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/rotate_right_menu"
+            android:src="@drawable/ic_rotate_right_white_24dp" />
+
+        <TextView
+            android:id="@+id/rotateRightTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/rotate_right_menu"
+            android:textColor="@color/primaryText" />
+
+    </GridLayout>
+</RelativeLayout>

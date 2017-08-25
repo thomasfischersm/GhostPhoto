@@ -24,4 +24,7 @@
 
     <!-- Tint for selected photos. -->
     <color name="selectedPhotoTint">#99FFFFFF</color>
+
+    <!-- Background color for context  menu. -->
+    <color name="contextMenuBackground">#99000000</color>
 </resources>

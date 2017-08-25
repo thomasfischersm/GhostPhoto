@@ -17,13 +17,14 @@ public class BitmapRotationUtil {
 
     private static final String LOG_TAG = BitmapRotationUtil.class.getSimpleName();
 
-    private static final int DEFAULT_ROTATION_IN_DEGREES = -90;
+    public static final int LEFT_ROTATION_DEGREES = -90;
+    public static final int RIGHT_ROTATION_DEGREES = 90;
 
-    public static void rotate(File imageFile, RotationCallback callback) {
-        new RotateAsyncTask(imageFile, callback).execute();
+    public static void rotate(File imageFile, int degrees, RotationCallback callback) {
+        new RotateAsyncTask(imageFile, callback, degrees).execute();
     }
 
-    private static File rotate(File sourceFile) throws IOException {
+    private static File rotate(File sourceFile, int degrees) throws IOException {
         Log.d(LOG_TAG, "rotate: Rotating image: " + sourceFile.getAbsolutePath());
 
         // Load bitmap.
@@ -32,7 +33,7 @@ public class BitmapRotationUtil {
         Bitmap sourceBitmap = BitmapFactory.decodeFile(sourceFile.getAbsolutePath(), option);
 
         // Rotate bitmap.
-        Bitmap resultBitmap = rotate(sourceBitmap);
+        Bitmap resultBitmap = rotate(sourceBitmap, degrees);
 
         // Compute next file name.
         File resultFile = computeNextFileName(sourceFile);
@@ -80,9 +81,9 @@ public class BitmapRotationUtil {
         }
     }
 
-    private static Bitmap rotate(Bitmap bitmap) {
+    private static Bitmap rotate(Bitmap bitmap, int degrees) {
         Matrix matrix = new Matrix();
-        matrix.postRotate(DEFAULT_ROTATION_IN_DEGREES);
+        matrix.postRotate(degrees);
         return Bitmap.createBitmap(
                 bitmap,
                 0,
@@ -100,16 +101,18 @@ public class BitmapRotationUtil {
 
         private final File imageFile;
         private final RotationCallback callback;
+        private final int degrees;
 
-        private RotateAsyncTask(File imageFile, RotationCallback callback) {
+        private RotateAsyncTask(File imageFile, RotationCallback callback, int degrees) {
             this.imageFile = imageFile;
             this.callback = callback;
+            this.degrees = degrees;
         }
 
         @Override
         protected File doInBackground(Void... params) {
             try {
-                return rotate(imageFile);
+                return rotate(imageFile, degrees);
             } catch (IOException ex) {
                 Log.e(LOG_TAG, "doInBackground: Failed to rotate image.", ex);
                 return null;

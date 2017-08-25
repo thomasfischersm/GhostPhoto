@@ -5,12 +5,18 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
@@ -21,6 +27,7 @@ import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
 import com.playposse.ghostphoto.util.BitmapRotationUtil;
 import com.playposse.ghostphoto.util.IntegrationUtil;
+import com.playposse.ghostphoto.util.RevealAnimationUtil;
 import com.playposse.ghostphoto.util.ToastUtil;
 import com.playposse.ghostphoto.util.view.DialogUtil;
 
@@ -40,6 +47,14 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
 
     private ViewPhotoContainerFragment photoContainerFragment;
     private CheckBox keepCheckBox;
+    private GridLayout rotateLayout;
+    private ImageView rotateLeftImageView;
+    private TextView rotateLeftTextView;
+    private ImageView rotateRightImageView;
+    private TextView rotateRightTextView;
+
+    @Nullable
+    private ActionMenuItemView rotateMenuItemView;
 
     private long photoShootId;
     private long initialPhotoId;
@@ -59,6 +74,11 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
         initialPhotoId = ExtraConstants.getPhotoIndex(getIntent());
 
         keepCheckBox = (CheckBox) findViewById(R.id.keepCheckBox);
+        rotateLayout = (GridLayout) findViewById(R.id.rotateLayout);
+        rotateLeftImageView = (ImageView) findViewById(R.id.rotateLeftImageView);
+        rotateLeftTextView = (TextView) findViewById(R.id.rotateLeftTextView);
+        rotateRightImageView = (ImageView) findViewById(R.id.rotateRightImageView);
+        rotateRightTextView = (TextView) findViewById(R.id.rotateRightTextView);
 
         photoContainerFragment =
                 ViewPhotoContainerFragment.newInstance(photoShootId, initialPhotoId);
@@ -80,6 +100,34 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                             AnalyticsCategory.selectPhoto,
                             Boolean.toString(isSelected));
                 }
+            }
+        });
+
+        rotateLeftImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRotateLeftClicked();
+            }
+        });
+
+        rotateLeftTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRotateLeftClicked();
+            }
+        });
+
+        rotateRightImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRotateRightClicked();
+            }
+        });
+
+        rotateRightTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRotateRightClicked();
             }
         });
     }
@@ -107,6 +155,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
                 onEditClicked();
                 return true;
             case R.id.rotate_menu_item:
+                rotateMenuItemView = findViewById(R.id.rotate_menu_item);
                 onRotateClicked();
                 return true;
         }
@@ -170,11 +219,39 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
     }
 
     private void onRotateClicked() {
+        RevealAnimationUtil.startRevealAnimation(rotateMenuItemView, rotateLayout, false);
+    }
+
+    private void onRotateLeftClicked() {
+        RevealAnimationUtil.startHideAnimation(rotateMenuItemView, rotateLayout, false);
+
         if (photoFile != null) {
             ToastUtil.sendShortToast(ViewPhotoActivity.this, R.string.rotation_toast);
 
             BitmapRotationUtil.rotate(
-                    photoFile, new BitmapRotationUtil.RotationCallback() {
+                    photoFile,
+                    BitmapRotationUtil.LEFT_ROTATION_DEGREES,
+                    new BitmapRotationUtil.RotationCallback() {
+                        @Override
+                        public void onRotated(File newFile) {
+                            onRotateComplete(newFile);
+                        }
+                    });
+
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.rotatePhoto, "");
+        }
+    }
+
+    private void onRotateRightClicked() {
+        RevealAnimationUtil.startHideAnimation(rotateMenuItemView, rotateLayout, false);
+
+        if (photoFile != null) {
+            ToastUtil.sendShortToast(ViewPhotoActivity.this, R.string.rotation_toast);
+
+            BitmapRotationUtil.rotate(
+                    photoFile,
+                    BitmapRotationUtil.RIGHT_ROTATION_DEGREES,
+                    new BitmapRotationUtil.RotationCallback() {
                         @Override
                         public void onRotated(File newFile) {
                             onRotateComplete(newFile);

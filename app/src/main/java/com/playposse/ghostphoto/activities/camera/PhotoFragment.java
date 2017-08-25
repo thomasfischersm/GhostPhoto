@@ -1,6 +1,5 @@
 package com.playposse.ghostphoto.activities.camera;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
@@ -24,7 +23,6 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -54,6 +52,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.EndShootAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.GetLatestPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
+import com.playposse.ghostphoto.util.RevealAnimationUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.view.NumberPickerDialogBuilder;
 
@@ -554,117 +553,19 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void startFlashLayoutRevealAnimation() {
-        int centerX = (flashImageView.getLeft() + flashImageView.getRight()) / 2;
-        int centerY = (flashImageView.getTop() + flashImageView.getBottom()) / 2;
-        int startRadius = 0;
-        int endRadius = flashSelectionLayout.getWidth();
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                flashSelectionLayout,
-                centerX,
-                centerY,
-                startRadius,
-                endRadius);
-
-        flashSelectionLayout.setVisibility(View.VISIBLE);
-        flashImageView.setVisibility(View.GONE);
-        animator.start();
+        RevealAnimationUtil.startRevealAnimation(flashImageView, flashSelectionLayout);
     }
 
     private void startFlashLayoutHideAnimation() {
-        int centerX = (flashImageView.getLeft() + flashImageView.getRight()) / 2;
-        int centerY = (flashImageView.getTop() + flashImageView.getBottom()) / 2;
-        int startRadius = flashSelectionLayout.getWidth();
-        int endRadius = 0;
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                flashSelectionLayout,
-                centerX,
-                centerY,
-                startRadius,
-                endRadius);
-
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                // Nothing to do.
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                flashSelectionLayout.setVisibility(View.GONE);
-                flashImageView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                // Nothing to do.
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                // Nothing to do.
-            }
-        });
-
-        animator.start();
+        RevealAnimationUtil.startHideAnimation(flashImageView, flashSelectionLayout);
     }
 
     private void startIntervalLayoutRevealAnimation() {
-        int centerX = (selectedIntervalButton.getLeft() + selectedIntervalButton.getRight()) / 2;
-        int centerY = (selectedIntervalButton.getTop() + selectedIntervalButton.getBottom()) / 2;
-        int startRadius = 0;
-        int endRadius = intervalSelectionLayout.getHeight();
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                intervalSelectionLayout,
-                centerX,
-                centerY,
-                startRadius,
-                endRadius);
-
-        intervalSelectionLayout.setVisibility(View.VISIBLE);
-        selectedIntervalButton.setVisibility(View.GONE);
-        animator.start();
+        RevealAnimationUtil.startRevealAnimation(selectedIntervalButton, intervalSelectionLayout);
     }
 
     private void startIntervalLayoutHideAnimation() {
-        int centerX = (selectedIntervalButton.getLeft() + selectedIntervalButton.getRight()) / 2;
-        int centerY = (selectedIntervalButton.getTop() + selectedIntervalButton.getBottom()) / 2;
-        int startRadius = intervalSelectionLayout.getHeight();
-        int endRadius = 0;
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                intervalSelectionLayout,
-                centerX,
-                centerY,
-                startRadius,
-                endRadius);
-
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                // Nothing to do.
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                intervalSelectionLayout.setVisibility(View.GONE);
-                selectedIntervalButton.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                // Nothing to do.
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                // Nothing to do.
-            }
-        });
-
-        animator.start();
+        RevealAnimationUtil.startHideAnimation(selectedIntervalButton, intervalSelectionLayout);
     }
 
     private void showActionButtonHint() {
