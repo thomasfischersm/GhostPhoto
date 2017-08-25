@@ -21,4 +21,7 @@
     <color name="roundButtonPressed">#999999</color>
     <color name="roundButtonSelected">#ff5724</color>
     <color name="roundButtonText">@android:color/white</color>
+
+    <!-- Tint for selected photos. -->
+    <color name="selectedPhotoTint">#99FFFFFF</color>
 </resources>

@@ -100,7 +100,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         GridLayoutManager allPhotosLayoutManager =
                 new GridLayoutManager(this, 3, VERTICAL, false);
         allPhotosRecyclerView.setLayoutManager(allPhotosLayoutManager);
-        allPhotosAdapter = new PhotoAdapter();
+        allPhotosAdapter = new AllPhotoAdapter();
         allPhotosRecyclerView.setAdapter(allPhotosAdapter);
         allPhotosRecyclerView.addItemDecoration(
                 new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
@@ -247,8 +247,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootId
-                    + " and not(" + PhotoTable.IS_SELECTED_COLUMN + ")";
+            String whereClause = PhotoTable.SHOOT_ID_COLUMN + " = " + photoShootId;
             return new CursorLoader(
                     getApplicationContext(),
                     PhotoTable.CONTENT_URI,
@@ -365,6 +364,47 @@ public class ReviewPhotoShootActivity extends ParentActivity {
                     return true;
                 }
             });
+        }
+    }
+
+    /**
+     * A {@link RecyclerView.Adapter} that extends {@link PhotoAdapter} to show selected photos with
+     * a white tint.
+     */
+    private class AllPhotoAdapter extends PhotoAdapter {
+
+        private static final int UNSELECTED_VIEW_TYPE = 1;
+        private static final int SELECTED_VIEW_TYPE = 2;
+
+
+        @Override
+        public int getItemViewType(int position) {
+            Cursor cursor = getCursor(position);
+            SmartCursor smartCursor = new SmartCursor(cursor, PhotoTable.COLUMN_NAMES);
+            boolean isSelected = smartCursor.getBoolean(PhotoTable.IS_SELECTED_COLUMN);
+
+            if (isSelected) {
+                return SELECTED_VIEW_TYPE;
+            } else {
+                return UNSELECTED_VIEW_TYPE;
+            }
+        }
+
+        @Override
+        public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final int layoutResId;
+            if (viewType == UNSELECTED_VIEW_TYPE) {
+                layoutResId = R.layout.photo_list_item;
+            } else {
+                layoutResId = R.layout.selected_photo_list_item;
+            }
+
+            Context context = parent.getContext();
+            View view = LayoutInflater.from(context).inflate(
+                    layoutResId,
+                    parent,
+                    false);
+            return new PhotoViewHolder(view);
         }
     }
 
