@@ -99,7 +99,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         // Build allPhotosRecyclerView.
         GridLayoutManager allPhotosLayoutManager =
-                new GridLayoutManager(this, 3, VERTICAL, false);
+                new GridLayoutManager(this, getAllPhotoPaneRowCount(), VERTICAL, false);
         allPhotosRecyclerView.setLayoutManager(allPhotosLayoutManager);
         allPhotosAdapter = new AllPhotoAdapter();
         allPhotosRecyclerView.setAdapter(allPhotosAdapter);
@@ -239,6 +239,10 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         } finally {
             cursor.close();
         }
+    }
+
+    private int getAllPhotoPaneRowCount() {
+        return (int) getResources().getInteger(R.integer.all_photo_pane_row_count);
     }
 
     /**

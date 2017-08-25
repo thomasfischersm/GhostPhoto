@@ -14,4 +14,7 @@
 
     <!-- Sets the diameter for round buttons. -->
     <dimen name="round_button_diameter">56dp</dimen>
+
+    <!-- Sets all photo pane row count. -->
+    <integer name="all_photo_pane_row_count">3</integer>
 </resources>
