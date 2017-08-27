@@ -23,6 +23,7 @@ public final class GhostPhotoPreferences {
     private static final String HAS_THUMBNAIL_HINT_BEEN_SEEN = "hasThumbnailHintBeenSeen";
     private static final String HAS_SEEN_INTRO_DECK_KEY = "hasSeenIntroDeck";
     private static final String CUSTOM_PHOTO_INTERVAL_SECONDS_KEY = "customPhotoIntervalSeconds";
+    private static final String HAS_ORPHAN_PHOTO_SHOOT_BEEN_CREATED = "hasOrphanPhotoShootBeenCreated";
 
     private static final FlashMode FLASH_MODE_DEFAULT = FlashMode.auto;
     private static final boolean HINT_DEFAULT = false;
@@ -77,6 +78,14 @@ public final class GhostPhotoPreferences {
 
     public static int getCustomPhotoIntervalSeconds(Context context) {
         return getInt(context, CUSTOM_PHOTO_INTERVAL_SECONDS_KEY, CUSTOM_INTERVAL_DEFAULT);
+    }
+
+    public static void setHasOrphanPhotoShootBeenCreated(Context context, boolean flag) {
+        setBoolean(context, HAS_ORPHAN_PHOTO_SHOOT_BEEN_CREATED, flag);
+    }
+
+    public static boolean hasOrphanPhotoShootBeenCreated(Context context) {
+        return getBoolean(context, HAS_ORPHAN_PHOTO_SHOOT_BEEN_CREATED, false);
     }
 
     private static String getString(Context context, String key) {

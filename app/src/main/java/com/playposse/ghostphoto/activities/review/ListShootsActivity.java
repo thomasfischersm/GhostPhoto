@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.playposse.ghostphoto.ExtraConstants;
+import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
@@ -28,6 +29,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
 import com.playposse.ghostphoto.util.DateUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.UriUtil;
+import com.playposse.ghostphoto.util.view.DialogUtil;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.ResponsiveGridLayoutManager;
 import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
@@ -86,6 +88,14 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 getContentResolver().update(ScanPhotoFilesAction.CONTENT_URI, null, null, null);
             }
         }).start();
+
+        if (GhostPhotoPreferences.hasOrphanPhotoShootBeenCreated(this)) {
+            DialogUtil.alert(
+                    this,
+                    R.string.orphan_photos_dialog_title,
+                    R.string.orphan_photos_dialog_message);
+            GhostPhotoPreferences.setHasOrphanPhotoShootBeenCreated(this, false);
+        }
     }
 
     @Override
@@ -171,7 +181,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                     }
                 });
             } catch (ParseException ex) {
-                Log.e(LOG_TAG, "onBindViewHolder: Failed to parse the photoshoot date.", ex);
+                Log.e(LOG_TAG, "onBindViewHolder: Failed to parse the photo shoot date.", ex);
             }
         }
     }

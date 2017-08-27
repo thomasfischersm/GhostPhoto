@@ -29,7 +29,6 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -51,6 +50,7 @@ import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.other.PermissionRecoveryActivity;
 import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
+import com.playposse.ghostphoto.constants.PhotoFileConversions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,8 +74,6 @@ public abstract class BasicPhotoFragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
     private static final String LOG_TAG = BasicPhotoFragment.class.getSimpleName();
-
-    public static final String DIR_NAME = "GhostPhoto";
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -472,9 +470,8 @@ public abstract class BasicPhotoFragment
     private File generateNextFileName() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File photoDir = new File(rootDir, DIR_NAME);
 
+        File photoDir = PhotoFileConversions.getPhotoDir();
         if (!photoDir.exists()) {
             if (!photoDir.mkdir()) {
                 startActivity(new Intent(
@@ -486,9 +483,7 @@ public abstract class BasicPhotoFragment
             }
         }
 
-        return new File(
-                photoDir,
-                imageFileName);
+        return PhotoFileConversions.toFile(imageFileName);
     }
 
     @Override

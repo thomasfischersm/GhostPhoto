@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,11 +16,8 @@ import android.widget.TextView;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.activities.camera.PhotoActivity;
+import com.playposse.ghostphoto.constants.PhotoFileConversions;
 import com.playposse.ghostphoto.util.ToastUtil;
-
-import java.io.File;
-
-import static com.playposse.ghostphoto.activities.camera.BasicPhotoFragment.DIR_NAME;
 
 /**
  * An {@link Activity} that tries to guide the user through handling photo directory creation
@@ -56,7 +52,7 @@ public class PermissionRecoveryActivity extends ParentActivity {
 
         directoryCreationErrorMessageTextView.setText(getString(
                 R.string.directory_creation_error_message,
-                getPhotoDirectory().getAbsolutePath()));
+                PhotoFileConversions.getPhotoDir().getAbsolutePath()));
 
         updateLayoutVisibility();
 
@@ -151,16 +147,10 @@ public class PermissionRecoveryActivity extends ParentActivity {
     }
 
     private boolean doesPhotoDirectoryExist() {
-        return getPhotoDirectory().exists();
-    }
-
-    @NonNull
-    private File getPhotoDirectory() {
-        File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return new File(rootDir, DIR_NAME);
+        return PhotoFileConversions.getPhotoDir().exists();
     }
 
     private boolean attemptToCreatePhotoDirectory() {
-        return getPhotoDirectory().mkdir();
+        return PhotoFileConversions.getPhotoDir().mkdir();
     }
 }

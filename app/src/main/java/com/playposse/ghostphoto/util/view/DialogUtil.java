@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.playposse.ghostphoto.R;
+import com.playposse.ghostphoto.activities.review.ListShootsActivity;
 
 import java.util.List;
 
@@ -61,14 +62,14 @@ public final class DialogUtil {
      */
     public static void confirm(
             Context context,
-            int titleId,
+            int titleResId,
             int messageResId,
             int positiveResId,
             int negativeResId,
             final Runnable confirmationRunnable) {
 
         new AlertDialog.Builder(context)
-                .setTitle(titleId)
+                .setTitle(titleResId)
                 .setMessage(messageResId)
                 .setNegativeButton(
                         negativeResId,
@@ -86,6 +87,26 @@ public final class DialogUtil {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                                 confirmationRunnable.run();
+                            }
+                        }
+                )
+                .show();
+    }
+
+    public static void alert(
+            Context context,
+            int titleResId,
+            int messageResId) {
+
+        new AlertDialog.Builder(context)
+                .setTitle(titleResId)
+                .setMessage(messageResId)
+                .setPositiveButton(
+                        R.string.ok_button_label,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
                             }
                         }
                 )

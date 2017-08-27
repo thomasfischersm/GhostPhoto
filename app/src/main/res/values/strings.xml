@@ -108,6 +108,11 @@
     <string name="minutes_date">%1$d minutes ago</string>
     <string name="same_day_date">%1$s</string>
     <string name="short_date">%1$s</string>
+    <string name="orphan_photos_dialog_title">Found photos!</string>
+    <string name="orphan_photos_dialog_message">
+        The app found photos that weren\'t in a photo shoot. A new photo shoot has been created for
+        these stray photos.
+    </string>
 
 
     <!-- Review photo shoot activity -->
@@ -159,6 +164,7 @@
     <string name="dialog_continue_button">Continue</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="confirm_button_label">Confirm</string>
+    <string name="ok_button_label">OK</string>
 
 
     <!-- Options menu -->

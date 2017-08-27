@@ -29,7 +29,8 @@ public abstract class AnalyticsUtil {
         rotatePhoto,
         editPhoto,
         sendFeedback,
-        deleteDirectory
+        fileIntegrityCheck,
+        deleteDirectory,
     }
 
     private AnalyticsUtil() {}

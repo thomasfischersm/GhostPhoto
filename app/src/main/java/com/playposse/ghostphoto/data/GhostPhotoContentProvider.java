@@ -143,6 +143,14 @@ public class GhostPhotoContentProvider extends ContentProvider {
                 return startShoot(database, contentResolver);
             case ADD_PHOTO_KEY:
                 return addPhoto(values, database, contentResolver);
+            case PHOTO_SHOOT_TABLE_KEY:
+                long shootId = database.insert(PhotoShootTable.TABLE_NAME, null, values);
+                contentResolver.notifyChange(PhotoShootTable.CONTENT_URI, null);
+                return ContentUris.withAppendedId(PhotoShootTable.CONTENT_URI, shootId);
+            case PHOTO_TABLE_KEY:
+                long photoId = database.insert(PhotoTable.TABLE_NAME, null, values);
+                contentResolver.notifyChange(PhotoTable.CONTENT_URI, null);
+                return ContentUris.withAppendedId(PhotoTable.CONTENT_URI, photoId);
             default:
                 return null;
         }
@@ -266,7 +274,7 @@ public class GhostPhotoContentProvider extends ContentProvider {
 
     /**
      * Deletes all photos in a photo shoot.
-     *
+     * <p>
      * <p>The photo shoot id should be passed as the first argument of the selectionArgs.
      */
     private int deleteAll(

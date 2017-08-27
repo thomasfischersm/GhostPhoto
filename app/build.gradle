@@ -8,8 +8,8 @@ android {
         applicationId "com.playposse.ghostphoto"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 14
-        versionName "14.0"
+        versionCode 15
+        versionName "15.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -35,9 +35,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
         <provider
             android:name=".data.GhostPhotoContentProvider"
             android:authorities="com.playposse.ghostphoto.provider"
+            android:exported="false" />
+
+        <service
+            android:name=".services.CheckFileIntegrityService"
             android:exported="false" />
 
         <activity android:name=".activities.other.IntroductionActivity">
