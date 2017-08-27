@@ -35,6 +35,7 @@ public class GhostPhotoContract {
         public static final String PHOTO_COUNT_COLUMN = "photo_count";
         public static final String STATE_COLUMN = "state";
         public static final String FIRST_PHOTO_URI_COLUMN = "first_photo_uri";
+        public static final String FIFTH_PHOTO_URI_COLUMN = "fifth_photo_uri";
 
         public static final int ACTIVE_STATE = 1;
         public static final int COMPLETED_STATE = 2;
@@ -49,7 +50,8 @@ public class GhostPhotoContract {
                 START_TIME_COLUMN,
                 STATE_COLUMN,
                 FIRST_PHOTO_URI_COLUMN,
-                PHOTO_COUNT_COLUMN};
+                PHOTO_COUNT_COLUMN,
+                FIFTH_PHOTO_URI_COLUMN};
 
         static final String SQL_CREATE_TABLE =
                 "CREATE TABLE photo_shoot "
@@ -63,7 +65,8 @@ public class GhostPhotoContract {
                         + "datetime(a.start_time, 'localtime') start_time, "
                         + "a.state, "
                         + "b.file_uri first_photo_uri, "
-                        + "(select count(*) from photo where shoot_id=a._id) photo_count "
+                        + "(select count(*) from photo where shoot_id=a._id) photo_count, "
+                        + "(select c.file_uri from photo c where (select count(*) from photo d where d.shoot_id=a._id and d._id <= c._id) = 5) fifth_photo_uri "
                         + "from photo_shoot a "
                         + "inner join photo b on (a._id = b.shoot_id) "
                         + "where b._id = (select max(_id) from photo where shoot_id=a._id) "

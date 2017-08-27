@@ -27,6 +27,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
 import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
 import com.playposse.ghostphoto.util.DateUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
+import com.playposse.ghostphoto.util.UriUtil;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.ResponsiveGridLayoutManager;
 import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
@@ -143,11 +144,14 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 SmartCursor smartCursor = new SmartCursor(cursor, PhotoShootTable.SELECT_COLUMN_NAMES);
                 final long photoShootId = smartCursor.getLong(PhotoShootTable.ID_COLUMN);
                 String firstPhotoUriStr = smartCursor.getString(PhotoShootTable.FIRST_PHOTO_URI_COLUMN);
+                String fifthPhotoUriStr = smartCursor.getString(PhotoShootTable.FIFTH_PHOTO_URI_COLUMN);
                 int photoCount = smartCursor.getInt(PhotoShootTable.PHOTO_COUNT_COLUMN);
                 Date date = smartCursor.getDate(PhotoShootTable.START_TIME_COLUMN);
 
                 // Prepare data.
-                Uri firstPhotoUri = Uri.parse(firstPhotoUriStr);
+                Uri firstPhotoUri = UriUtil.tryParse(firstPhotoUriStr);
+                Uri fifthPhotoUri = UriUtil.tryParse(fifthPhotoUriStr);
+                Uri photoUri = (fifthPhotoUri != null) ? fifthPhotoUri : firstPhotoUri;
                 String photoCountStr = getString(R.string.photo_count_label, photoCount);
                 String dateStr = formatTime(date);
 
@@ -155,7 +159,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 holder.getPhotoCountTextView().setText(photoCountStr);
                 holder.getDateTextView().setText(dateStr);
                 Glide.with(getApplicationContext())
-                        .load(firstPhotoUri)
+                        .load(photoUri)
                         .into(holder.getPhotoImageView());
 
                 // Set event listeners
