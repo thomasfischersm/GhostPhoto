@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,7 +26,7 @@ import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
-import com.playposse.ghostphoto.data.GhostPhotoContract.ScanPhotoFilesAction;
+import com.playposse.ghostphoto.services.ScanForDeletedPhotosService;
 import com.playposse.ghostphoto.util.DateUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.UriUtil;
@@ -82,12 +83,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
     protected void onResume() {
         super.onResume();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getContentResolver().update(ScanPhotoFilesAction.CONTENT_URI, null, null, null);
-            }
-        }).start();
+        startService(new Intent(this, ScanForDeletedPhotosService.class));
 
         if (GhostPhotoPreferences.hasOrphanPhotoShootBeenCreated(this)) {
             DialogUtil.alert(

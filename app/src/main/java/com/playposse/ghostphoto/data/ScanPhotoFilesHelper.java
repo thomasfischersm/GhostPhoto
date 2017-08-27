@@ -17,6 +17,8 @@ import java.util.Map;
 
 /**
  * A helper that scans all photo files.
+ *
+ * <p>TODO: Convert this to no longer use the database directly.
  */
 class ScanPhotoFilesHelper {
 
