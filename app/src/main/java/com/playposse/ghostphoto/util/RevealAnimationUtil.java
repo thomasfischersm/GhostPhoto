@@ -16,8 +16,10 @@ public class RevealAnimationUtil {
     }
 
     public static void startRevealAnimation(View originView, View layoutView, boolean hideOrigin) {
-        int centerX = (originView.getLeft() + originView.getRight()) / 2;
-        int centerY = (originView.getTop() + originView.getBottom()) / 2;
+        int[] originLocation = new int[2];
+        originView.getLocationOnScreen(originLocation);
+        int centerX = originLocation[0] + (originView.getWidth() / 2);
+        int centerY = originLocation[1] + (originView.getHeight() / 2);
         int startRadius = 0;
         int endRadius = Math.max(layoutView.getWidth(), layoutView.getHeight());
 
@@ -43,8 +45,10 @@ public class RevealAnimationUtil {
             final View layoutView,
             final boolean revealOrigin) {
 
-        int centerX = (originView.getLeft() + originView.getRight()) / 2;
-        int centerY = (originView.getTop() + originView.getBottom()) / 2;
+        int[] originLocation = new int[2];
+        originView.getLocationOnScreen(originLocation);
+        int centerX = originLocation[0] + (originView.getWidth() / 2);
+        int centerY = originLocation[1] + (originView.getHeight() / 2);
         int startRadius = Math.max(layoutView.getWidth(), layoutView.getHeight());
         int endRadius = 0;
 

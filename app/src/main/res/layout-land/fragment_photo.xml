@@ -18,7 +18,8 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="@string/camera_loading_message" />
     </LinearLayout>
@@ -33,8 +34,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@+id/texture"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/status_bar_height"
         android:orientation="horizontal"
         android:padding="@dimen/activity_horizontal_margin">
 
@@ -50,32 +52,75 @@
             android:id="@+id/switchCameraImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/switch_camera_content_description"
             android:paddingEnd="4dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:paddingStart="4dp"
             android:src="@drawable/ic_loop_black_24dp"
-            android:tint="@color/selectedText"
-            android:contentDescription="@string/switch_camera_content_description" />
+            android:tint="@color/selectedText" />
 
         <TextView
             android:id="@+id/optionsMenuLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingStart="8dp"
             android:text="@string/vertical_ellipsis"
             android:textColor="@color/selectedText"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="?android:attr/actionBarSize"
+        android:layout_marginTop="@dimen/status_bar_height"
+        android:background="@color/panelBackground"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/secondPanelLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/selectedIntervalButton"
+                style="@style/roundButtonStyle"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/actionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_play_arrow_black_24dp" />
+
+            <ImageView
+                android:id="@+id/thumbNailImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/actionButton"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/actionButton"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/thumbnail_content_description" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
     <FrameLayout
         android:id="@+id/flashSelectionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="?android:attr/actionBarSize"
+        android:layout_marginTop="@dimen/status_bar_height"
         android:animateLayoutChanges="true"
         android:clickable="true"
         android:visibility="gone">
@@ -163,90 +208,55 @@
         </LinearLayout>
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/intervalSelectionLayout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:background="@color/panelBackground"
-        android:orientation="horizontal">
+        android:layout_marginEnd="?android:attr/actionBarSize"
+        android:layout_marginTop="@dimen/status_bar_height"
+        android:animateLayoutChanges="true"
+        android:clickable="true"
+        android:visibility="gone">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/panelBackground"
+            android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/halfSecondTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/half_second_interval"
-                android:textColor="@android:color/white" />
+                style="@style/roundButtonStyle"
+                android:text="@string/half_second_interval" />
 
-            <TextView
+            <Space style="@style/defaultSpacer" />
+
+            <Button
                 android:id="@+id/secondTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/second_interval"
-                android:textColor="@android:color/white" />
+                style="@style/roundButtonStyle"
+                android:text="@string/second_interval" />
 
-            <TextView
+            <Space style="@style/defaultSpacer" />
+
+            <Button
                 android:id="@+id/threeSecondTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/three_second_interval"
-                android:textColor="@android:color/white" />
+                style="@style/roundButtonStyle"
+                android:text="@string/three_second_interval" />
 
-            <TextView
+            <Space style="@style/defaultSpacer" />
+
+            <Button
                 android:id="@+id/tenSecondTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/ten_second_interval"
-                android:textColor="@android:color/white" />
+                style="@style/roundButtonStyle"
+                android:text="@string/ten_second_interval" />
 
-            <TextView
+            <Space style="@style/defaultSpacer" />
+
+            <Button
                 android:id="@+id/customTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/custom_interval"
-                android:textColor="@android:color/white" />
+                style="@style/roundButtonStyle"
+                android:text="@string/custom_interval" />
         </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/secondPanelLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/actionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_play_arrow_black_24dp" />
-
-            <ImageView
-                android:id="@+id/thumbNailImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/actionButton"
-                android:layout_alignParentBottom="true"
-                android:layout_alignEnd="@+id/actionButton"
-                android:layout_gravity="end" />
-        </RelativeLayout>
-    </LinearLayout>
+    </FrameLayout>
 </RelativeLayout>

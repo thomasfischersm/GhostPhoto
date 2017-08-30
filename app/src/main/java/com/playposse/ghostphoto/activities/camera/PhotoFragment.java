@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -33,7 +32,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -446,19 +444,6 @@ public class PhotoFragment extends BasicPhotoFragment {
                     .load(contentUri)
                     .apply(RequestOptions.circleCropTransform())
                     .into(thumbNailImageView);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    actionButton.getWidth(),
-                    actionButton.getHeight());
-            int orientation = getResources().getConfiguration().orientation;
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-            } else {
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            }
-            thumbNailImageView.setLayoutParams(layoutParams);
-            thumbNailImageView.requestLayout();
-            thumbNailImageView.invalidate();
         } else {
             thumbNailImageView.setImageBitmap(null);
         }

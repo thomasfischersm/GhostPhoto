@@ -17,4 +17,6 @@
 
     <!-- Sets all photo pane row count. -->
     <integer name="all_photo_pane_row_count">3</integer>
+
+    <dimen name="status_bar_height">24dp</dimen>
 </resources>
