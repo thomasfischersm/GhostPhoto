@@ -438,6 +438,12 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void showThumbNail(String photoContentUri) {
+        if (!isAdded()) {
+            // Let's be defensive. Since retrieving the thumbnail info, the fragment could have
+            // detached. So, let's avoid creating an exception here.
+            return;
+        }
+
         if (photoContentUri != null) {
             Uri contentUri = Uri.parse(photoContentUri);
             Glide.with(getActivity())
