@@ -3,11 +3,9 @@ package com.playposse.ghostphoto.activities.other;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v13.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -17,6 +15,7 @@ import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.activities.camera.PhotoActivity;
 import com.playposse.ghostphoto.constants.PhotoFileConversions;
+import com.playposse.ghostphoto.util.PermissionUtil;
 import com.playposse.ghostphoto.util.ToastUtil;
 
 /**
@@ -79,8 +78,8 @@ public class PermissionRecoveryActivity extends ParentActivity {
     }
 
     private void updateLayoutVisibility() {
-        boolean hasStoragePermission = hasStoragePermission();
-        boolean hasCameraPermission = hasCameraPermission();
+        boolean hasStoragePermission = PermissionUtil.hasStoragePermission(this);
+        boolean hasCameraPermission = PermissionUtil.hasCameraPermission(this);
         if (!hasStoragePermission || !hasCameraPermission) {
             requestPermissionLayout.setVisibility(View.VISIBLE);
             directoryCreationErrorLayout.setVisibility(View.INVISIBLE);
@@ -88,7 +87,7 @@ public class PermissionRecoveryActivity extends ParentActivity {
                     .setVisibility(hasCameraPermission ? View.GONE : View.VISIBLE);
             requestStoragePermissionButton
                     .setVisibility(hasStoragePermission ? View.GONE : View.VISIBLE);
-        } else if (!doesPhotoDirectoryExist()) {
+        } else if (!PermissionUtil.doesPhotoDirectoryExist()) {
             requestPermissionLayout.setVisibility(View.INVISIBLE);
             directoryCreationErrorLayout.setVisibility(View.VISIBLE);
         } else {
@@ -129,25 +128,11 @@ public class PermissionRecoveryActivity extends ParentActivity {
     }
 
     private void onCreateDirectoryClicked() {
-        if (doesPhotoDirectoryExist() || attemptToCreatePhotoDirectory()) {
+        if (PermissionUtil.doesPhotoDirectoryExist() || attemptToCreatePhotoDirectory()) {
             startPhotoActivity();
         } else {
             ToastUtil.sendShortToast(this, R.string.failed_to_create_directory_toast);
         }
-    }
-
-    private boolean hasStoragePermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean hasCameraPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean doesPhotoDirectoryExist() {
-        return PhotoFileConversions.getPhotoDir().exists();
     }
 
     private boolean attemptToCreatePhotoDirectory() {

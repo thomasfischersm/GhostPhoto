@@ -17,6 +17,7 @@ import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoShootTable;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.util.AnalyticsUtil.AnalyticsCategory;
+import com.playposse.ghostphoto.util.PermissionUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,12 +45,23 @@ public class CheckFileIntegrityService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         long start = System.currentTimeMillis();
-        checkForOrphanFiles();
-        sendAllPhotosToTheMediaScanner();
-        long end = System.currentTimeMillis();
 
-        AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.fileIntegrityCheck, "");
-        Log.i(LOG_TAG, "onHandleIntent: The file integrity check took " + (end - start) + "ms");
+        try {
+            if (!PermissionUtil.hasStoragePermission(getApplicationContext())
+                    || !PermissionUtil.doesPhotoDirectoryExist()) {
+                Log.d(LOG_TAG, "onHandleIntent: Storage permission or the photo directory are " +
+                        "missing. Skipping file integry check.");
+                return;
+            }
+
+            checkForOrphanFiles();
+            sendAllPhotosToTheMediaScanner();
+        } finally {
+            long end = System.currentTimeMillis();
+
+            AnalyticsUtil.reportEvent(getApplication(), AnalyticsCategory.fileIntegrityCheck, "");
+            Log.i(LOG_TAG, "onHandleIntent: The file integrity check took " + (end - start) + "ms");
+        }
     }
 
     private void checkForOrphanFiles() {
