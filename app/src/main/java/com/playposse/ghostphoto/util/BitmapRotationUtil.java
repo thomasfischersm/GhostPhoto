@@ -31,6 +31,10 @@ public class BitmapRotationUtil {
         BitmapFactory.Options option = new BitmapFactory.Options();
         option.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap sourceBitmap = BitmapFactory.decodeFile(sourceFile.getAbsolutePath(), option);
+        if (sourceBitmap == null) {
+            Log.e(LOG_TAG, "rotate: Failed to load bitmap for " + sourceFile.getAbsolutePath());
+            return null;
+        }
 
         // Rotate bitmap.
         Bitmap resultBitmap = rotate(sourceBitmap, degrees);

@@ -214,6 +214,11 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
     }
 
     private void onRotateComplete(File newFile) {
+        if (newFile == null) {
+            // Something went wrong. Ignore this.
+            return;
+        }
+
         Uri photoUri = Uri.fromFile(newFile);
 
         ContentValues contentValues = new ContentValues();
