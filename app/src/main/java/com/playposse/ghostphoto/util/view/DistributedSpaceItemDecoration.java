@@ -36,6 +36,9 @@ public class DistributedSpaceItemDecoration extends RecyclerView.ItemDecoration 
         outRect.right = horizontal[1];
         outRect.top = (rowCount == 0) ? 0 : vertical[0];
         outRect.bottom = vertical[1];
+
+        // TODO: Remove space under the bottom most row.
+        // TODO: Remove space at the end of the last item.
     }
 
     private int[] calculateSpacing(int position, int max, int spacing) {
