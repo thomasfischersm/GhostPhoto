@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Difference to portrait version:
+    * The translucent action bar needs to be adjusted for in the portrait and landscape version
+      differently:
+    ** In portrait, the keep checkbox has to be raised above the actionbar.
+    ** In landscape, the actionbar nededs end padding to avoid overlapping the actionbar.
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,6 +21,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_marginTop="@dimen/status_bar_height"
         android:elevation="4dp"
+        android:paddingEnd="?android:attr/actionBarSize"
         android:theme="@style/ActionBarStyle"
         app:popupTheme="@style/PopupMenuStyle" />
 
@@ -24,7 +34,7 @@
         android:id="@+id/keepCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/actionBarSpace"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="12dp"
@@ -32,15 +42,4 @@
         android:text="@string/keep_label"
         android:textAllCaps="true"
         android:textColor="@color/primaryText" />
-
-    <!-- The action bar can have different heights depending on the screen resolution. By anchoring
-         the checkbox a certain distance above this spacer, it will be a certain distance above the
-         action bar on all devices. -->
-    <android.support.v4.widget.Space
-        android:id="@+id/actionBarSpace"
-        android:layout_width="10dp"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
 </RelativeLayout>
