@@ -2,9 +2,9 @@
 
 <!--
     Difference to portrait version:
+    * Compare photos side by side instead of on top of each other.
     * The translucent action bar needs to be adjusted for in the portrait and landscape version
       differently:
-    ** In portrait, the keep checkbox has to be raised above the actionbar.
     ** In landscape, the actionbar needs end padding to avoid overlapping the actionbar.
 -->
 
@@ -13,7 +13,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.playposse.ghostphoto.activities.review.ViewPhotoActivity">
+    tools:context="com.playposse.ghostphoto.activities.review.ComparePhotosActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -25,21 +25,25 @@
         android:theme="@style/ActionBarStyle"
         app:popupTheme="@style/PopupMenuStyle" />
 
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/keepCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="12dp"
-        android:buttonTint="@color/primaryText"
-        android:text="@string/keep_label"
-        android:textAllCaps="true"
-        android:textColor="@color/primaryText" />
+        <com.alexvasilkov.gestures.views.GestureImageView
+            android:id="@+id/firstImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/full_photo_content_description"
+            android:scaleType="fitCenter" />
+
+        <com.alexvasilkov.gestures.views.GestureImageView
+            android:id="@+id/secondImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/full_photo_content_description"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
 </RelativeLayout>
