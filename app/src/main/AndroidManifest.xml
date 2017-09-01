@@ -72,7 +72,8 @@
         <activity
             android:name=".activities.review.ComparePhotosActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.review.ReviewPhotoShootActivity" />
+            android:parentActivityName=".activities.review.ReviewPhotoShootActivity"
+            android:theme="@style/TranslucentAppTheme" />
         <activity
             android:name=".activities.review.ViewPhotoActivity"
             android:launchMode="singleTop"

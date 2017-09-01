@@ -151,7 +151,7 @@
 
 
     <!-- Compare two photos activity -->
-    <string name="compare_photos_title">Compare photos</string>
+    <string name="compare_photos_title">Compare</string>
     <string name="full_photo_content_description">
         Shows a full photo for comparison to the photo next to it.
     </string>

@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.playposse.ghostphoto.activities.review.ComparePhotosActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_marginTop="@dimen/status_bar_height"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ActionBarStyle"
+        app:popupTheme="@style/PopupMenuStyle" />
 
-    <com.alexvasilkov.gestures.views.GestureImageView
-        android:id="@+id/firstImageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitCenter"
-        android:contentDescription="@string/full_photo_content_description" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.alexvasilkov.gestures.views.GestureImageView
-        android:id="@+id/secondImageView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitCenter"
-        android:contentDescription="@string/full_photo_content_description" />
-</LinearLayout>
+        <com.alexvasilkov.gestures.views.GestureImageView
+            android:id="@+id/firstImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/full_photo_content_description"
+            android:scaleType="fitCenter" />
+
+        <com.alexvasilkov.gestures.views.GestureImageView
+            android:id="@+id/secondImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/full_photo_content_description"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+</RelativeLayout>

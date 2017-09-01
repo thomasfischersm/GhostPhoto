@@ -49,6 +49,7 @@
         <item name="android:background">@color/actionBarBackground</item>
         <item name="android:colorBackground">@color/popupMenuBackground</item>
         <item name="colorControlNormal">@color/primaryText</item>
+        <item name="titleTextColor">@color/primaryText</item>
     </style>
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
