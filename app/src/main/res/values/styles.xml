@@ -19,6 +19,9 @@
 
         <!-- Set text color of the action bar. -->
         <item name="android:actionMenuTextColor">@color/primaryText</item>
+
+        <!-- Set the default background color for all activities. -->
+        <item name="android:windowBackground">@color/activityDefaultBackground</item>
     </style>
 
     <!-- Apply this theme to activities that should be fullscreen with a transparent status bar. -->
