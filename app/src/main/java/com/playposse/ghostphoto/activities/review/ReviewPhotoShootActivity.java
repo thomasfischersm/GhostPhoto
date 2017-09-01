@@ -44,8 +44,9 @@ import com.playposse.ghostphoto.util.IntegrationUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 import com.playposse.ghostphoto.util.ToastUtil;
 import com.playposse.ghostphoto.util.view.DialogUtil;
+import com.playposse.ghostphoto.util.view.DistributedSpaceItemDecoration;
+import com.playposse.ghostphoto.util.view.FixedSpaceItemDecoration;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
-import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         allPhotosAdapter = new AllPhotoAdapter();
         allPhotosRecyclerView.setAdapter(allPhotosAdapter);
         allPhotosRecyclerView.addItemDecoration(
-                new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
+                new DistributedSpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
         allPhotosRecyclerView.setOnDragListener(photoDragListener);
 
         // Build selectedPhotosRecyclerView.
@@ -114,7 +115,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
         selectedPhotosAdapter = new PhotoAdapter();
         selectedPhotosRecyclerView.setAdapter(selectedPhotosAdapter);
         selectedPhotosRecyclerView.addItemDecoration(
-                new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
+                new FixedSpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
         selectedPhotosRecyclerView.setOnDragListener(photoDragListener);
 
         selectedPhotosHintTextView.setOnDragListener(photoDragListener);

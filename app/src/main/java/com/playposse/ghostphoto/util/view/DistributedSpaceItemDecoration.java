@@ -9,13 +9,13 @@ import android.view.View;
 /**
  * A helper class that creates grid spacing in a {@link RecyclerView}.
  */
-public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+public class DistributedSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
-    private static final String LOG_TAG = SpaceItemDecoration.class.getSimpleName();
+    private static final String LOG_TAG = DistributedSpaceItemDecoration.class.getSimpleName();
 
     private final int space;
 
-    public SpaceItemDecoration(Context context, int spaceResId) {
+    public DistributedSpaceItemDecoration(Context context, int spaceResId) {
         this.space = (int) context.getResources().getDimension(spaceResId);
     }
 
@@ -31,14 +31,11 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildLayoutPosition(view);
 
         int[] horizontal = calculateSpacing(position, spanCount, space);
-        int[] vertical = calculateSpacing(position / spanCount, rowCount, space);
+        int[] vertical = new int[]{space / 2, space / 2};
         outRect.left = horizontal[0];
         outRect.right = horizontal[1];
-        outRect.top = vertical[0];
+        outRect.top = (rowCount == 0) ? 0 : vertical[0];
         outRect.bottom = vertical[1];
-
-//        Log.i(LOG_TAG, "getItemOffsets: position: " + position + " left: " + horizontal[0]
-//                + " right: " + horizontal[1]);
     }
 
     private int[] calculateSpacing(int position, int max, int spacing) {
@@ -46,13 +43,10 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         double widthReduction = spacing * (max - 1.0) / max;
         double left = 0;
         double right = widthReduction - left;
-//        Log.i(LOG_TAG, "calculateSpacing: space: " + spacing + " widthReduction: " + widthReduction);
-//        Log.i(LOG_TAG, "calculateSpacing: left: " + left + " right: " + right);
 
         for (int i = 0; i < position; i++) {
             left = spacing - right;
             right = widthReduction - left;
-//            Log.i(LOG_TAG, "calculateSpacing: left: " + left + " right: " + right);
         }
         return new int[]{(int) left, (int) right};
     }

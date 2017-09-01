@@ -33,7 +33,7 @@ import com.playposse.ghostphoto.util.UriUtil;
 import com.playposse.ghostphoto.util.view.DialogUtil;
 import com.playposse.ghostphoto.util.view.RecyclerViewCursorAdapter;
 import com.playposse.ghostphoto.util.view.ResponsiveGridLayoutManager;
-import com.playposse.ghostphoto.util.view.SpaceItemDecoration;
+import com.playposse.ghostphoto.util.view.DistributedSpaceItemDecoration;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -74,7 +74,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
         photoShootAdapter = new PhotoShootAdapter();
         shootRecyclerView.setAdapter(photoShootAdapter);
         shootRecyclerView.addItemDecoration(
-                new SpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
+                new DistributedSpaceItemDecoration(this, R.dimen.photo_shoot_spacing));
 
         getLoaderManager().initLoader(LOADER_MANAGER, null, this);
     }
