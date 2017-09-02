@@ -100,7 +100,7 @@
 
 
     <!-- List shoots activity -->
-    <string name="list_shoots_title">List photo sessions</string>
+    <string name="list_shoots_title">Photo sessions</string>
     <string name="cover_photo_content_description">Show the first photo of a photo session.</string>
     <string name="photo_count_label">%1$d photos</string>
     <string name="photo_shoot_loading_message">Loading…</string>

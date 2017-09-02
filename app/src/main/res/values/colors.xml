@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#FF5724</color>
+    <color name="colorPrimaryDark">#E64919</color>
     <color name="colorAccent">#FF4081</color>
     <color name="emphasis">#31b6e7</color>
-    <color name="activityDefaultBackground">#1f1f1f</color>
+    <color name="activityDefaultBackground">#1F1F1F</color>
+    <color name="listActivityBackground">#FAFAFA</color>
 
     <color name="panelBackground">#40000000</color>
     <color name="selectedText">#FFFFFF</color>
     <color name="unselectedText">#F5F5F5</color>
 
     <color name="primaryText">#FFFFFF</color>
+    <color name="bodyText">#C4B5B5</color>
     <color name="linkText">#3F51B5</color>
+
+    <!-- Text colors for white background -->
+    <color name="primaryDarkText">#1F1F1F</color>
 
     <!-- Drag and drop colors -->
     <color name="availableDragTargetTint">#80558B2F</color>
