@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FF5724</color>
     <color name="colorPrimaryDark">#E64919</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF5724</color>
     <color name="emphasis">#31b6e7</color>
     <color name="activityDefaultBackground">#1F1F1F</color>
     <color name="listActivityBackground">#FAFAFA</color>
@@ -34,4 +34,6 @@
     <!-- Background color action bar and popup menu. -->
     <color name="actionBarBackground">#00000000</color>
     <color name="popupMenuBackground">#99000000</color>
+
+    <color name="dividerColor">#3B3B3B</color>
 </resources>

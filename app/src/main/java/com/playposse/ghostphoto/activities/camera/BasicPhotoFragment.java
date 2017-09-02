@@ -2,13 +2,11 @@ package com.playposse.ghostphoto.activities.camera;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -35,6 +33,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -46,8 +45,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
-import com.playposse.ghostphoto.activities.other.PermissionRecoveryActivity;
 import com.playposse.ghostphoto.constants.CameraType;
 import com.playposse.ghostphoto.constants.FlashMode;
 import com.playposse.ghostphoto.constants.PhotoFileConversions;
@@ -474,9 +473,7 @@ public abstract class BasicPhotoFragment
         File photoDir = PhotoFileConversions.getPhotoDir();
         if (!photoDir.exists()) {
             if (!photoDir.mkdir()) {
-                startActivity(new Intent(
-                        getActivity(),
-                        PermissionRecoveryActivity.class));
+                ExtraConstants.startPermissionActivity(getActivity());
                 Log.e(LOG_TAG, "generateNextFileName: Failed to create photo directory: "
                         + photoDir);
                 return null;
@@ -534,8 +531,7 @@ public abstract class BasicPhotoFragment
             if ((grantResults.length != 2)
                     || (grantResults[0] != PackageManager.PERMISSION_GRANTED)
                     || (grantResults[1] != PackageManager.PERMISSION_GRANTED)) {
-                startActivity(
-                        new Intent(getActivity(), PermissionRecoveryActivity.class));
+                ExtraConstants.startPermissionActivity(getActivity());
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1180,23 +1176,27 @@ public abstract class BasicPhotoFragment
             final Fragment parent = getParentFragment();
             return new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.request_permission)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FragmentCompat.requestPermissions(parent,
-                                    new String[]{
-                                            Manifest.permission.CAMERA,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    REQUEST_ALL_PERMISSIONS);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel,
+                    .setPositiveButton(
+                            android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    FragmentCompat.requestPermissions(parent,
+                                            new String[]{
+                                                    Manifest.permission.CAMERA,
+                                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                            REQUEST_ALL_PERMISSIONS);
+                                }
+                            })
+                    .setNegativeButton(
+                            android.R.string.cancel,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Activity activity = parent.getActivity();
                                     if (activity != null) {
                                         activity.finish();
+                                        ExtraConstants.startPermissionActivity(getActivity());
                                     }
                                 }
                             })

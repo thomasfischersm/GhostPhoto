@@ -15,11 +15,14 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:visibility="gone"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp">
 
         <LinearLayout
             android:id="@+id/requestPermissionLayout"
@@ -32,28 +35,76 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:paddingBottom="8dp"
                 android:text="@string/permission_error_title"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/abc_text_size_headline_material"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/permission_error_message" />
+                android:paddingBottom="16dp"
+                android:text="@string/permission_error_message"
+                android:textColor="@color/bodyText"
+                android:textSize="@dimen/abc_text_size_body_1_material" />
 
-            <Button
-                android:id="@+id/requestCameraPermissionButton"
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/camera_permission_button" />
+                android:columnCount="2"
+                android:paddingBottom="16dp">
 
-            <Button
-                android:id="@+id/requestStoragePermissionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/storage_permission_button" />
+                <TextView
+                    android:id="@+id/grantCameraPermissionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingBottom="16dp"
+                    android:text="@string/camera_permission_label"
+                    android:textColor="@color/primaryText"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/grantCameraPermissionLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:paddingBottom="16dp"
+                    android:text="@string/grant_permission_link"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/grantStoragePermissionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/storage_permission_label"
+                    android:textColor="@color/primaryText"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/grantStoragePermissionLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/grant_permission_link"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/dividerColor" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +118,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:paddingBottom="8dp"
                 android:text="@string/directory_creation_error_title"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/abc_text_size_headline_material"
                 android:textStyle="bold" />
 
             <TextView
@@ -75,14 +129,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/directory_creation_error_message" />
+                android:paddingBottom="16dp"
+                android:text="@string/directory_creation_error_message"
+                android:textColor="@color/bodyText"
+                android:textSize="@dimen/abc_text_size_body_1_material" />
 
             <Button
                 android:id="@+id/createDirectoryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/colorAccent"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
                 android:text="@string/directory_creation_error_button" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/dividerColor" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

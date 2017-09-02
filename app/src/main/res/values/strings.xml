@@ -203,13 +203,14 @@
 
 
     <!-- Activity to recover from photo directory creation  failure -->
-    <string name="permission_error_title">Permission needed!</string>
+    <string name="permission_error_title">Can\'t take photos!</string>
     <string name="permission_error_message">
         To take photos, you have to grant permission to access the camera and save photos to
         storage.
     </string>
-    <string name="camera_permission_button">Grant camera permission</string>
-    <string name="storage_permission_button">Grant storage permission</string>
+    <string name="camera_permission_label">Camera permission</string>
+    <string name="storage_permission_label">Storage permission</string>
+    <string name="grant_permission_link">Grant</string>
     <string name="directory_creation_error_title">Failed to create the photo directory.</string>
     <string name="directory_creation_error_message">
         To be able to save photos, the app failed to create this directory: %1$s. Please, try to

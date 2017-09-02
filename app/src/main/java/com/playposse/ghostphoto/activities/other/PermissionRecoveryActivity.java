@@ -28,8 +28,10 @@ public class PermissionRecoveryActivity extends ParentActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 3;
 
     private LinearLayout requestPermissionLayout;
-    private Button requestCameraPermissionButton;
-    private Button requestStoragePermissionButton;
+    private TextView grantCameraPermissionLabel;
+    private TextView grantCameraPermissionLink;
+    private TextView grantStoragePermissionLabel;
+    private TextView grantStoragePermissionLink;
     private LinearLayout directoryCreationErrorLayout;
     private TextView directoryCreationErrorMessageTextView;
     private Button createDirectoryButton;
@@ -42,12 +44,14 @@ public class PermissionRecoveryActivity extends ParentActivity {
 
         initActionBar();
 
-        requestPermissionLayout = (LinearLayout) findViewById(R.id.requestPermissionLayout);
-        requestCameraPermissionButton = (Button) findViewById(R.id.requestCameraPermissionButton);
-        requestStoragePermissionButton = (Button) findViewById(R.id.requestStoragePermissionButton);
-        directoryCreationErrorLayout = (LinearLayout) findViewById(R.id.directoryCreationErrorLayout);
-        directoryCreationErrorMessageTextView = (TextView) findViewById(R.id.directoryCreationErrorMessageTextView);
-        createDirectoryButton = (Button) findViewById(R.id.createDirectoryButton);
+        requestPermissionLayout = findViewById(R.id.requestPermissionLayout);
+        grantCameraPermissionLabel = findViewById(R.id.grantCameraPermissionLabel);
+        grantCameraPermissionLink = findViewById(R.id.grantCameraPermissionLink);
+        grantStoragePermissionLabel = findViewById(R.id.grantStoragePermissionLabel);
+        grantStoragePermissionLink = findViewById(R.id.grantStoragePermissionLink);
+        directoryCreationErrorLayout = findViewById(R.id.directoryCreationErrorLayout);
+        directoryCreationErrorMessageTextView = findViewById(R.id.directoryCreationErrorMessageTextView);
+        createDirectoryButton = findViewById(R.id.createDirectoryButton);
 
         directoryCreationErrorMessageTextView.setText(getString(
                 R.string.directory_creation_error_message,
@@ -55,14 +59,14 @@ public class PermissionRecoveryActivity extends ParentActivity {
 
         updateLayoutVisibility();
 
-        requestCameraPermissionButton.setOnClickListener(new View.OnClickListener() {
+        grantCameraPermissionLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onRequestCameraPermissionClicked();
             }
         });
 
-        requestStoragePermissionButton.setOnClickListener(new View.OnClickListener() {
+        grantStoragePermissionLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onRequestStoragePermissionClicked();
@@ -83,9 +87,13 @@ public class PermissionRecoveryActivity extends ParentActivity {
         if (!hasStoragePermission || !hasCameraPermission) {
             requestPermissionLayout.setVisibility(View.VISIBLE);
             directoryCreationErrorLayout.setVisibility(View.INVISIBLE);
-            requestCameraPermissionButton
+            grantCameraPermissionLabel
                     .setVisibility(hasCameraPermission ? View.GONE : View.VISIBLE);
-            requestStoragePermissionButton
+            grantCameraPermissionLink
+                    .setVisibility(hasCameraPermission ? View.GONE : View.VISIBLE);
+            grantStoragePermissionLabel
+                    .setVisibility(hasStoragePermission ? View.GONE : View.VISIBLE);
+            grantStoragePermissionLink
                     .setVisibility(hasStoragePermission ? View.GONE : View.VISIBLE);
         } else if (!PermissionUtil.doesPhotoDirectoryExist()) {
             requestPermissionLayout.setVisibility(View.INVISIBLE);

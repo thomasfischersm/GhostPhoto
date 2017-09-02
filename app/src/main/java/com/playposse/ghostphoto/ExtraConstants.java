@@ -3,6 +3,7 @@ package com.playposse.ghostphoto;
 import android.content.Context;
 import android.content.Intent;
 
+import com.playposse.ghostphoto.activities.other.PermissionRecoveryActivity;
 import com.playposse.ghostphoto.activities.review.ComparePhotosActivity;
 import com.playposse.ghostphoto.activities.review.ReviewPhotoShootActivity;
 import com.playposse.ghostphoto.activities.review.ViewPhotoActivity;
@@ -42,5 +43,9 @@ public class ExtraConstants {
     public static Intent createComparePhotosIntent(Context context, long[] photoIndexes) {
         return new Intent(context, ComparePhotosActivity.class)
                 .putExtra(PHOTO_INDEXES_ID, photoIndexes);
+    }
+
+    public static void startPermissionActivity(Context context) {
+        context.startActivity(new Intent(context, PermissionRecoveryActivity.class));
     }
 }
