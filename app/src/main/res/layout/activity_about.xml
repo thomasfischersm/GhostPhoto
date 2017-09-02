@@ -5,6 +5,7 @@
     android:id="@+id/activity_help"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/listActivityBackground"
     android:orientation="vertical"
     tools:context="com.playposse.ghostphoto.activities.other.AboutActivity">
 
@@ -14,8 +15,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/solidToolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -37,6 +38,7 @@
                 android:text="@string/about_app_heading" />
 
             <TextView
+                style="@style/sectionBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/about_app_body_text" />
@@ -48,8 +50,10 @@
                 android:text="@string/about_feedback_heading" />
 
             <TextView
-                android:layout_width="match_parent" android:autoLink="all"
+                style="@style/sectionBody"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autoLink="all"
                 android:text="@string/about_feedback_body_text" />
 
             <TextView
@@ -59,8 +63,10 @@
                 android:text="@string/about_credits_heading" />
 
             <TextView
-                android:layout_width="match_parent" android:autoLink="all"
+                style="@style/sectionBody"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autoLink="all"
                 android:text="@string/about_credits_body_text" />
         </LinearLayout>
     </ScrollView>
