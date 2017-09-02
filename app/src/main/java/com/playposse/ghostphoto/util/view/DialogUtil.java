@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.playposse.ghostphoto.R;
-import com.playposse.ghostphoto.activities.review.ListShootsActivity;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public final class DialogUtil {
     /**
      * Shows a dialog with a message that the user can agree with or reject.
      */
-    public static void confirm(
+    public static void  confirm(
             Context context,
             int titleResId,
             int messageResId,
