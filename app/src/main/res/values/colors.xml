@@ -36,4 +36,6 @@
     <color name="popupMenuBackground">#99000000</color>
 
     <color name="dividerColor">#3B3B3B</color>
+
+    <color name="selectionPanelBackground">#F5F5F5</color>
 </resources>

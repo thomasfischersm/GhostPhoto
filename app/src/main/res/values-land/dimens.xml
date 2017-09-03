@@ -1,0 +1,4 @@
+<resources>
+    <!-- Sets all photo pane row count. -->
+    <integer name="all_photo_pane_row_count">6</integer>
+</resources>
