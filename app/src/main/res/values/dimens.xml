@@ -19,4 +19,7 @@
     <integer name="all_photo_pane_row_count">3</integer>
 
     <dimen name="status_bar_height">24dp</dimen>
+
+    <!-- The space between the time interval circles. -->
+    <dimen name="button_spacing">14dp</dimen>
 </resources>

@@ -87,7 +87,9 @@
         <RelativeLayout
             android:id="@+id/secondPanelLayout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp">
 
             <Button
                 android:id="@+id/selectedIntervalButton"
@@ -219,15 +221,19 @@
         android:visibility="gone">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|end"
             android:background="@color/panelBackground"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp">
 
             <Button
                 android:id="@+id/halfSecondTextView"
                 style="@style/roundButtonStyle"
+                android:layout_marginEnd="@dimen/button_spacing"
                 android:text="@string/half_second_interval" />
 
             <Space style="@style/defaultSpacer" />
@@ -235,6 +241,7 @@
             <Button
                 android:id="@+id/secondTextView"
                 style="@style/roundButtonStyle"
+                android:layout_marginEnd="@dimen/button_spacing"
                 android:text="@string/second_interval" />
 
             <Space style="@style/defaultSpacer" />
@@ -242,6 +249,7 @@
             <Button
                 android:id="@+id/threeSecondTextView"
                 style="@style/roundButtonStyle"
+                android:layout_marginEnd="@dimen/button_spacing"
                 android:text="@string/three_second_interval" />
 
             <Space style="@style/defaultSpacer" />
@@ -249,6 +257,7 @@
             <Button
                 android:id="@+id/tenSecondTextView"
                 style="@style/roundButtonStyle"
+                android:layout_marginEnd="@dimen/button_spacing"
                 android:text="@string/ten_second_interval" />
 
             <Space style="@style/defaultSpacer" />
