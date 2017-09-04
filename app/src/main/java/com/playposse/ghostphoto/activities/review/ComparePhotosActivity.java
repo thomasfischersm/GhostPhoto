@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +17,8 @@ import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
+import com.playposse.ghostphoto.data.QueryUtil;
+import com.playposse.ghostphoto.util.AnalyticsUtil;
 import com.playposse.ghostphoto.util.SmartCursor;
 
 /**
@@ -29,10 +33,14 @@ public class ComparePhotosActivity
     private static final int LOADER_ID = 5;
 
     private ImageView firstImageView;
+    private CheckBox keepFirstCheckBox;
     private ImageView secondImageView;
+    private CheckBox keepSecondCheckBox;
 
     private long firstPhotoId;
+    private Boolean isFirstPhotoSelected;
     private long secondPhotoId;
+    private Boolean isSecondPhotoSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +52,10 @@ public class ComparePhotosActivity
 
         initActionBar();
 
-        firstImageView = (ImageView) findViewById(R.id.firstImageView);
-        secondImageView = (ImageView) findViewById(R.id.secondImageView);
+        firstImageView = findViewById(R.id.firstImageView);
+        keepFirstCheckBox = findViewById(R.id.keepFirstCheckBox);
+        secondImageView = findViewById(R.id.secondImageView);
+        keepSecondCheckBox = findViewById(R.id.keepSecondCheckBox);
 
         long[] photoIndexes = ExtraConstants.getPhotoIndexes(getIntent());
         if ((photoIndexes == null) || (photoIndexes.length != 2)) {
@@ -57,6 +67,64 @@ public class ComparePhotosActivity
         secondPhotoId = photoIndexes[1];
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        keepFirstCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(LOG_TAG, "onCheckedChanged: first check listener triggered");
+                isFirstPhotoSelected =
+                        ComparePhotosActivity.this.onCheckedChanged(
+                                keepFirstCheckBox,
+                                isChecked,
+                                isFirstPhotoSelected,
+                                firstPhotoId);
+            }
+        });
+
+        keepSecondCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(LOG_TAG, "onCheckedChanged: second check listener triggered");
+                isSecondPhotoSelected =
+                        ComparePhotosActivity.this.onCheckedChanged(
+                                keepSecondCheckBox,
+                                isChecked,
+                                isSecondPhotoSelected,
+                                secondPhotoId);
+            }
+        });
+    }
+
+    private Boolean onCheckedChanged(
+            final CheckBox checkBox,
+            boolean shouldBeCheck,
+            Boolean isCurrentlyChecked,
+            final long photoId) {
+
+        Log.d(LOG_TAG, "onCheckedChanged: checkbox view " + checkBox.getId()
+                + ", shouldBeCheck" + shouldBeCheck
+                + ", isCurrentlyChecked" + isCurrentlyChecked);
+
+        if ((isCurrentlyChecked != null) && (isCurrentlyChecked != shouldBeCheck)) {
+            Log.d(LOG_TAG, "onCheckedChanged: Updating check state");
+            isCurrentlyChecked = shouldBeCheck;
+            final Boolean isFinalChecked = isCurrentlyChecked;
+            checkBox.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "onCheckedChanged: Executing check change " + photoId
+                            + " set to " + isFinalChecked);
+                    QueryUtil.selectPhoto(getContentResolver(), photoId, isFinalChecked);
+                    checkBox.setChecked(isFinalChecked);
+                }
+            });
+
+            AnalyticsUtil.reportEvent(
+                    getApplication(),
+                    AnalyticsUtil.AnalyticsCategory.selectPhoto,
+                    Boolean.toString(isCurrentlyChecked));
+        }
+        return isCurrentlyChecked;
     }
 
     @Override
@@ -74,16 +142,20 @@ public class ComparePhotosActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d(LOG_TAG, "onLoadFinished: OnLoadFinished triggered");
         SmartCursor smartCursor = new SmartCursor(cursor, PhotoTable.COLUMN_NAMES);
-        loadPhoto(cursor, smartCursor, 0, firstImageView);
-        loadPhoto(cursor, smartCursor, 1, secondImageView);
+        isFirstPhotoSelected =
+                loadPhoto(cursor, smartCursor, 0, firstImageView, keepFirstCheckBox);
+        isSecondPhotoSelected =
+                loadPhoto(cursor, smartCursor, 1, secondImageView, keepSecondCheckBox);
     }
 
-    private void loadPhoto(
+    private Boolean loadPhoto(
             Cursor cursor,
             SmartCursor smartCursor,
             int position,
-            ImageView imageView) {
+            ImageView imageView,
+            final CheckBox checkBox) {
 
         if (cursor.moveToPosition(position)) {
             final String photoUri =
@@ -92,7 +164,22 @@ public class ComparePhotosActivity
             Glide.with(this)
                     .load(contentUri)
                     .into(imageView);
+
+            final boolean isSelected = smartCursor.getBoolean(PhotoTable.IS_SELECTED_COLUMN);
+            checkBox.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "loadPhoto: Executing check change");
+                    checkBox.setChecked(isSelected);
+                }
+            });
+            Log.d(LOG_TAG, "loadPhoto: view " + imageView.getId() + ", position " + position
+                    + ", checkbox view " + checkBox.getId() + ", " + isSelected
+                    + " photoId " + smartCursor.getLong(PhotoTable.ID_COLUMN));
+            return isSelected;
         }
+
+        return null;
     }
 
     @Override

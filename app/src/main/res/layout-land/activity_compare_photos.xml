@@ -30,20 +30,56 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.alexvasilkov.gestures.views.GestureImageView
-            android:id="@+id/firstImageView"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="@string/full_photo_content_description"
-            android:scaleType="fitCenter" />
+            android:layout_weight="1">
 
-        <com.alexvasilkov.gestures.views.GestureImageView
-            android:id="@+id/secondImageView"
+            <com.alexvasilkov.gestures.views.GestureImageView
+                android:id="@+id/firstImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/full_photo_content_description"
+                android:scaleType="fitCenter" />
+
+            <CheckBox
+                android:id="@+id/keepFirstCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="@color/primaryText"
+                android:text="@string/keep_label"
+                android:textAllCaps="true"
+                android:textColor="@color/primaryText" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="@string/full_photo_content_description"
-            android:scaleType="fitCenter" />
+            android:layout_weight="1">
+
+            <com.alexvasilkov.gestures.views.GestureImageView
+                android:id="@+id/secondImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/full_photo_content_description"
+                android:scaleType="fitCenter" />
+
+            <CheckBox
+                android:id="@+id/keepSecondCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="@color/primaryText"
+                android:text="@string/keep_label"
+                android:textAllCaps="true"
+                android:textColor="@color/primaryText" />
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

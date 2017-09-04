@@ -8,6 +8,8 @@ import com.playposse.ghostphoto.activities.review.ComparePhotosActivity;
 import com.playposse.ghostphoto.activities.review.ReviewPhotoShootActivity;
 import com.playposse.ghostphoto.activities.review.ViewPhotoActivity;
 
+import java.util.Arrays;
+
 /**
  * A central class for dealing with extra constants of intents.
  */
@@ -37,7 +39,9 @@ public class ExtraConstants {
     }
 
     public static long[] getPhotoIndexes(Intent intent) {
-        return intent.getLongArrayExtra(PHOTO_INDEXES_ID);
+        long[] photoIds = intent.getLongArrayExtra(PHOTO_INDEXES_ID);
+        Arrays.sort(photoIds);
+        return photoIds;
     }
 
     public static Intent createComparePhotosIntent(Context context, long[] photoIndexes) {

@@ -20,20 +20,68 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.alexvasilkov.gestures.views.GestureImageView
-            android:id="@+id/firstImageView"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/full_photo_content_description"
-            android:scaleType="fitCenter" />
+            android:layout_weight="1">
 
-        <com.alexvasilkov.gestures.views.GestureImageView
-            android:id="@+id/secondImageView"
+            <com.alexvasilkov.gestures.views.GestureImageView
+                android:id="@+id/firstImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/full_photo_content_description"
+                android:scaleType="fitCenter" />
+
+            <CheckBox
+                android:id="@+id/keepFirstCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="@color/primaryText"
+                android:text="@string/keep_label"
+                android:textAllCaps="true"
+                android:textColor="@color/primaryText" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/full_photo_content_description"
-            android:scaleType="fitCenter" />
+            android:layout_weight="1">
+
+            <com.alexvasilkov.gestures.views.GestureImageView
+                android:id="@+id/secondImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/full_photo_content_description"
+                android:scaleType="fitCenter" />
+
+
+            <CheckBox
+                android:id="@+id/keepSecondCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/actionBarSpace"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="@color/primaryText"
+                android:text="@string/keep_label"
+                android:textAllCaps="true"
+                android:textColor="@color/primaryText" />
+
+            <!-- The action bar can have different heights depending on the screen resolution. By anchoring
+                 the checkbox a certain distance above this spacer, it will be a certain distance above the
+                 action bar on all devices. -->
+            <android.support.v4.widget.Space
+                android:id="@+id/actionBarSpace"
+                android:layout_width="10dp"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal" />
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
