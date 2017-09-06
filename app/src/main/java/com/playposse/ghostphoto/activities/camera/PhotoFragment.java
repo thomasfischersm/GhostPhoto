@@ -119,22 +119,22 @@ public class PhotoFragment extends BasicPhotoFragment {
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
-        flashImageView = (ImageView) rootView.findViewById(R.id.flashImageView);
-        switchCameraImageView = (ImageView) rootView.findViewById(R.id.switchCameraImageView);
-        optionsMenuLink = (TextView) rootView.findViewById(R.id.optionsMenuLink);
-        selectedIntervalButton = (Button) rootView.findViewById(R.id.selectedIntervalButton);
-        intervalSelectionLayout = (FrameLayout) rootView.findViewById(R.id.intervalSelectionLayout);
-        halfSecondTextView = (Button) rootView.findViewById(R.id.halfSecondTextView);
-        secondTextView = (Button) rootView.findViewById(R.id.secondTextView);
-        threeSecondTextView = (Button) rootView.findViewById(R.id.threeSecondTextView);
-        tenSecondTextView = (Button) rootView.findViewById(R.id.tenSecondTextView);
-        customTextView = (Button) rootView.findViewById(R.id.customTextView);
-        actionButton = (FloatingActionButton) rootView.findViewById(R.id.actionButton);
-        thumbNailImageView = (ImageView) rootView.findViewById(R.id.thumbNailImageView);
-        flashSelectionLayout = (FrameLayout) rootView.findViewById(R.id.flashSelectionLayout);
-        flashOffLayout = (LinearLayout) rootView.findViewById(R.id.flashOffLayout);
-        flashAutoLayout = (LinearLayout) rootView.findViewById(R.id.flashAutoLayout);
-        flashOnLayout = (LinearLayout) rootView.findViewById(R.id.flashOnLayout);
+        flashImageView = rootView.findViewById(R.id.flashImageView);
+        switchCameraImageView = rootView.findViewById(R.id.switchCameraImageView);
+        optionsMenuLink = rootView.findViewById(R.id.optionsMenuLink);
+        selectedIntervalButton = rootView.findViewById(R.id.selectedIntervalButton);
+        intervalSelectionLayout = rootView.findViewById(R.id.intervalSelectionLayout);
+        halfSecondTextView = rootView.findViewById(R.id.halfSecondTextView);
+        secondTextView = rootView.findViewById(R.id.secondTextView);
+        threeSecondTextView = rootView.findViewById(R.id.threeSecondTextView);
+        tenSecondTextView = rootView.findViewById(R.id.tenSecondTextView);
+        customTextView = rootView.findViewById(R.id.customTextView);
+        actionButton = rootView.findViewById(R.id.actionButton);
+        thumbNailImageView = rootView.findViewById(R.id.thumbNailImageView);
+        flashSelectionLayout = rootView.findViewById(R.id.flashSelectionLayout);
+        flashOffLayout = rootView.findViewById(R.id.flashOffLayout);
+        flashAutoLayout = rootView.findViewById(R.id.flashAutoLayout);
+        flashOnLayout = rootView.findViewById(R.id.flashOnLayout);
 
         customInterval = GhostPhotoPreferences.getCustomPhotoIntervalSeconds(getActivity());
 
