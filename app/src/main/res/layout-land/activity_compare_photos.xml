@@ -44,14 +44,16 @@
 
             <CheckBox
                 android:id="@+id/keepFirstCheckBox"
+                android:theme="@style/keepCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="12dp"
-                android:buttonTint="@color/primaryText"
+                android:layout_marginBottom="20dp"
                 android:text="@string/keep_label"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"
                 android:textColor="@color/primaryText" />
         </RelativeLayout>
@@ -70,14 +72,16 @@
 
             <CheckBox
                 android:id="@+id/keepSecondCheckBox"
+                android:theme="@style/keepCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="12dp"
-                android:buttonTint="@color/primaryText"
+                android:layout_marginBottom="20dp"
                 android:text="@string/keep_label"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"
                 android:textColor="@color/primaryText" />
         </RelativeLayout>

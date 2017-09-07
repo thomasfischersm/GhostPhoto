@@ -21,15 +21,17 @@
         android:layout_height="match_parent" />
 
     <CheckBox
+        android:theme="@style/keepCheckBox"
         android:id="@+id/keepCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/actionBarSpace"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="12dp"
-        android:buttonTint="@color/primaryText"
+        android:layout_marginBottom="20dp"
         android:text="@string/keep_label"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
         android:textColor="@color/primaryText" />
 

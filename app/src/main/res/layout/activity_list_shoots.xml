@@ -42,11 +42,11 @@
             android:id="@+id/shootRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingEnd="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp"
-            android:paddingTop="5dp"
+            android:paddingEnd="6dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingStart="6dp"
+            android:paddingTop="6dp"
             android:scrollbars="vertical" />
     </FrameLayout>
 </LinearLayout>

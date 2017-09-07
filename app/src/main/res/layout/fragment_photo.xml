@@ -54,12 +54,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/switch_camera_content_description"
-            android:paddingEnd="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingStart="4dp"
+            android:paddingEnd="24dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingStart="24dp"
             android:src="@drawable/ic_loop_black_24dp"
             android:tint="@color/selectedText" />
+
+
 
         <TextView
             android:id="@+id/optionsMenuLink"
@@ -82,12 +84,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="?android:attr/actionBarSize"
+        android:paddingBottom="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:background="@color/panelBackground">
 
         <Button
             android:id="@+id/selectedIntervalButton"
+            android:layout_marginTop="6dp"
             style="@style/roundButtonStyle" />
 
         <android.support.design.widget.FloatingActionButton
@@ -95,10 +99,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_play_arrow_black_24dp" />
+            android:src="@drawable/ic_play_arrow_white_24dp" />
 
         <ImageView
             android:id="@+id/thumbNailImageView"
+            android:layout_marginTop="6dp"
             android:layout_width="@dimen/round_button_diameter"
             android:layout_height="@dimen/round_button_diameter"
             android:layout_alignParentEnd="true"
@@ -215,26 +220,9 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/halfSecondTextView"
+                android:id="@+id/customTextView"
                 style="@style/roundButtonStyle"
-                android:layout_marginBottom="@dimen/button_spacing"
-                android:text="@string/half_second_interval" />
-
-            <Space style="@style/defaultSpacer" />
-
-            <Button
-                android:id="@+id/secondTextView"
-                style="@style/roundButtonStyle"
-                android:layout_marginBottom="@dimen/button_spacing"
-                android:text="@string/second_interval" />
-
-            <Space style="@style/defaultSpacer" />
-
-            <Button
-                android:id="@+id/threeSecondTextView"
-                style="@style/roundButtonStyle"
-                android:layout_marginBottom="@dimen/button_spacing"
-                android:text="@string/three_second_interval" />
+                android:text="@string/custom_interval" />
 
             <Space style="@style/defaultSpacer" />
 
@@ -247,9 +235,27 @@
             <Space style="@style/defaultSpacer" />
 
             <Button
-                android:id="@+id/customTextView"
+                android:id="@+id/threeSecondTextView"
                 style="@style/roundButtonStyle"
-                android:text="@string/custom_interval" />
+                android:layout_marginBottom="@dimen/button_spacing"
+                android:text="@string/three_second_interval" />
+
+            <Space style="@style/defaultSpacer" />
+
+            <Button
+                android:id="@+id/secondTextView"
+                style="@style/roundButtonStyle"
+                android:layout_marginBottom="@dimen/button_spacing"
+                android:text="@string/second_interval" />
+
+            <Space style="@style/defaultSpacer" />
+
+            <Button
+                android:id="@+id/halfSecondTextView"
+                style="@style/roundButtonStyle"
+                android:layout_marginBottom="@dimen/button_spacing"
+                android:text="@string/half_second_interval" />
+
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>
