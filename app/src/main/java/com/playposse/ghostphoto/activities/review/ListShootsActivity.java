@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -49,7 +50,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
     private RecyclerView shootRecyclerView;
 
-    private TextView loadingMessageTextView;
+    private ProgressBar loadingProgressBar;
     private TextView emptyMessageTextView;
     private PhotoShootAdapter photoShootAdapter;
 
@@ -63,9 +64,9 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
         setTitle(R.string.list_shoots_title);
 
-        shootRecyclerView = (RecyclerView) findViewById(R.id.shootRecyclerView);
-        loadingMessageTextView = (TextView) findViewById(R.id.loadingMessageTextView);
-        emptyMessageTextView = (TextView) findViewById(R.id.emptyMessageTextView);
+        shootRecyclerView = findViewById(R.id.shootRecyclerView);
+        loadingProgressBar = findViewById(R.id.loadingProgressBar);
+        emptyMessageTextView = findViewById(R.id.emptyMessageTextView);
 
         // Initializes shootRecyclerView.
         ResponsiveGridLayoutManager layoutManager =
@@ -107,7 +108,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        loadingMessageTextView.setVisibility(View.GONE);
+        loadingProgressBar.setVisibility(View.GONE);
 
         photoShootAdapter.swapCursor(cursor);
         if (cursor.getCount() > 0) {
@@ -121,7 +122,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        loadingMessageTextView.setVisibility(View.VISIBLE);
+        loadingProgressBar.setVisibility(View.VISIBLE);
         shootRecyclerView.setVisibility(View.GONE);
         emptyMessageTextView.setVisibility(View.GONE);
 
