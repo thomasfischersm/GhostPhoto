@@ -13,7 +13,7 @@
     <dimen name="photo_shoot_spacing">5dp</dimen>
 
     <!-- Sets the diameter for round buttons. -->
-    <dimen name="round_button_diameter">56dp</dimen>
+    <dimen name="round_button_diameter">52dp</dimen>
 
     <!-- Sets all photo pane row count. -->
     <integer name="all_photo_pane_row_count">3</integer>
@@ -21,5 +21,5 @@
     <dimen name="status_bar_height">24dp</dimen>
 
     <!-- The space between the time interval circles. -->
-    <dimen name="button_spacing">14dp</dimen>
+    <dimen name="button_spacing">16dp</dimen>
 </resources>

@@ -18,7 +18,7 @@
         <shape
             android:shape="oval"
             android:useLevel="false">
-            <solid android:color="#f44b3e" />
+            <solid android:color="#0AFFFFFF" />
             <size android:height="100dp" android:width="100dp"/>
         </shape>
     </item>
@@ -30,7 +30,7 @@
         <shape
             android:shape="oval"
             android:useLevel="false">
-            <solid android:color="#f45144" />
+            <solid android:color="#0AFFFFFF" />
             <size android:height="76dp" android:width="76dp"/>
         </shape>
     </item>
@@ -42,7 +42,7 @@
         <shape
             android:shape="oval"
             android:useLevel="false">
-            <solid android:color="#f4574a" />
+            <solid android:color="#0AFFFFFF" />
             <size android:height="53dp" android:width="53dp"/>
         </shape>
     </item>

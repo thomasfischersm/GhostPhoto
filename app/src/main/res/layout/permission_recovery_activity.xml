@@ -21,8 +21,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingEnd="24dp"
-        android:paddingStart="24dp">
+        android:paddingEnd="25dp"
+        android:paddingStart="25dp">
 
         <LinearLayout
             android:id="@+id/requestPermissionLayout"
@@ -34,50 +34,49 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:paddingBottom="8dp"
+                android:paddingBottom="10dp"
                 android:text="@string/permission_error_title"
                 android:textColor="@color/primaryText"
                 android:textSize="@dimen/abc_text_size_headline_material"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:paddingBottom="16dp"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingBottom="20dp"
                 android:text="@string/permission_error_message"
-                android:textColor="@color/bodyText"
+                android:textColor="@color/secondaryTextColorDark"
                 android:textSize="@dimen/abc_text_size_body_1_material" />
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
-                android:paddingBottom="16dp">
+                android:paddingBottom="25dp">
 
                 <TextView
                     android:id="@+id/grantCameraPermissionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:paddingBottom="16dp"
+                    android:paddingBottom="20dp"
                     android:text="@string/camera_permission_label"
                     android:textColor="@color/primaryText"
-                    android:textSize="@dimen/abc_text_size_body_1_material"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/grantCameraPermissionLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:paddingBottom="16dp"
+                    android:paddingBottom="20dp"
                     android:text="@string/grant_permission_link"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/abc_text_size_body_1_material"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/grantStoragePermissionLabel"
@@ -86,8 +85,8 @@
                     android:gravity="start"
                     android:text="@string/storage_permission_label"
                     android:textColor="@color/primaryText"
-                    android:textSize="@dimen/abc_text_size_body_1_material"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/grantStoragePermissionLink"
@@ -98,13 +97,13 @@
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/abc_text_size_body_1_material"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-medium" />
             </GridLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/dividerColor" />
+                android:background="@color/dividerDark" />
         </LinearLayout>
 
         <LinearLayout

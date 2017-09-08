@@ -20,6 +20,8 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:gravity="end"
         android:text="@string/dismiss_link"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
-        android:textColor="@color/linkText" />
+        android:textColor="@color/colorPrimary" />
 </LinearLayout>

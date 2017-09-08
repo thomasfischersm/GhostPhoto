@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF5724</color>
-    <color name="colorPrimaryDark">#E64919</color>
-    <color name="colorAccent">#FF5724</color>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#ff5722</color>
     <color name="emphasis">#31b6e7</color>
     <color name="activityDefaultBackground">#1F1F1F</color>
     <color name="listActivityBackground">#FAFAFA</color>
 
-    <color name="panelBackground">#40000000</color>
+    <color name="panelBackground">#00000000</color>
     <color name="selectedText">#FFFFFF</color>
     <color name="unselectedText">#F5F5F5</color>
 
@@ -16,16 +16,30 @@
     <color name="linkText">#3F51B5</color>
 
     <!-- Text colors for white background -->
-    <color name="primaryDarkText">#1F1F1F</color>
+    <color name="primaryDarkText">#232323</color>
+
+    <!-- Light theme -->
+    <color name="primaryTextColorLight">#232323</color>
+    <color name="secondaryTextColorLight">#777777</color>
+    <color name="disabledTextColorLight">#BFBFBF</color>
+    <color name="divider">#E2E2E2</color>
+    <color name="backgroundLight">#FAFAFA</color>
+
+    <!-- Dark theme -->
+    <color name="primaryTextColorDark">#FFFFFF</color>
+    <color name="secondaryTextColorDark">#B3FFFFFF</color>
+    <color name="disabledTextColorDark">#4DFFFFFF</color>
+    <color name="dividerDark">#1FFFFFFF</color>
+    <color name="backgroundDark">#232323</color>
 
     <!-- Drag and drop colors -->
     <color name="availableDragTargetTint">#80558B2F</color>
     <color name="activeDragTargetTint">#80AED581</color>
 
     <!-- Colors for the round buttons -->
-    <color name="roundButton">#666666</color>
-    <color name="roundButtonPressed">#999999</color>
-    <color name="roundButtonSelected">#ff5724</color>
+    <color name="roundButton">#4D000000</color>
+    <color name="roundButtonPressed">#80000000</color>
+    <color name="roundButtonSelected">#FF5722</color>
     <color name="roundButtonText">@android:color/white</color>
 
     <!-- Tint for selected photos. -->
@@ -33,7 +47,7 @@
 
     <!-- Background color action bar and popup menu. -->
     <color name="actionBarBackground">#00000000</color>
-    <color name="popupMenuBackground">#99000000</color>
+    <color name="popupMenuBackground">#B3000000</color>
 
     <color name="dividerColor">#3B3B3B</color>
 
