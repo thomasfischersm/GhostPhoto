@@ -302,9 +302,9 @@ public class PhotoFragment extends BasicPhotoFragment {
 
     private void refreshActionButton() {
         if (actionState == ActionState.running) {
-            actionButton.setImageResource(R.drawable.ic_stop_black_24dp);
+            actionButton.setImageResource(R.drawable.ic_stop_white_24dp);
         } else {
-            actionButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            actionButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
         }
     }
 

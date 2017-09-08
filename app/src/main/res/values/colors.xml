@@ -52,4 +52,6 @@
     <color name="dividerColor">#3B3B3B</color>
 
     <color name="selectionPanelBackground">#F5F5F5</color>
+
+    <color name="iconColor">#FFFFFF</color>
 </resources>
