@@ -12,8 +12,9 @@
     <!-- Sets the spacing between items in the photo shoot activity. -->
     <dimen name="photo_shoot_spacing">5dp</dimen>
 
-    <!-- Sets the diameter for round buttons. -->
+    <!-- Dimensions for round buttons. -->
     <dimen name="round_button_diameter">52dp</dimen>
+    <dimen name="round_button_radius">26dp</dimen>
 
     <!-- Sets all photo pane row count. -->
     <integer name="all_photo_pane_row_count">3</integer>
