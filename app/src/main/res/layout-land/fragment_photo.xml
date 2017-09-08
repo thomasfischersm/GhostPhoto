@@ -60,18 +60,13 @@
             android:src="@drawable/ic_loop_black_24dp"
             android:tint="@color/selectedText" />
 
-        <TextView
-            android:id="@+id/optionsMenuLink"
+        <ImageView
+            android:id="@+id/optionsMenuImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingStart="8dp"
-            android:text="@string/vertical_ellipsis"
-            android:textColor="@color/selectedText"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:contentDescription="@string/flash_content_description"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            android:tint="@color/selectedText" />
     </LinearLayout>
 
     <LinearLayout

@@ -84,7 +84,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
     private ImageView flashImageView;
     private ImageView switchCameraImageView;
-    private TextView optionsMenuLink;
+    private ImageView optionsMenuImageView;
     private Button selectedIntervalButton;
     private FrameLayout intervalSelectionLayout;
     private Button halfSecondTextView;
@@ -121,7 +121,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
         flashImageView = rootView.findViewById(R.id.flashImageView);
         switchCameraImageView = rootView.findViewById(R.id.switchCameraImageView);
-        optionsMenuLink = rootView.findViewById(R.id.optionsMenuLink);
+        optionsMenuImageView = rootView.findViewById(R.id.optionsMenuImageView);
         selectedIntervalButton = rootView.findViewById(R.id.selectedIntervalButton);
         intervalSelectionLayout = rootView.findViewById(R.id.intervalSelectionLayout);
         halfSecondTextView = rootView.findViewById(R.id.halfSecondTextView);
@@ -181,7 +181,7 @@ public class PhotoFragment extends BasicPhotoFragment {
             }
         });
 
-        optionsMenuLink.setOnClickListener(new OnClickListener() {
+        optionsMenuImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onShowOptionsMenu();
@@ -619,7 +619,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void onShowOptionsMenu() {
-        PopupMenu menu = new PopupMenu(getActivity(), optionsMenuLink);
+        PopupMenu menu = new PopupMenu(getActivity(), optionsMenuImageView);
         menu.inflate(R.menu.options_menu);
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -632,7 +632,7 @@ public class PhotoFragment extends BasicPhotoFragment {
         Context wrapper = new ContextThemeWrapper(getActivity(), R.style.ManualPopupMenuStyle);
 
         MenuPopupHelper menuHelper =
-                new MenuPopupHelper(wrapper, (MenuBuilder) menu.getMenu(), optionsMenuLink);
+                new MenuPopupHelper(wrapper, (MenuBuilder) menu.getMenu(), optionsMenuImageView);
         menuHelper.setForceShowIcon(true);
         menuHelper.show();
     }
