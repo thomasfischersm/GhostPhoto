@@ -49,16 +49,16 @@
             android:name=".services.ScanForDeletedPhotosService"
             android:exported="false" />
 
-        <activity android:name=".activities.other.IntroductionActivity">
+        <activity android:name=".activities.other.IntroductionActivity" />
+        <activity
+            android:name=".activities.camera.PhotoActivity"
+            android:theme="@style/TranslucentAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.camera.PhotoActivity"
-            android:theme="@style/TranslucentAppTheme" />
         <activity
             android:name=".activities.other.AboutActivity"
             android:parentActivityName=".activities.camera.PhotoActivity" />
