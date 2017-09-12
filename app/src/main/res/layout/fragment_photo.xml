@@ -87,12 +87,14 @@
             style="@style/roundButtonStyle"
             android:layout_marginTop="6dp" />
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/actionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/camera_button_diameter"
+            android:layout_height="@dimen/camera_button_diameter"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_play_arrow_white_24dp" />
+            android:background="@drawable/camera_button_background"
+            android:src="@drawable/ic_play_arrow_white_24dp"
+            android:contentDescription="@string/action_button_content_description" />
 
         <ImageView
             android:id="@+id/thumbNailImageView"
