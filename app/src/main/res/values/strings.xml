@@ -45,9 +45,9 @@
     <string name="three_second_interval">3s</string>
     <string name="ten_second_interval">10s</string>
     <string name="custom_interval">Custom</string>
-    <string name="flash_off">Flash Off</string>
-    <string name="flash_auto">Flash Auto</string>
-    <string name="flash_on">Flash On</string>
+    <string name="flash_off">Flash off</string>
+    <string name="flash_auto">Flash auto</string>
+    <string name="flash_on">Flash on</string>
     <string name="action_button_content_description">Starts/pauses taking photos</string>
     <string name="thumbnail_content_description">
         A thumbnail of the last photo. Clicking it opens a review of all taken photos.
