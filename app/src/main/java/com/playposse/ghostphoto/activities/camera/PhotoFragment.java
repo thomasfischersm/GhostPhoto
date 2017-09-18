@@ -479,19 +479,23 @@ public class PhotoFragment extends BasicPhotoFragment {
         selectedIntervalButton.setText(currentTimeInterval.getString(getResources()));
 
         for (Map.Entry<TimeInterval, Button> entry : timeIntervalToViewMap.entrySet()) {
-            makeBoldOrNormal(entry.getValue(), entry.getKey() == currentTimeInterval);
+            boolean isSelected = (entry.getKey() == currentTimeInterval);
+            boolean isCustomInterval = entry.getKey() == TimeInterval.custom;
+            makeBoldOrNormal(entry.getValue(), isSelected, isCustomInterval);
         }
     }
 
-    private void makeBoldOrNormal(Button button, boolean isBold) {
+    private void makeBoldOrNormal(Button button, boolean isBold, boolean isCustomInterval) {
         Context context = getActivity();
         if (isBold) {
             button.setSelected(true);
-            button.setTypeface(null, Typeface.BOLD);
             button.setTextColor(ContextCompat.getColor(context, R.color.selectedText));
-            button.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.selectedText));
+            if (!isCustomInterval) {
+                button.setTypeface(null, Typeface.BOLD);
+                button.setTextSize(
+                        TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.selectedText));
+            }
         } else {
             button.setSelected(false);
             button.setTypeface(null, Typeface.NORMAL);
