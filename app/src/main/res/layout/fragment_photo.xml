@@ -58,8 +58,9 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:paddingStart="24dp"
-            android:src="@drawable/ic_loop_black_24dp"
+            android:src="@drawable/ic_camera_front_black_24dp"
             android:tint="@color/selectedText" />
+        <!-- Should switch between ic_camera_front_black_24dp and ic_camera_rear_black_24dp  -->
 
         <ImageView
             android:id="@+id/optionsMenuImageView"
@@ -212,6 +213,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="26dp"
             android:orientation="vertical">
 
             <Button
@@ -251,6 +253,16 @@
                 style="@style/roundButtonStyle"
                 android:layout_marginBottom="@dimen/button_spacing"
                 android:text="@string/half_second_interval" />
+
+            <Space style="@style/defaultSpacer" />
+
+            <ImageView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:padding="14dp"
+                android:src="@drawable/ic_close_white_24dp"
+                android:background="@drawable/round_button_not_pressed"/>
+
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

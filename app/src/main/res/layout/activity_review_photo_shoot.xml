@@ -48,33 +48,55 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                android:layout_marginTop="6dp"
+                android:layout_width="56dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
                 android:contentDescription="@string/three_dot_divider_content_description"
-                android:src="@drawable/three_horizontal_dots" />
+                android:src="@drawable/selected_photos_drag_handle" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/selected_photos_label"
-                android:textColor="@color/primaryDarkText" />
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textSize="14sp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/selected_photos_label"
+                    android:textColor="@color/secondaryTextColorLight" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="16dp"
+                    android:text="(#)"
+                    android:textColor="@color/disabledTextColorLight" />
+
+
+            </LinearLayout>
+
+
 
             <TextView
                 android:id="@+id/selectedPhotosHintTextView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:background="@color/selectionPanelBackground"
                 android:gravity="center"
                 android:text="@string/selected_photos_hint"
-                android:textColor="@color/primaryDarkText"
+                android:textColor="@color/disabledTextColorLight"
                 android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
