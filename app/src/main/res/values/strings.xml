@@ -136,6 +136,7 @@
         - To compare two photos: Use multi-touch. Put one finger on each photo at the same time.\n
     </string>
     <string name="three_dot_divider_content_description">Three dots as a visual divider.</string>
+    <string name="selected_photo_count">(%1$d)</string>
 
 
     <!-- View photo activity -->

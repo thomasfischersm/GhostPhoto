@@ -62,12 +62,27 @@
                 android:contentDescription="@string/three_dot_divider_content_description"
                 android:src="@drawable/selected_photos_drag_handle" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/selected_photos_label"
-                android:textColor="@color/primaryDarkText" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_alignParentStart="true"
+                    android:textSize="14sp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/selected_photos_label"
+                    android:textColor="@color/secondaryTextColorLight" />
+
+                <TextView
+                    android:id="@+id/selectedPhotosCountTextView"
+                    android:layout_width="wrap_content" android:layout_alignParentEnd="true"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/disabledTextColorLight" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/selectedPhotosHintTextView"

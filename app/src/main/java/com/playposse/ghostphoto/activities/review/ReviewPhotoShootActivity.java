@@ -70,6 +70,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
     private RecyclerView selectedPhotosRecyclerView;
     private TextView selectedPhotosHintTextView;
     private LinearLayout rootView;
+    private TextView selectedPhotosCountTextView;
 
     private PhotoAdapter allPhotosAdapter;
     private PhotoAdapter selectedPhotosAdapter;
@@ -87,10 +88,11 @@ public class ReviewPhotoShootActivity extends ParentActivity {
 
         setContentView(R.layout.activity_review_photo_shoot);
 
-        allPhotosRecyclerView = (RecyclerView) findViewById(R.id.allPhotosRecyclerView);
-        selectedPhotosRecyclerView = (RecyclerView) findViewById(R.id.selectedPhotosRecyclerView);
-        selectedPhotosHintTextView = (TextView) findViewById(R.id.selectedPhotosHintTextView);
-        rootView = (LinearLayout) findViewById(R.id.rootView);
+        allPhotosRecyclerView = findViewById(R.id.allPhotosRecyclerView);
+        selectedPhotosRecyclerView = findViewById(R.id.selectedPhotosRecyclerView);
+        selectedPhotosHintTextView = findViewById(R.id.selectedPhotosHintTextView);
+        rootView = findViewById(R.id.rootView);
+        selectedPhotosCountTextView = findViewById(R.id.selectedPhotosCountTextView);
 
         initActionBar();
 
@@ -299,9 +301,14 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             if (cursor.getCount() > 0) {
                 selectedPhotosRecyclerView.setVisibility(View.VISIBLE);
                 selectedPhotosHintTextView.setVisibility(View.GONE);
+
+                String selectedPhotoCountStr =
+                        getString(R.string.selected_photo_count, cursor.getCount());
+                selectedPhotosCountTextView.setText(selectedPhotoCountStr);
             } else {
                 selectedPhotosRecyclerView.setVisibility(View.GONE);
                 selectedPhotosHintTextView.setVisibility(View.VISIBLE);
+                selectedPhotosCountTextView.setText("");
             }
         }
 
@@ -310,6 +317,7 @@ public class ReviewPhotoShootActivity extends ParentActivity {
             selectedPhotosAdapter.swapCursor(null);
             selectedPhotosRecyclerView.setVisibility(View.GONE);
             selectedPhotosHintTextView.setVisibility(View.VISIBLE);
+            selectedPhotosCountTextView.setText("");
         }
     }
 
