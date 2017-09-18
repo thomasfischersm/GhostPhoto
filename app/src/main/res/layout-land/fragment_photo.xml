@@ -89,7 +89,7 @@
 
             <Button
                 android:id="@+id/selectedIntervalButton"
-                style="@style/roundButtonStyle"
+                style="@style/mainRoundButtonStyle"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true" />
 

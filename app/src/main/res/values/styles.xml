@@ -104,6 +104,10 @@
         <item name="android:textColor">@color/roundButtonText</item>
     </style>
 
+    <style name="mainRoundButtonStyle" parent="roundButtonStyle">
+        <item name="android:background">@drawable/main_round_button_states</item>
+    </style>
+
     <!-- A style that is applied to Space views to become default 1 weight spacers in a
      LinearLayout. -->
     <style name="defaultSpacer">

@@ -85,7 +85,7 @@
 
         <Button
             android:id="@+id/selectedIntervalButton"
-            style="@style/roundButtonStyle"
+            style="@style/mainRoundButtonStyle"
             android:layout_marginTop="6dp" />
 
         <ImageButton
