@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
+import javax.annotation.Nullable;
+
 /**
  * A utility that starts reveal and hide animations for panels.
  */
@@ -14,8 +16,17 @@ public class RevealAnimationUtil {
     public static void startRevealAnimation(View originView, View layoutView) {
         startRevealAnimation(originView, layoutView, true);
     }
-
     public static void startRevealAnimation(View originView, View layoutView, boolean hideOrigin) {
+
+        startRevealAnimation(originView, layoutView, true, null);
+    }
+
+    public static void startRevealAnimation(
+            View originView,
+            View layoutView,
+            boolean hideOrigin,
+            @Nullable final View additionalViewToHide) {
+
         int[] originLocation = new int[2];
         originView.getLocationOnScreen(originLocation);
         int centerX = originLocation[0] + (originView.getWidth() / 2);
@@ -34,7 +45,33 @@ public class RevealAnimationUtil {
         if (hideOrigin) {
             originView.setVisibility(View.GONE);
         }
-        animator.start();    }
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (additionalViewToHide != null) {
+                    additionalViewToHide.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                // Nothing to do.
+            }
+        });
+
+        animator.start();
+    }
 
     public static void startHideAnimation(View originView, View layoutView) {
         startHideAnimation(originView, layoutView, true);

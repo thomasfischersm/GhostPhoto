@@ -8,6 +8,7 @@
     <color name="listActivityBackground">#FAFAFA</color>
 
     <color name="panelBackground">#00000000</color>
+    <color name="translucentPanelBackground">#40000000</color>
     <color name="selectedText">#FFFFFF</color>
     <color name="unselectedText">#F5F5F5</color>
 

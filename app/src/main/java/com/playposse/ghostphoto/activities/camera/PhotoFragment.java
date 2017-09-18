@@ -82,6 +82,7 @@ public class PhotoFragment extends BasicPhotoFragment {
 
     private final Timer timer = new Timer();
 
+    private LinearLayout topBarLayout;
     private ImageView flashImageView;
     private ImageView switchCameraImageView;
     private ImageView optionsMenuImageView;
@@ -119,6 +120,7 @@ public class PhotoFragment extends BasicPhotoFragment {
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
+        topBarLayout = rootView.findViewById(R.id.topBarLayout);
         flashImageView = rootView.findViewById(R.id.flashImageView);
         switchCameraImageView = rootView.findViewById(R.id.switchCameraImageView);
         optionsMenuImageView = rootView.findViewById(R.id.optionsMenuImageView);
@@ -547,11 +549,16 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void startFlashLayoutRevealAnimation() {
-        RevealAnimationUtil.startRevealAnimation(flashImageView, flashSelectionLayout);
+        RevealAnimationUtil.startRevealAnimation(
+                flashImageView,
+                flashSelectionLayout,
+                true,
+                topBarLayout);
     }
 
     private void startFlashLayoutHideAnimation() {
         RevealAnimationUtil.startHideAnimation(flashImageView, flashSelectionLayout);
+        topBarLayout.setVisibility(View.VISIBLE);
     }
 
     private void startIntervalLayoutRevealAnimation() {
