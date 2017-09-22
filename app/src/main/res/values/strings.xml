@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jump-In-Front Camera</string>
+    <string name="app_name">Hands-Free Selfie Camera</string>
 
     <!-- Strings from the original Android documentation example. -->
     <string name="request_permission">
@@ -20,7 +20,7 @@
     <string name="intro_free_selfie_body">
         Typical selfies constrain the users to holding the camera at arm\'s length.\n
         \n
-        Jump-In-Front Camera frees you to put the photo down, run around, jump, and pose to your heart\'s
+        Hands-Free Selfie Camera frees you to put the photo down, run around, jump, and pose to your heart\'s
         content. Jump-In-Front Camera takes a photo every second (customizable) to be sure to capture all
         the special moments.
     </string>
@@ -30,7 +30,7 @@
         The best photographers take hundreds or even thousands of photos to capture that one perfect
         shot.\n
         \n
-        Jump-In-Front Camera comes with a photo review tool to organize the photos and discard the rest.
+        Hands-Free Selfie Camera comes with a photo review tool to organize the photos and discard the rest.
     </string>
 
 
@@ -73,7 +73,7 @@
         \n
         If you want to take a selfie, the back facing camera makes higher quality photos. Putting
         the camera down instead of holding it steps up the photo quality another notch. But how do
-        you trigger the photos then? A timer takes one photo. With Jump-In-Front Camera, you can make the
+        you trigger the photos then? A timer takes one photo. With Hands-Free Selfie Camera, you can make the
         phone take a series of photos while you post. At the end, simply look through the photos
         and pick the best one.\n\nWhen taking a group photo, there is often a runner. The runner
         presses the timer button and runs to the group. Some smart people simply turn on a video
@@ -85,7 +85,7 @@
     <string name="about_feedback_heading">Send Us Feedback!</string>
     <string name="about_feedback_body_text">
         I love to hear from you. Send your feedback to
-        <a href="mailto:thomas@playposse.com?subject=Feedback About Jump-In-Front Camera Android App">thomas@playposse.com</a>.
+        <a href="mailto:thomas@playposse.com?subject=Feedback About Hands-Free Selfie Camera Android App">thomas@playposse.com</a>.
     </string>
     <string name="about_credits_heading">Copyright And Credits</string>
     <string name="about_credits_body_text">
@@ -200,7 +200,7 @@
     <string name="feedback_dialog_title">Send us feedback!</string>
     <string name="feedback_dialog_message">An e-mail will be opened where you can send me feedback.</string>
     <string name="feedback_email_recipient">thomas@playposse.com</string>
-    <string name="feedback_email_subject">Feedback About Jump-In-Front Camera App</string>
+    <string name="feedback_email_subject">Feedback About Hands-Free Selfie Camera App</string>
     <string name="feedback_email_body">Please, send me your feedback. I care about hearing from you.</string>
 
 
