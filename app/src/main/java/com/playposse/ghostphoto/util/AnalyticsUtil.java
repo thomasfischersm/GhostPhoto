@@ -53,6 +53,8 @@ public abstract class AnalyticsUtil {
         Tracker tracker = app.getDefaultTracker();
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        tracker.enableAdvertisingIdCollection(true);
     }
 
     public static void reportEvent(

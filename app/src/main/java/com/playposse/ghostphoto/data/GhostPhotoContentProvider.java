@@ -111,7 +111,6 @@ public class GhostPhotoContentProvider extends ContentProvider {
             cursor.setNotificationUri(contentResolver, notificationUri);
         }
         return cursor;
-
     }
 
     @NonNull

@@ -16,6 +16,8 @@ import com.playposse.ghostphoto.activities.ParentActivity;
 import com.playposse.ghostphoto.activities.camera.PhotoActivity;
 import com.playposse.ghostphoto.util.AnalyticsUtil;
 
+import static android.support.v4.view.ViewPager.*;
+
 /**
  * An {@link Activity} that shows introductory slides to the user after the first user log on.
  */
@@ -84,10 +86,9 @@ public class IntroductionActivity extends ParentActivity {
     }
 
     /**
-     * A {@link android.support.v4.view.ViewPager.OnPageChangeListener} that reports to Analytics
-     * when a new fragment is selected.
+     * A {@link OnPageChangeListener} that reports to Analytics when a new fragment is selected.
      */
-    private class AnalyticsPageChangeListener implements ViewPager.OnPageChangeListener {
+    private class AnalyticsPageChangeListener implements OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             // Nothing to do.
