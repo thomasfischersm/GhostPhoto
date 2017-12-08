@@ -727,9 +727,14 @@ public class PhotoFragment extends BasicPhotoFragment {
                 @Override
                 public void run() {
                     takePicture();
-                    AnalyticsUtil.sendEvent(
-                            getActivity().getApplication(),
-                            AnalyticsUtil.TAKE_PHOTO_ACTION);
+
+                    Activity activity = getActivity();
+                    if (isAdded() && (activity != null)) {
+                        // Prevent Crashlytics error.
+                        AnalyticsUtil.sendEvent(
+                                activity.getApplication(),
+                                AnalyticsUtil.TAKE_PHOTO_ACTION);
+                    }
                 }
             });
         }
