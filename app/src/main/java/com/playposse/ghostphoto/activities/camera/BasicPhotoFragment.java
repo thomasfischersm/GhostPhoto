@@ -754,7 +754,10 @@ public abstract class BasicPhotoFragment
     private void createCameraPreviewSession() {
         try {
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
-            assert texture != null;
+            if (texture == null) {
+                // We must be too early. This crashed in production.
+                return;
+            }
 
             // We configure the size of default buffer to be the size of camera preview we want.
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
