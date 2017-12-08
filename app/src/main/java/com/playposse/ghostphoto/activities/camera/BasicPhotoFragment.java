@@ -870,8 +870,13 @@ public abstract class BasicPhotoFragment
                     CameraMetadata.CONTROL_AF_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the lock.
             mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
+            if (mCaptureSession != null) {
+                // Be more defensive. I don't know how this case could happen.
+                mCaptureSession.capture(
+                        mPreviewRequestBuilder.build(),
+                        mCaptureCallback,
+                        mBackgroundHandler);
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }

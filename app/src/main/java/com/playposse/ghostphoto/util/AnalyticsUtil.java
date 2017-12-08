@@ -10,7 +10,7 @@ import com.playposse.ghostphoto.GhostPhotoApplication;
 /**
  * A helper class to deal with Google Analytics.
  */
-public abstract class AnalyticsUtil {
+public final class AnalyticsUtil {
 
     public static final String START_TAKING_PHOTOS_ACTION = "startTakingPhotos";
     public static final String STOP_TAKING_PHOTOS_ACTION = "stopTakingPhotos";
