@@ -771,6 +771,9 @@ public abstract class BasicPhotoFragment
             mPreviewRequestBuilder.addTarget(surface);
 
             // Here, we create a CameraCaptureSession for camera preview.
+            if (mImageReader == null) {
+                return;
+            }
             mCameraDevice.createCaptureSession(
                     Arrays.asList(surface, mImageReader.getSurface()),
                     new CameraCaptureSession.StateCallback() {

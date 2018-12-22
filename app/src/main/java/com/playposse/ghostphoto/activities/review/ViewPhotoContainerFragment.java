@@ -110,7 +110,7 @@ public class ViewPhotoContainerFragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (pagerAdapter == null) {
-            pagerAdapter = new PhotoShootPagerAdapter(getFragmentManager(), cursor);
+            pagerAdapter = new PhotoShootPagerAdapter(getChildFragmentManager(), cursor);
             viewPager.setAdapter(pagerAdapter);
             viewPager.addOnPageChangeListener(new PhotoPageChangeListener());
             pagerAdapter.moveToInitialPhoto();
