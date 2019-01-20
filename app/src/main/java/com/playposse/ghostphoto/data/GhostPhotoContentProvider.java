@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.playposse.ghostphoto.data.GhostPhotoContract.AddPhotoAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteAllAction;
 import com.playposse.ghostphoto.data.GhostPhotoContract.DeleteDirectoryContentAction;
@@ -306,7 +307,11 @@ public class GhostPhotoContentProvider extends ContentProvider {
                     File file = new File(new java.net.URI(photoUri));
                     file.delete();
                 } catch (URISyntaxException ex) {
-                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                    Log.e(
+                            LOG_TAG,
+                            "deleteUnselected: Failed to delete photo: " + photoUri,
+                            ex);
+                    Crashlytics.logException(ex);
                 }
             }
         } finally {
@@ -366,7 +371,11 @@ public class GhostPhotoContentProvider extends ContentProvider {
                     File file = new File(new java.net.URI(photoUri));
                     file.delete();
                 } catch (URISyntaxException ex) {
-                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                    Log.e(
+                            LOG_TAG,
+                            "deleteUnselected: Failed to delete photo: " + photoUri,
+                            ex);
+                    Crashlytics.logException(ex);
                 }
             }
         } finally {
@@ -440,7 +449,11 @@ public class GhostPhotoContentProvider extends ContentProvider {
                     }
                     absolutePaths[cursor.getPosition()] = file.getAbsolutePath();
                 } catch (URISyntaxException ex) {
-                    Log.e(LOG_TAG, "deleteUnselected: Failed to delete photo: " + photoUri, ex);
+                    Log.e(
+                            LOG_TAG,
+                            "deleteUnselected: Failed to delete photo: " + photoUri,
+                            ex);
+                    Crashlytics.logException(ex);
                 }
             }
         } finally {

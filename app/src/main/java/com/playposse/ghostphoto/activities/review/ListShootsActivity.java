@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.GhostPhotoPreferences;
 import com.playposse.ghostphoto.R;
@@ -179,6 +180,7 @@ public class ListShootsActivity extends ParentActivity implements LoaderManager.
                 });
             } catch (ParseException ex) {
                 Log.e(LOG_TAG, "onBindViewHolder: Failed to parse the photo shoot date.", ex);
+                Crashlytics.logException(ex);
             }
         }
     }

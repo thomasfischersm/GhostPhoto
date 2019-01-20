@@ -2,11 +2,13 @@ package com.playposse.ghostphoto.activities.camera;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -33,7 +35,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -45,6 +46,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.constants.CameraType;
@@ -656,14 +658,18 @@ public abstract class BasicPhotoFragment
                 mCameraId = cameraId;
                 return;
             }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
+            restartActivityDueToError();
+        } catch (NullPointerException ex) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
+            Crashlytics.logException(ex);
             ErrorDialog.newInstance(getString(R.string.camera_error))
                     .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         }
+
+        Crashlytics.logException(new Exception("Couldn't find usable camera."));
     }
 
     /**
@@ -689,10 +695,9 @@ public abstract class BasicPhotoFragment
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
             manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
+        } catch (CameraAccessException | InterruptedException ex) {
+            Crashlytics.logException(ex);
+            restartActivityDueToError();
         }
 
         isCameraOpen = true;
@@ -718,8 +723,8 @@ public abstract class BasicPhotoFragment
                 mImageReader.close();
                 mImageReader = null;
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException("Interrupted while trying to lock camera closing.", ex);
         } finally {
             mCameraOpenCloseLock.release();
         }
@@ -743,8 +748,8 @@ public abstract class BasicPhotoFragment
             mBackgroundThread.join();
             mBackgroundThread = null;
             mBackgroundHandler = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -752,6 +757,11 @@ public abstract class BasicPhotoFragment
      * Creates a new {@link CameraCaptureSession} for camera preview.
      */
     private void createCameraPreviewSession() {
+        if (!isCameraOpen) {
+            Crashlytics.logException(new Exception(
+                    "Camera is closed. Can't create preview session."));
+            return;
+        }
         try {
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             if (texture == null) {
@@ -804,8 +814,8 @@ public abstract class BasicPhotoFragment
                                 mPreviewRequest = mPreviewRequestBuilder.build();
                                 mCaptureSession.setRepeatingRequest(mPreviewRequest,
                                         mCaptureCallback, mBackgroundHandler);
-                            } catch (CameraAccessException e) {
-                                e.printStackTrace();
+                            } catch (CameraAccessException ex) {
+                                Crashlytics.logException(ex);
                             }
                         }
 
@@ -816,8 +826,8 @@ public abstract class BasicPhotoFragment
                         }
                     },
                     null);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -883,8 +893,8 @@ public abstract class BasicPhotoFragment
                         mCaptureCallback,
                         mBackgroundHandler);
             }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -901,8 +911,8 @@ public abstract class BasicPhotoFragment
             mState = STATE_WAITING_PRECAPTURE;
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -961,8 +971,14 @@ public abstract class BasicPhotoFragment
                 }
             };
 
-            mCaptureSession.stopRepeating();
-            mCaptureSession.capture(captureBuilder.build(), captureCallback, null);
+            if (mCaptureSession != null) {
+                mCaptureSession.stopRepeating();
+                mCaptureSession.capture(captureBuilder.build(), captureCallback, null);
+            } else {
+                Crashlytics.logException(new NullPointerException(
+                        "Couldn't capture a photo because mCaptureSession was null."));
+                return;
+            }
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -970,8 +986,8 @@ public abstract class BasicPhotoFragment
                     onAboutToTakePhoto();
                 }
             });
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -1011,14 +1027,18 @@ public abstract class BasicPhotoFragment
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
             setFlash(mPreviewRequestBuilder);
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
+            if (mCaptureSession != null) {
+                mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+                        mBackgroundHandler);
+            } else {
+                Crashlytics.logException(new NullPointerException("mCaptureSession was null!"));
+            }
             // After this, the camera will go back to the normal state of preview.
             mState = STATE_PREVIEW;
             mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
                     mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } catch (CameraAccessException ex) {
+            Crashlytics.logException(ex);
         }
     }
 
@@ -1036,8 +1056,10 @@ public abstract class BasicPhotoFragment
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
         } else {
-            Log.e(LOG_TAG, "setFlash: Unexepected configuration! mFlashSupported: "
-                    + mFlashSupported + ", currentFlashMode: " + currentFlashMode);
+            String msg = "Unexepected configuration! mFlashSupported: " + mFlashSupported
+                    + ", currentFlashMode: " + currentFlashMode;
+            Log.e(LOG_TAG, "setFlash: " + msg);
+            Crashlytics.logException(new Exception(msg));
         }
     }
 
@@ -1080,6 +1102,27 @@ public abstract class BasicPhotoFragment
     }
 
     /**
+     * Opens a dialog if the user wants to restart the activity. Dealing with the camera is a very
+     * fragile endeavor. To make the crash experience a bit better, this dialog let's the user
+     * retry.
+     */
+    private void restartActivityDueToError() {
+        new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme)
+                .setTitle(R.string.camera_error_dialog_title)
+                .setMessage(R.string.camera_error_dialog_message)
+                .setPositiveButton(
+                        R.string.camera_error_dialog_retry_button,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(getActivity(), PhotoActivity.class));
+                                getActivity().finish();
+                            }
+                        })
+                .show();
+    }
+
+    /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
     private class ImageSaver implements Runnable {
@@ -1108,15 +1151,15 @@ public abstract class BasicPhotoFragment
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                Crashlytics.logException(ex);
             } finally {
                 mImage.close();
                 if (null != output) {
                     try {
                         output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ex) {
+                        Crashlytics.logException(ex);
                     }
                 }
             }
@@ -1214,5 +1257,4 @@ public abstract class BasicPhotoFragment
                     .create();
         }
     }
-
 }

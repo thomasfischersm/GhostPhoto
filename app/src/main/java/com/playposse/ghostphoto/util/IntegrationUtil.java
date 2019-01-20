@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.playposse.ghostphoto.data.GhostPhotoContract.PhotoTable;
 
 import java.io.File;
@@ -136,6 +137,7 @@ public final class IntegrationUtil {
             }
         } catch (Throwable ex) {
             Log.e(LOG_TAG, "Failed to view photo in photoviewer");
+            Crashlytics.logException(ex);
             throw ex;
         }
     }

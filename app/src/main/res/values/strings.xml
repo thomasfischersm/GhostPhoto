@@ -63,6 +63,9 @@
     <string name="camera_loading_message">Loading...</string>
     <string name="loading_icon_content_content_description">Icon suggesting that the camera is loading.</string>
     <string name="custom_interval_dialog_title">Pick a custom time interval in seconds.</string>
+    <string name="camera_error_dialog_title">Failed to open the camera.</string>
+    <string name="camera_error_dialog_message">Tap okay to re-try opening the camera.</string>
+    <string name="camera_error_dialog_retry_button">Retry</string>
 
 
     <!-- About activity -->

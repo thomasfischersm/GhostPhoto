@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.crashlytics.android.Crashlytics;
 import com.playposse.ghostphoto.ExtraConstants;
 import com.playposse.ghostphoto.R;
 import com.playposse.ghostphoto.activities.ParentActivity;
@@ -138,6 +139,7 @@ public class ViewPhotoActivity extends ParentActivity implements PhotoSelectionC
             this.photoFile = new File(new java.net.URI(photoUri.toString()));
         } catch (URISyntaxException ex) {
             Log.e(LOG_TAG, "onPhotoShown: Failed to create photo File object", ex);
+            Crashlytics.logException(ex);
         }
     }
 

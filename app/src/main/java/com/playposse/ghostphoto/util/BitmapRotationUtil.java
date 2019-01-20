@@ -6,6 +6,8 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -119,6 +121,7 @@ public class BitmapRotationUtil {
                 return rotate(imageFile, degrees);
             } catch (IOException ex) {
                 Log.e(LOG_TAG, "doInBackground: Failed to rotate image.", ex);
+                Crashlytics.logException(ex);
                 return null;
             }
         }

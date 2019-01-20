@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.crashlytics.android.Crashlytics;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.common.collect.BiMap;
@@ -362,6 +363,7 @@ public class PhotoFragment extends BasicPhotoFragment {
                     Thread.sleep(200);
                 } catch (InterruptedException ex) {
                     Log.e(LOG_TAG, "doInBackground: Failed to sleep", ex);
+                    Crashlytics.logException(ex);
                 }
 
                 getActivity()
@@ -458,11 +460,18 @@ public class PhotoFragment extends BasicPhotoFragment {
     }
 
     private void playSound() {
+        Context context = getActivity();
+        if (context == null) {
+            // The activity is probably already gone. Skip attempting to playing a sound and
+            // triggering a crash.
+            return;
+        }
+
         final MediaPlayer mediaPlayer;
         if (currentTimeInterval == TimeInterval.halfSecond) {
-            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.water_drop_sound);
+            mediaPlayer = MediaPlayer.create(context, R.raw.water_drop_sound);
         } else {
-            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.water_drop_sound2);
+            mediaPlayer = MediaPlayer.create(context, R.raw.water_drop_sound2);
         }
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
